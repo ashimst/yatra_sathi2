@@ -1,0 +1,106 @@
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ── Virtual environments ──────────────────────────────────────────────────────
+venv/
+env/
+ENV/
+.venv/
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Secrets / environment ─────────────────────────────────────────────────────
+.env
+# Keep the template
+!.env.example
+
+# ── Database files ────────────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+
+# ── ETL data files (large / generated) ───────────────────────────────────────
+data/raw/*.osm.pbf
+data/extracted/*.jsonl
+data/validated/*.jsonl
+data/validated/*.json
+data/normalized/*.jsonl
+data/enriched/*.jsonl
+data/curated/*.jsonl
+# Pipeline state
+data/pipeline_checkpoint.json
+data/enrichment_cache.sqlite
+
+# Keep directory stubs so git tracks the folder structure
+!data/raw/.gitkeep
+!data/extracted/.gitkeep
+!data/validated/.gitkeep
+!data/normalized/.gitkeep
+!data/enriched/.gitkeep
+!data/curated/.gitkeep
+
+# ── Debug / diagnostic scratch files (never commit these) ────────────────────
+_*.py
+_*.log
+_*.txt
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Jupyter ───────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── Testing ───────────────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ── ML model artefacts ───────────────────────────────────────────────────────
+*.pkl
+*.h5
+*.pt
+*.pth
+
+# ── Misc temp ─────────────────────────────────────────────────────────────────
+*.tmp
+*.bak
+.cache/
+
+# ── Flutter / Dart ───────────────────────────────────────────────────────────
+mobile/.dart_tool/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.packages
+mobile/.metadata
+mobile/build/
+mobile/.idea/

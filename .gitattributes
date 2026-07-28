@@ -1,0 +1,29 @@
+# Normalise all text files to LF in the repo, checkout as-is on Windows
+* text=auto eol=lf
+
+# Python
+*.py text eol=lf
+*.pyi text eol=lf
+
+# Config / data
+*.json text eol=lf
+*.jsonl text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+*.txt text eol=lf
+*.md text eol=lf
+*.env text eol=lf
+*.example text eol=lf
+*.gitkeep text eol=lf
+*.gitignore text eol=lf
+*.gitattributes text eol=lf
+
+# Binary — never mangle
+*.pbf binary
+*.sqlite binary
+*.db binary
+*.pkl binary
+*.pt binary
+*.pth binary
+*.h5 binary
