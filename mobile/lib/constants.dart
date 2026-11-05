@@ -18,10 +18,17 @@ const Color kBorder = Color(0xFFE0DAD0);
 // API KEYS & URLs
 // ─────────────────────────────────────────────────────────────────
 
-const String kOpenWeatherApiKey =
-    '8424a1b023fdfb82ee202163b27bcfb9';
+// Supplied at build time; never commit keys:
+//   flutter run --dart-define=OPENWEATHER_API_KEY=xxx --dart-define=API_BASE_URL=https://api.example.com
+const String kOpenWeatherApiKey = String.fromEnvironment('OPENWEATHER_API_KEY');
+
+// Production/staging API origin. Empty -> local development defaults below.
+const String _kApiBaseUrlOverride = String.fromEnvironment('API_BASE_URL');
 
 String get kBaseUrl {
+  if (_kApiBaseUrlOverride.isNotEmpty) {
+    return _kApiBaseUrlOverride;
+  }
   if (kIsWeb) {
     return 'http://localhost:8000'; //https://sh8sghtw-8000.inc1.devtunnels.ms:8000
   }

@@ -52,8 +52,9 @@ def main() -> None:
         sys.exit(1)
 
     # Configuration
+    from backend.app.config.settings import settings
     batch_size = 128
-    model_name = "all-MiniLM-L6-v2"
+    model_name = getattr(settings, "EMBEDDING_MODEL", "BAAI/bge-small-en-v1.5")
     print(f"[CONFIG] Batch size: {batch_size}")
     print(f"[CONFIG] Model:      {model_name}")
 
@@ -67,14 +68,14 @@ def main() -> None:
     stats = pipeline.run()
 
     elapsed_time = time.time() - start_time
-    rate = stats["total_places"] / elapsed_time if elapsed_time > 0 else 0
+    rate = stats["total"] / elapsed_time if elapsed_time > 0 else 0
 
     print("\n" + "=" * 70)
     print("Embedding Generation Complete")
     print("=" * 70)
-    print(f"Total places:         {stats['total_places']}")
-    print(f"Embeddings generated: {stats['embeddings_generated']}")
-    print(f"Embeddings stored:    {stats['embeddings_stored']}")
+    print(f"Total places:         {stats['total']}")
+    print(f"Embeddings generated: {stats['generated']}")
+    print(f"Embeddings stored:    {stats['stored']}")
     print(f"Failed:               {stats['failed']}")
     print(f"Model:                {model_name}")
     print(f"Time elapsed:         {elapsed_time:.2f} seconds")

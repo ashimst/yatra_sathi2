@@ -1,0 +1,103 @@
+{
+  "rewrites": [
+    {
+      "source": "/places",
+      "destination": "${VITE_API_BASE_URL}/places"
+    },
+    {
+      "source": "/places/(.*)",
+      "destination": "${VITE_API_BASE_URL}/places/$1"
+    },
+    {
+      "source": "/recommend",
+      "destination": "${VITE_API_BASE_URL}/recommend"
+    },
+    {
+      "source": "/recommend/(.*)",
+      "destination": "${VITE_API_BASE_URL}/recommend/$1"
+    },
+    {
+      "source": "/route",
+      "destination": "${VITE_API_BASE_URL}/route"
+    },
+    {
+      "source": "/route/(.*)",
+      "destination": "${VITE_API_BASE_URL}/route/$1"
+    },
+    {
+      "source": "/ai",
+      "destination": "${VITE_API_BASE_URL}/ai"
+    },
+    {
+      "source": "/ai/(.*)",
+      "destination": "${VITE_API_BASE_URL}/ai/$1"
+    },
+    {
+      "source": "/auth",
+      "destination": "${VITE_API_BASE_URL}/auth"
+    },
+    {
+      "source": "/auth/(.*)",
+      "destination": "${VITE_API_BASE_URL}/auth/$1"
+    },
+    {
+      "source": "/itineraries",
+      "destination": "${VITE_API_BASE_URL}/itineraries"
+    },
+    {
+      "source": "/itineraries/(.*)",
+      "destination": "${VITE_API_BASE_URL}/itineraries/$1"
+    },
+    {
+      "source": "/memories",
+      "destination": "${VITE_API_BASE_URL}/memories"
+    },
+    {
+      "source": "/memories/(.*)",
+      "destination": "${VITE_API_BASE_URL}/memories/$1"
+    },
+    {
+      "source": "/trail-watch",
+      "destination": "${VITE_API_BASE_URL}/trail-watch"
+    },
+    {
+      "source": "/trail-watch/(.*)",
+      "destination": "${VITE_API_BASE_URL}/trail-watch/$1"
+    },
+    {
+      "source": "/telemetry",
+      "destination": "${VITE_API_BASE_URL}/telemetry"
+    },
+    {
+      "source": "/telemetry/(.*)",
+      "destination": "${VITE_API_BASE_URL}/telemetry/$1"
+    },
+    {
+      "source": "/uploads/(.*)",
+      "destination": "${VITE_API_BASE_URL}/uploads/$1"
+    },
+    {
+      "source": "/static/(.*)",
+      "destination": "${VITE_API_BASE_URL}/static/$1"
+    },
+    {
+      "source": "/health",
+      "destination": "${VITE_API_BASE_URL}/health"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}

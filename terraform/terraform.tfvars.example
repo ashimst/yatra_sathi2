@@ -1,0 +1,27 @@
+# ==============================================================================
+# YatraSathi Terraform Configuration Variables Example (100% Free Tier Setup)
+# Uses GitHub Container Registry (ghcr.io) instead of ACR to eliminate storage fees!
+# ==============================================================================
+
+app_name        = "yatrasathi"
+environment     = "prod"
+azure_region    = "southeastasia" # or "eastus"
+github_username = "ashimst"       # Your GitHub username or organization
+
+# Optional GitHub Personal Access Token (PAT) with `read:packages` permission.
+# If you set your ghcr.io package visibility to "Public" on GitHub, leave this as ""!
+github_pat = ""
+
+# Supabase PostgreSQL (Ensure PostGIS & pgvector extensions are enabled in Supabase)
+# Format: postgresql://postgres.[project-ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres?sslmode=require
+supabase_database_url = "postgresql://postgres.yourprojectref:yourpassword@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?sslmode=require"
+
+# Groq Cloud API Key for System 2 Deliberative Planning
+groq_api_key = "gsk_your_groq_api_key_here"
+
+# Secure 64-char JWT secret (generate with `openssl rand -hex 32`)
+jwt_secret_key = "replace_with_a_random_64_character_hex_secret_string"
+
+# Custom Domains
+custom_domain = "yatrasathi.noesisframeworks.com"
+api_subdomain = "api.yatrasathi.noesisframeworks.com"

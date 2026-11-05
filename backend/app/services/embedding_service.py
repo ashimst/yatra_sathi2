@@ -35,6 +35,9 @@ from etl.embeddings import EmbeddingGenerator, DBEmbeddingPipeline, upsert_place
 from etl.embedding_helpers import EmbeddingTextHelpers
 
 
+from backend.app.config.settings import settings
+
+
 class EmbeddingService:
     """Facade for generating and managing place embeddings.
 
@@ -44,10 +47,10 @@ class EmbeddingService:
     """
 
     def __init__(self):
-        # Lazily-loaded shared generator — populated on first `load_model()` call.
+        # Lazily-loaded shared generator - populated on first `load_model()` call.
         self._generator: EmbeddingGenerator | None = None
-        self.model_name = "all-MiniLM-L6-v2"
-        # Fallback default for all-MiniLM-L6-v2; overwritten lazily from model.
+        self.model_name = getattr(settings, "EMBEDDING_MODEL", "BAAI/bge-small-en-v1.5")
+        # Fallback default for BAAI/bge-small-en-v1.5 (384 dimensions); overwritten lazily from model.
         self.dimensions = 384
 
     # ------------------------------------------------------------------
@@ -57,7 +60,7 @@ class EmbeddingService:
     def load_model(self) -> None:
         """Lazy-load the shared :class:`EmbeddingGenerator`.
 
-        Safe to call multiple times — subsequent calls are no-ops.
+        Safe to call multiple times - subsequent calls are no-ops.
         """
         if self._generator is None:
             self._generator = EmbeddingGenerator(self.model_name)
@@ -151,7 +154,7 @@ class EmbeddingService:
         return upsert_place_embedding(self.generator, place, session, commit=commit)
 
     # ------------------------------------------------------------------
-    # Batch operation — delegates entirely to ETL.DBEmbeddingPipeline
+    # Batch operation - delegates entirely to ETL.DBEmbeddingPipeline
     # ------------------------------------------------------------------
 
     def generate_embeddings_for_all_places(

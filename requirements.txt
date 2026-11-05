@@ -1,34 +1,42 @@
-# Core data processing
-osmium>=4.0.2
-shapely>=2.0.6
-orjson>=3.10.7
-tqdm>=4.66.5
-python-dotenv>=1.0.1
-
-# Database
-SQLAlchemy>=2.0.36
-psycopg[binary]>=3.2.1
-
-# API
+# Core API & ASGI Web Server
 fastapi>=0.115.0
 uvicorn[standard]>=0.32.0
+python-multipart>=0.0.6
+
+# Hugging Face Gradio SDK
+gradio>=5.0.0
+
+# Database (PostgreSQL + PostGIS + pgvector)
+SQLAlchemy>=2.0.36
+psycopg2-binary>=2.9.9
+geoalchemy2>=0.14.0
+pgvector>=0.2.4
+
+# Authentication & Security
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+
+# Configuration & Utilities
 pydantic>=2.9.0
 pydantic-settings>=2.5.0
-
-# Wikidata integration
-requests>=2.32.0
-SPARQLWrapper>=2.0.0
-
-# Embeddings
-sentence-transformers>=3.0.0
-numpy>=1.26.0
-
-# LLM integration
-openai>=1.45.0
-
-# Routing
-geojson>=3.1.0
-
-# Utilities
+python-dotenv>=1.0.1
+python-dateutil>=2.8.2
 httpx>=0.27.0
 tenacity>=8.5.0
+orjson>=3.10.7
+tqdm>=4.66.5
+
+# Geospatial & Geometry
+shapely>=2.0.6
+geojson>=3.1.0
+
+# AI / Embeddings / LangGraph
+sentence-transformers>=3.0.0
+numpy>=1.26.0
+groq>=0.9.0
+langchain>=0.1.14
+langchain-core>=0.1.40
+langchain-groq>=0.1.10
+langchain-openai>=0.1.0
+langgraph>=0.0.71
+openai>=1.45.0

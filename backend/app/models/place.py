@@ -55,6 +55,13 @@ class Place(Base):
     best_seasons = Column(JSONB, default=list)
     landscape = Column(JSONB, default=list)
     
+    # Media and pricing
+    image_url = Column(Text, nullable=True)
+    gallery = Column(JSONB, default=list)
+    price_level = Column(Text, nullable=True)
+    must_try = Column(Text, nullable=True)
+    is_hidden_gem = Column(Boolean, default=False, index=True)
+
     # Popularity and quality metrics
     popularity = Column(Float, index=True)
     rating = Column(Float)
@@ -112,6 +119,11 @@ class Place(Base):
                 lat = (self.bbox_min_lat + self.bbox_max_lat) / 2
                 lng = (self.bbox_min_lon + self.bbox_max_lon) / 2
         
+        # Resolve best image
+        img = self.image_url
+        if not img and self.raw_tags:
+            img = self.raw_tags.get("wikidata_image") or self.raw_tags.get("image")
+
         return {
             "id": str(self.id),
             "osm_id": self.osm_id,
@@ -121,6 +133,11 @@ class Place(Base):
             "group": self.group,
             "latitude": lat,
             "longitude": lng,
+            "image_url": img,
+            "gallery": self.gallery or ([] if not img else [img]),
+            "price_level": self.price_level,
+            "must_try": self.must_try,
+            "is_hidden_gem": bool(self.is_hidden_gem),
             "wikidata_id": self.wikidata_id,
             "wikipedia_url": self.wikipedia_url,
             "website": self.website,

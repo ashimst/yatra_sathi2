@@ -1,0 +1,21 @@
+# ==============================================================================
+# Cloudflare Pages Custom Headers Configuration
+# ==============================================================================
+
+# Long-term immutable caching for bundled JS/CSS/image assets
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+
+# Revalidate index.html immediately so deployments appear instantly
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Security headers
+# (X-XSS-Protection is deprecated and removed. TODO Phase 1.9: add a
+# Content-Security-Policy once the API origin and image hosts are final.)
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(self)

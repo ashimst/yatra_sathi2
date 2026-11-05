@@ -90,6 +90,13 @@ def place_to_db(place: Place) -> PlaceDB:
         accessibility=place.accessibility,
         best_seasons=place.best_seasons or [],
         landscape=place.landscape or [],
+        popularity=getattr(place, "popularity", None),
+        rating=getattr(place, "rating", None),
+        image_url=getattr(place, "image_url", None) or rt.get("image") or rt.get("wikidata_image"),
+        gallery=getattr(place, "gallery", []) or [],
+        price_level=getattr(place, "price_level", None),
+        must_try=getattr(place, "must_try", None),
+        is_hidden_gem=bool(getattr(place, "is_hidden_gem", False)),
     )
 
 

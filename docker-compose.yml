@@ -1,0 +1,78 @@
+# Local development stack. Not used for production deployments.
+# Required in .env (project root): POSTGRES_PASSWORD. Optional: GROQ_API_KEY.
+
+services:
+  # ============================================================================
+  # Database: PostgreSQL 16 + PostGIS + pgvector
+  # ============================================================================
+  db:
+    build:
+      context: ./docker/postgres
+      dockerfile: Dockerfile
+    container_name: yatrasathi_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-yatra_sathi}
+    ports:
+      # Bound to localhost only; never expose the database on all interfaces.
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-yatra_sathi}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================================
+  # Backend API: FastAPI + Uvicorn
+  # ============================================================================
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: yatrasathi_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: development
+      DEBUG: "false"
+      PORT: "8000"
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-yatra_sathi}
+      LLM_PROVIDER: ${LLM_PROVIDER:-groq}
+      LLM_MODEL: ${LLM_MODEL:-llama-3.3-70b-versatile}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      NVIDIA_NIM_API_KEY: ${NVIDIA_NIM_API_KEY:-}
+      # Empty -> a fixed dev-only secret is used (refused when ENVIRONMENT=production).
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-}
+      OSRM_URL: ${OSRM_URL:-https://router.project-osrm.org}
+      CORS_ORIGINS: http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-8000}:8000"
+    volumes:
+      - uploads_data:/app/uploads
+
+  # ============================================================================
+  # Frontend Web: React 19 + Vite + Tailwind + Leaflet + Nginx
+  # ============================================================================
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: yatrasathi_web
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "127.0.0.1:${WEB_PORT:-3000}:80"
+
+volumes:
+  postgres_data:
+    driver: local
+  uploads_data:
+    driver: local

@@ -103,3 +103,37 @@ mobile/.packages
 mobile/.metadata
 mobile/build/
 mobile/.idea/
+
+# ── Web Frontend (React / Vite) ───────────────────────────────────────────────
+web/node_modules/
+web/dist/
+web/dist-ssr/
+web/*.local
+
+# ── Uploads & Dynamic Media ───────────────────────────────────────────────────
+uploads/*
+!uploads/.gitkeep
+!uploads/*/.gitkeep
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# ── Agent Workspaces & Temporary Assets ───────────────────────────────────────
+.agents/
+*.bmp
+
+# ── Terraform (Infrastructure as Code) ────────────────────────────────────────
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+!*.tfvars.example
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+

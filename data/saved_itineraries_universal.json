@@ -1,0 +1,1215 @@
+{
+  "version": "universal_v1",
+  "generated_at": "2026-07-31T08:01:20Z",
+  "itineraries": [
+    {
+      "id": "itinerary_dhulikhel_mustang_7d",
+      "title": "7-Day Dhulikhel to Mustang Overland Expedition (Bypassing Kathmandu)",
+      "from": "Dhulikhel",
+      "origin": "Dhulikhel",
+      "to": "Lo Manthang, Mustang",
+      "destination": "Lo Manthang, Mustang",
+      "days": 7,
+      "travelers": 2,
+      "budget": "Rs 85,000",
+      "pace": "Active Overland",
+      "diet": "Non-veg / Local Thakali",
+      "author": "Yatra Sathi Expedition Team",
+      "likes": 1240,
+      "is_public": true,
+      "isPublic": true,
+      "description": "A 7-day high-altitude overland journey from the mountain rim of Dhulikhel straight into the forbidden kingdom of Upper Mustang, bypassing Kathmandu traffic completely via the outer express corridor.",
+      "itinerary": {
+        "Day 1": [
+          {
+            "time": "06:30 AM",
+            "name": "Breakfast at Dwarika's Resort Dhulikhel",
+            "category": "Food & Culinary",
+            "duration": "1.0 hr",
+            "notes": "Organic gourmet breakfast overlooking sunrise over the Eastern Himalayas.",
+            "latitude": 27.6186,
+            "longitude": 85.5531
+          },
+          {
+            "time": "07:30 AM",
+            "name": "Express Bypass Highway Drive past Kathmandu Valley",
+            "category": "Scenic Drive",
+            "duration": "4.5 hrs",
+            "notes": "Bypasses Kathmandu city traffic entirely using the outer express corridor straight to Prithvi Highway.",
+            "latitude": 27.7000,
+            "longitude": 85.2000
+          },
+          {
+            "time": "12:30 PM",
+            "name": "Lunch at Riverside Springs Resort, Kurintar",
+            "category": "Food & Rest Stop",
+            "duration": "1.5 hrs",
+            "notes": "Buffet lunch alongside the roaring Trishuli River gorge.",
+            "latitude": 27.8584,
+            "longitude": 84.6292
+          },
+          {
+            "time": "04:30 PM",
+            "name": "Arrive Pokhara & Check-in at Temple Tree Resort & Spa",
+            "category": "Hotel Stay",
+            "duration": "2.0 hrs",
+            "notes": "Boutique hotel stay near Lakeside Pokhara. Rest and vehicle inspection.",
+            "latitude": 28.2096,
+            "longitude": 83.9585
+          },
+          {
+            "time": "07:30 PM",
+            "name": "Dinner at Moondance Restaurant Lakeside",
+            "category": "Dinner",
+            "duration": "1.5 hrs",
+            "notes": "Woodfired pizzas, Himalayan trout, and craft drinks by Phewa Lake.",
+            "latitude": 28.2085,
+            "longitude": 83.9572
+          }
+        ],
+        "Day 2": [
+          {
+            "time": "07:30 AM",
+            "name": "Breakfast at Temple Tree Resort",
+            "category": "Food & Culinary",
+            "duration": "1.0 hr",
+            "notes": "Hearty breakfast fuel for the mountain drive ahead.",
+            "latitude": 28.2096,
+            "longitude": 83.9585
+          },
+          {
+            "time": "08:30 AM",
+            "name": "Drive past Kusma Suspension Bridge & Beni",
+            "category": "Sightseeing Drive",
+            "duration": "4.0 hrs",
+            "notes": "Cross the world's highest foot suspension bridges and enter Kali Gandaki gorge.",
+            "latitude": 28.2201,
+            "longitude": 83.6792
+          },
+          {
+            "time": "01:00 PM",
+            "name": "Lunch at Himalayan Hotel, Beni",
+            "category": "Lunch",
+            "duration": "1.5 hrs",
+            "notes": "Traditional Thakali Thali lunch at the river confluence town of Beni.",
+            "latitude": 28.3444,
+            "longitude": 83.5658
+          },
+          {
+            "time": "04:30 PM",
+            "name": "Arrive Tatopani Natural Thermal Hot Springs",
+            "category": "Wellness & Nature",
+            "duration": "2.0 hrs",
+            "notes": "Soak away road fatigue in natural mineral hot spring pools beside the river.",
+            "latitude": 28.4965,
+            "longitude": 83.6543
+          },
+          {
+            "time": "07:30 PM",
+            "name": "Check-in & Dinner at Natural Hot Spring Resort",
+            "category": "Hotel Stay & Dinner",
+            "duration": "2.0 hrs",
+            "notes": "Overnight stay and fresh river trout dinner.",
+            "latitude": 28.4970,
+            "longitude": 83.6548
+          }
+        ],
+        "Day 3": [
+          {
+            "time": "07:30 AM",
+            "name": "Breakfast at Hot Spring Resort",
+            "category": "Food & Culinary",
+            "duration": "1.0 hr",
+            "notes": "Fresh mountain breakfast.",
+            "latitude": 28.4970,
+            "longitude": 83.6548
+          },
+          {
+            "time": "09:00 AM",
+            "name": "Rupse Waterfall & World's Deepest Gorge Viewpoint",
+            "category": "Waterfall & Geology",
+            "duration": "2.0 hrs",
+            "notes": "300m cascading waterfall plunging into the deepest gorge between Annapurna & Dhaulagiri.",
+            "latitude": 28.6015,
+            "longitude": 83.6425
+          },
+          {
+            "time": "01:00 PM",
+            "name": "Lunch & Apple Cider at Marpha Organic Farm Lodge",
+            "category": "Culinary & Village",
+            "duration": "2.5 hrs",
+            "notes": "Walk whitewashed stone alleys of Marpha, sample fresh apple pie, cider, and brandy.",
+            "latitude": 28.7523,
+            "longitude": 83.6974
+          },
+          {
+            "time": "04:30 PM",
+            "name": "Check-in at Moksha Mustang Resort, Jomsom",
+            "category": "Hotel Stay",
+            "duration": "2.0 hrs",
+            "notes": "Luxury stone lodge facing Mount Nilgiri (7,061m).",
+            "latitude": 28.7844,
+            "longitude": 83.7378
+          },
+          {
+            "time": "07:30 PM",
+            "name": "Dinner & Marpha Brandy Tasting at Moksha Lounge",
+            "category": "Dinner",
+            "duration": "2.0 hrs",
+            "notes": "Gourmet Mustang apple-infused dishes by a stone fireplace.",
+            "latitude": 28.7844,
+            "longitude": 83.7378
+          }
+        ],
+        "Day 4": [
+          {
+            "time": "07:30 AM",
+            "name": "Breakfast at Moksha Resort",
+            "category": "Food & Culinary",
+            "duration": "1.0 hr",
+            "notes": "Breakfast overlooking Nilgiri North peak.",
+            "latitude": 28.7844,
+            "longitude": 83.7378
+          },
+          {
+            "time": "09:00 AM",
+            "name": "Kagbeni Medieval Gateway Fortress",
+            "category": "Heritage & Culture",
+            "duration": "2.5 hrs",
+            "notes": "Explore 14th-century mud-brick monastery, ancestor statues, and border check post.",
+            "latitude": 28.8378,
+            "longitude": 83.7845
+          },
+          {
+            "time": "12:30 PM",
+            "name": "Lunch at Red House Lodge, Kagbeni",
+            "category": "Lunch",
+            "duration": "1.5 hrs",
+            "notes": "Authentic Tibetan butter tea and buck-wheat bread inside a historic lodge.",
+            "latitude": 28.8382,
+            "longitude": 83.7849
+          },
+          {
+            "time": "03:00 PM",
+            "name": "Muktinath Sacred Temple (3,800m) & 108 Waterspouts",
+            "category": "Sacred Pilgrimage",
+            "duration": "2.5 hrs",
+            "notes": "Holy shrine of Lord Vishnu featuring eternal flame, natural gas vent, and 108 bronze bullhead spouts.",
+            "latitude": 28.8168,
+            "longitude": 83.8717
+          },
+          {
+            "time": "05:30 PM",
+            "name": "Check-in & Dinner at Hotel Grand Sambala, Muktinath",
+            "category": "Hotel Stay & Dinner",
+            "duration": "2.0 hrs",
+            "notes": "Warm mountain hotel stay with panoramic views of Thorong La Pass.",
+            "latitude": 28.8160,
+            "longitude": 83.8700
+          }
+        ],
+        "Day 5": [
+          {
+            "time": "07:00 AM",
+            "name": "Breakfast at Hotel Grand Sambala",
+            "category": "Food & Culinary",
+            "duration": "1.0 hr",
+            "notes": "Early morning energy meal.",
+            "latitude": 28.8160,
+            "longitude": 83.8700
+          },
+          {
+            "time": "08:30 AM",
+            "name": "Chhusang Red Cliffs & River Crossing into Upper Mustang",
+            "category": "Geology & Adventure",
+            "duration": "3.5 hrs",
+            "notes": "Drive through spectacular red conglomerate rock towers and cave dwellings.",
+            "latitude": 28.9167,
+            "longitude": 83.8050
+          },
+          {
+            "time": "01:00 PM",
+            "name": "Lunch at Tsarang Guest House, Charang",
+            "category": "Lunch",
+            "duration": "1.5 hrs",
+            "notes": "Local barley soup and dumplings near Charang Dzong palace.",
+            "latitude": 29.0911,
+            "longitude": 83.9312
+          },
+          {
+            "time": "04:30 PM",
+            "name": "Arrive Walled City of Lo Manthang (3,840m)",
+            "category": "Forbidden Kingdom",
+            "duration": "2.0 hrs",
+            "notes": "Enter through the grand southern gate into the medieval capital of Upper Mustang.",
+            "latitude": 29.1822,
+            "longitude": 83.9572
+          },
+          {
+            "time": "07:30 PM",
+            "name": "Check-in & Dinner at Royal Mustang Resort, Lo Manthang",
+            "category": "Hotel Stay & Dinner",
+            "duration": "2.0 hrs",
+            "notes": "Heated Himalayan resort stay inside the historic walled kingdom.",
+            "latitude": 29.1828,
+            "longitude": 83.9578
+          }
+        ],
+        "Day 6": [
+          {
+            "time": "07:30 AM",
+            "name": "Breakfast at Royal Mustang Resort",
+            "category": "Food & Culinary",
+            "duration": "1.0 hr",
+            "notes": "Fresh yak butter pancakes and Tibetan tea.",
+            "latitude": 29.1828,
+            "longitude": 83.9578
+          },
+          {
+            "time": "09:00 AM",
+            "name": "Chhoser Jhong Sky Caves & Garphu Monastery",
+            "category": "Archaeology & Caves",
+            "duration": "3.5 hrs",
+            "notes": "Explore 5-story cliffside cave dwellings carved 2,500 years ago into sheer sandstone walls.",
+            "latitude": 29.2312,
+            "longitude": 83.9785
+          },
+          {
+            "time": "01:00 PM",
+            "name": "Lunch at Chhoser Village Eco Lodge",
+            "category": "Lunch",
+            "duration": "1.5 hrs",
+            "notes": "Traditional Himalayan lunch near the China-Nepal border trade corridor.",
+            "latitude": 29.2320,
+            "longitude": 83.9790
+          },
+          {
+            "time": "03:30 PM",
+            "name": "Jampa Lhakhang & Thubchen Monasteries Tour",
+            "category": "Heritage & Art",
+            "duration": "2.5 hrs",
+            "notes": "View 15th-century gold leaf mandalas and massive clay Buddha statues.",
+            "latitude": 29.1825,
+            "longitude": 83.9575
+          },
+          {
+            "time": "07:30 PM",
+            "name": "Fireside Cultural Dinner at Royal Mustang Lounge",
+            "category": "Dinner & Culture",
+            "duration": "2.0 hrs",
+            "notes": "Fireside storytelling with local Mustangi elders.",
+            "latitude": 29.1828,
+            "longitude": 83.9578
+          }
+        ],
+        "Day 7": [
+          {
+            "time": "07:00 AM",
+            "name": "Breakfast at Royal Mustang Resort",
+            "category": "Food & Culinary",
+            "duration": "1.0 hr",
+            "notes": "Final breakfast in Lo Manthang.",
+            "latitude": 29.1828,
+            "longitude": 83.9578
+          },
+          {
+            "time": "08:00 AM",
+            "name": "Scenic Return Drive down Upper Mustang Corridor",
+            "category": "Overland Drive",
+            "duration": "4.5 hrs",
+            "notes": "Descend past Syangboche pass with views of Nilgiri peak.",
+            "latitude": 28.9833,
+            "longitude": 83.8500
+          },
+          {
+            "time": "01:00 PM",
+            "name": "Lunch at Hotel Mustang Gateway, Jomsom",
+            "category": "Lunch",
+            "duration": "1.5 hrs",
+            "notes": "Celebratory completion lunch at Jomsom.",
+            "latitude": 28.7844,
+            "longitude": 83.7378
+          },
+          {
+            "time": "04:30 PM",
+            "name": "Check-in at Om's Home Jomsom Resort",
+            "category": "Hotel Stay",
+            "duration": "2.0 hrs",
+            "notes": "Relax along the stony banks of the Kali Gandaki River.",
+            "latitude": 28.7850,
+            "longitude": 83.7382
+          },
+          {
+            "time": "07:30 PM",
+            "name": "Farewell Dinner at Om's Home Dining Room",
+            "category": "Dinner",
+            "duration": "2.0 hrs",
+            "notes": "Freshly prepared mountain dinner.",
+            "latitude": 28.7850,
+            "longitude": 83.7382
+          }
+        ]
+      },
+      "ordered_waypoints": [
+        {
+          "id": "start",
+          "name": "Dhulikhel Resort Rim",
+          "category": "Origin",
+          "district": "Kavrepalanchok",
+          "province": "Bagmati",
+          "city": "Dhulikhel",
+          "description": "Starting mountain ridge resort in Kavrepalanchok district.",
+          "history": "",
+          "latitude": 27.6186,
+          "longitude": 85.5531,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": false,
+          "hasTicket": false
+        },
+        {
+          "id": "w1",
+          "name": "Kurintar Trishuli River Gorge",
+          "category": "Rest & Lunch",
+          "district": "Chitwan",
+          "province": "Bagmati",
+          "city": "Kurintar",
+          "description": "Highway riverside rest stop along Prithvi Highway.",
+          "history": "",
+          "latitude": 27.8584,
+          "longitude": 84.6292,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": false,
+          "hasTicket": false
+        },
+        {
+          "id": "w2",
+          "name": "Pokhara Temple Tree Resort",
+          "category": "Lakeside Oasis",
+          "district": "Kaski",
+          "province": "Gandaki",
+          "city": "Pokhara",
+          "description": "Overnight lakeside sanctuary in Pokhara valley.",
+          "history": "",
+          "latitude": 28.2096,
+          "longitude": 83.9585,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": false,
+          "hasTicket": false
+        },
+        {
+          "id": "w3",
+          "name": "Tatopani Thermal Springs",
+          "category": "Natural Spa",
+          "district": "Myagdi",
+          "province": "Gandaki",
+          "city": "Tatopani",
+          "description": "Hot mineral spring bath pools on Kali Gandaki bank.",
+          "history": "",
+          "latitude": 28.4965,
+          "longitude": 83.6543,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": false,
+          "hasTicket": false
+        },
+        {
+          "id": "w4",
+          "name": "Marpha Apple Village",
+          "category": "Heritage Village",
+          "district": "Mustang",
+          "province": "Gandaki",
+          "city": "Marpha",
+          "description": "Charming village of stone houses and organic apple orchards.",
+          "history": "",
+          "latitude": 28.7523,
+          "longitude": 83.6974,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": false,
+          "hasTicket": false
+        },
+        {
+          "id": "w5",
+          "name": "Moksha Mustang Resort, Jomsom",
+          "category": "Luxury Mountain Lodge",
+          "district": "Mustang",
+          "province": "Gandaki",
+          "city": "Jomsom",
+          "description": "High-altitude boutique resort facing Mount Nilgiri.",
+          "history": "",
+          "latitude": 28.7844,
+          "longitude": 83.7378,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": false,
+          "hasTicket": false
+        },
+        {
+          "id": "w6",
+          "name": "Muktinath Temple & 108 Spouts",
+          "category": "Sacred Pilgrimage",
+          "district": "Mustang",
+          "province": "Gandaki",
+          "city": "Muktinath",
+          "description": "Venerated 3,800m temple site sacred to Hindus and Buddhists.",
+          "history": "",
+          "latitude": 28.8168,
+          "longitude": 83.8717,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": true,
+          "hasTicket": true
+        },
+        {
+          "id": "end",
+          "name": "Lo Manthang Royal Resort",
+          "category": "Destination",
+          "district": "Mustang",
+          "province": "Gandaki",
+          "city": "Lo Manthang",
+          "description": "Capital of the ancient walled Kingdom of Lo Manthang.",
+          "history": "",
+          "latitude": 29.1822,
+          "longitude": 83.9572,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": true,
+          "hasTicket": true
+        }
+      ],
+      "orderedWaypoints": [
+        {
+          "id": "start",
+          "name": "Dhulikhel Resort Rim",
+          "category": "Origin",
+          "district": "Kavrepalanchok",
+          "province": "Bagmati",
+          "city": "Dhulikhel",
+          "description": "Starting mountain ridge resort in Kavrepalanchok district.",
+          "history": "",
+          "latitude": 27.6186,
+          "longitude": 85.5531,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": false
+        },
+        {
+          "id": "w1",
+          "name": "Kurintar Trishuli River Gorge",
+          "category": "Rest & Lunch",
+          "district": "Chitwan",
+          "province": "Bagmati",
+          "city": "Kurintar",
+          "description": "Highway riverside rest stop along Prithvi Highway.",
+          "history": "",
+          "latitude": 27.8584,
+          "longitude": 84.6292,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": false
+        },
+        {
+          "id": "w2",
+          "name": "Pokhara Temple Tree Resort",
+          "category": "Lakeside Oasis",
+          "district": "Kaski",
+          "province": "Gandaki",
+          "city": "Pokhara",
+          "description": "Overnight lakeside sanctuary in Pokhara valley.",
+          "history": "",
+          "latitude": 28.2096,
+          "longitude": 83.9585,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": false
+        },
+        {
+          "id": "w3",
+          "name": "Tatopani Thermal Springs",
+          "category": "Natural Spa",
+          "district": "Myagdi",
+          "province": "Gandaki",
+          "city": "Tatopani",
+          "description": "Hot mineral spring bath pools on Kali Gandaki bank.",
+          "history": "",
+          "latitude": 28.4965,
+          "longitude": 83.6543,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": false
+        },
+        {
+          "id": "w4",
+          "name": "Marpha Apple Village",
+          "category": "Heritage Village",
+          "district": "Mustang",
+          "province": "Gandaki",
+          "city": "Marpha",
+          "description": "Charming village of stone houses and organic apple orchards.",
+          "history": "",
+          "latitude": 28.7523,
+          "longitude": 83.6974,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": false
+        },
+        {
+          "id": "w5",
+          "name": "Moksha Mustang Resort, Jomsom",
+          "category": "Luxury Mountain Lodge",
+          "district": "Mustang",
+          "province": "Gandaki",
+          "city": "Jomsom",
+          "description": "High-altitude boutique resort facing Mount Nilgiri.",
+          "history": "",
+          "latitude": 28.7844,
+          "longitude": 83.7378,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": false
+        },
+        {
+          "id": "w6",
+          "name": "Muktinath Temple & 108 Spouts",
+          "category": "Sacred Pilgrimage",
+          "district": "Mustang",
+          "province": "Gandaki",
+          "city": "Muktinath",
+          "description": "Venerated 3,800m temple site sacred to Hindus and Buddhists.",
+          "history": "",
+          "latitude": 28.8168,
+          "longitude": 83.8717,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": true
+        },
+        {
+          "id": "end",
+          "name": "Lo Manthang Royal Resort",
+          "category": "Destination",
+          "district": "Mustang",
+          "province": "Gandaki",
+          "city": "Lo Manthang",
+          "description": "Capital of the ancient walled Kingdom of Lo Manthang.",
+          "history": "",
+          "latitude": 29.1822,
+          "longitude": 83.9572,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": true
+        }
+      ],
+      "route_points": [
+        [27.6186, 85.5531],
+        [27.8584, 84.6292],
+        [28.2096, 83.9585],
+        [28.4965, 83.6543],
+        [28.7523, 83.6974],
+        [28.7844, 83.7378],
+        [28.8168, 83.8717],
+        [29.1822, 83.9572]
+      ],
+      "routePoints": [
+        [27.6186, 85.5531],
+        [27.8584, 84.6292],
+        [28.2096, 83.9585],
+        [28.4965, 83.6543],
+        [28.7523, 83.6974],
+        [28.7844, 83.7378],
+        [28.8168, 83.8717],
+        [29.1822, 83.9572]
+      ],
+      "distance_km": 420.0,
+      "distanceKm": 420.0,
+      "duration_minutes": 960.0,
+      "durationMinutes": 960.0
+    },
+    {
+      "id": "itinerary_pokhara_manang_7d",
+      "title": "7-Day Pokhara to Manang & Tilicho Lake High Circuit",
+      "from": "Pokhara",
+      "origin": "Pokhara",
+      "to": "Manang & Tilicho Lake",
+      "destination": "Manang & Tilicho Lake",
+      "days": 7,
+      "travelers": 2,
+      "budget": "Rs 75,000",
+      "pace": "Alpine Trek & Drive",
+      "diet": "Non-veg / Yak Cheese",
+      "author": "Yatra Sathi Mountain Team",
+      "likes": 1680,
+      "is_public": true,
+      "isPublic": true,
+      "description": "A 7-day high-altitude trek and mountain drive through the Marshyangdi River gorge to Manang, Braga Monastery, and the turquoise waters of Tilicho Lake (4,919m).",
+      "itinerary": {
+        "Day 1": [
+          {
+            "time": "08:00 AM",
+            "name": "Breakfast at Waterfront Resort Pokhara",
+            "category": "Food & Culinary",
+            "duration": "1.0 hr",
+            "notes": "Lakeside breakfast before departing Pokhara valley.",
+            "latitude": 28.2096,
+            "longitude": 83.9585
+          },
+          {
+            "time": "09:00 AM",
+            "name": "Scenic Drive to Besisahar",
+            "category": "Overland Drive",
+            "duration": "4.0 hrs",
+            "notes": "Travel along Prithvi Highway turning north at Dumre towards Annapurna Circuit gateway.",
+            "latitude": 28.2285,
+            "longitude": 84.3754
+          },
+          {
+            "time": "01:00 PM",
+            "name": "Lunch at Hotel Gateway, Besisahar",
+            "category": "Lunch",
+            "duration": "1.5 hrs",
+            "notes": "Dal Bhat meal and ACAP permit registration.",
+            "latitude": 28.2290,
+            "longitude": 84.3760
+          },
+          {
+            "time": "04:00 PM",
+            "name": "Off-Road Canyon Drive to Jagat",
+            "category": "Adventure Drive",
+            "duration": "2.0 hrs",
+            "notes": "Drive along dramatic cliffside roads above Marshyangdi River.",
+            "latitude": 28.4068,
+            "longitude": 84.4124
+          },
+          {
+            "time": "06:00 PM",
+            "name": "Check-in & Dinner at Mont-Blanc Guest House, Jagat",
+            "category": "Hotel Stay & Dinner",
+            "duration": "2.0 hrs",
+            "notes": "Cozy alpine lodge stay with local vegetable stew.",
+            "latitude": 28.4072,
+            "longitude": 84.4128
+          }
+        ],
+        "Day 2": [
+          {
+            "time": "07:00 AM",
+            "name": "Breakfast at Mont-Blanc Guest House",
+            "category": "Food & Culinary",
+            "duration": "1.0 hr",
+            "notes": "Fresh Tibetan bread and honey.",
+            "latitude": 28.4072,
+            "longitude": 84.4128
+          },
+          {
+            "time": "08:00 AM",
+            "name": "Drive past Tal Village Waterfall Gorge & Dharapani",
+            "category": "Waterfall & Gorge",
+            "duration": "4.5 hrs",
+            "notes": "Enter Manang district through the iconic waterfall cliff gate at Tal.",
+            "latitude": 28.4682,
+            "longitude": 84.3792
+          },
+          {
+            "time": "01:00 PM",
+            "name": "Lunch at Hotel Manang Plaza, Timang Village",
+            "category": "Lunch",
+            "duration": "1.5 hrs",
+            "notes": "High-altitude pine ridge lunch with views of Manaslu Peak (8,163m).",
+            "latitude": 28.5350,
+            "longitude": 84.3210
+          },
+          {
+            "time": "04:30 PM",
+            "name": "Arrive Chame (2,670m) District HQ",
+            "category": "Mountain Town",
+            "duration": "1.0 hr",
+            "notes": "District headquarters of Manang surrounded by apple orchards.",
+            "latitude": 28.5524,
+            "longitude": 84.2415
+          },
+          {
+            "time": "05:30 PM",
+            "name": "Check-in & Dinner at Hotel Marshyangdi Mandala",
+            "category": "Hotel Stay & Hot Springs",
+            "duration": "2.0 hrs",
+            "notes": "Natural hot spring dip near the river and warm fireplace dining.",
+            "latitude": 28.5530,
+            "longitude": 84.2420
+          }
+        ],
+        "Day 3": [
+          {
+            "time": "07:30 AM",
+            "name": "Breakfast at Hotel Marshyangdi Mandala",
+            "category": "Food & Culinary",
+            "duration": "1.0 hr",
+            "notes": "Warm porridge and coffee.",
+            "latitude": 28.5530,
+            "longitude": 84.2420
+          },
+          {
+            "time": "08:30 AM",
+            "name": "Paungda Danda Curved Rock Wall Viewpoint",
+            "category": "Geology & View",
+            "duration": "3.5 hrs",
+            "notes": "Behold the colossal 1,500m smooth curved rock slab rising out of pine forest.",
+            "latitude": 28.5712,
+            "longitude": 84.1895
+          },
+          {
+            "time": "12:30 PM",
+            "name": "Lunch at Hotel Hill Town, Lower Pisang",
+            "category": "Lunch",
+            "duration": "1.5 hrs",
+            "notes": "Yak cheese soup and fried rice.",
+            "latitude": 28.6152,
+            "longitude": 84.1482
+          },
+          {
+            "time": "03:00 PM",
+            "name": "Hike to Upper Pisang Monastery (3,300m)",
+            "category": "Spirituality & Views",
+            "duration": "2.5 hrs",
+            "notes": "Ancient Tibetan monastery with panoramic views of Annapurna II (7,937m).",
+            "latitude": 28.6189,
+            "longitude": 84.1455
+          },
+          {
+            "time": "05:30 PM",
+            "name": "Check-in & Dinner at Hotel Bob Marley, Upper Pisang",
+            "category": "Hotel Stay & Dinner",
+            "duration": "2.0 hrs",
+            "notes": "Iconic high-altitude lodge stay with woodstove warming.",
+            "latitude": 28.6192,
+            "longitude": 84.1460
+          }
+        ],
+        "Day 4": [
+          {
+            "time": "07:30 AM",
+            "name": "Breakfast at Hotel Bob Marley",
+            "category": "Food & Culinary",
+            "duration": "1.0 hr",
+            "notes": "Homemade yak milk omelet and toast.",
+            "latitude": 28.6192,
+            "longitude": 84.1460
+          },
+          {
+            "time": "08:30 AM",
+            "name": "Ghyaru & Ngawal Panoramic Valley Drive",
+            "category": "Scenic Drive",
+            "duration": "4.0 hrs",
+            "notes": "High trail drive offering breathtaking vistas of Annapurna III, IV, and Gangapurna.",
+            "latitude": 28.6310,
+            "longitude": 84.0950
+          },
+          {
+            "time": "01:00 PM",
+            "name": "Lunch at Yak Restaurant, Braga Village",
+            "category": "Lunch",
+            "duration": "1.5 hrs",
+            "notes": "Fresh bakery items and traditional Thakali lunch.",
+            "latitude": 28.6512,
+            "longitude": 84.0321
+          },
+          {
+            "time": "03:00 PM",
+            "name": "900-year-old Braga Monastery (Brakha Gompa)",
+            "category": "Heritage & Culture",
+            "duration": "2.0 hrs",
+            "notes": "Explore one of the oldest monasteries in Manang valley with hundreds of Buddha statues.",
+            "latitude": 28.6518,
+            "longitude": 84.0325
+          },
+          {
+            "time": "05:00 PM",
+            "name": "Arrive Manang Village (3,540m) & Check-in at Hotel Yeti",
+            "category": "Hotel Stay & Dinner",
+            "duration": "2.5 hrs",
+            "notes": "Premier stone lodge in Manang village with heated rooms and bakery.",
+            "latitude": 28.6664,
+            "longitude": 84.0205
+          }
+        ],
+        "Day 5": [
+          {
+            "time": "07:00 AM",
+            "name": "Breakfast at Hotel Yeti",
+            "category": "Food & Culinary",
+            "duration": "1.0 hr",
+            "notes": "Carb-rich breakfast for high-altitude hike.",
+            "latitude": 28.6664,
+            "longitude": 84.0205
+          },
+          {
+            "time": "08:00 AM",
+            "name": "Ice Lake (Kicho Tal - 4,600m) Acclimatization Hike",
+            "category": "High Trekking",
+            "duration": "5.0 hrs",
+            "notes": "Hike up north ridge to sacred alpine lake reflecting Gangapurna and Annapurna peaks.",
+            "latitude": 28.6850,
+            "longitude": 84.0410
+          },
+          {
+            "time": "01:00 PM",
+            "name": "Picnic Lunch at Ice Lake Ridge",
+            "category": "Picnic Lunch",
+            "duration": "1.0 hr",
+            "notes": "High-altitude packed lunch with 360-degree mountain panorama.",
+            "latitude": 28.6855,
+            "longitude": 84.0415
+          },
+          {
+            "time": "04:30 PM",
+            "name": "Himalayan Rescue Association (HRA) Altitude Clinic Visit",
+            "category": "Health & Education",
+            "duration": "1.5 hrs",
+            "notes": "Attend daily lecture on acute mountain sickness (AMS) prevention.",
+            "latitude": 28.6670,
+            "longitude": 84.0210
+          },
+          {
+            "time": "07:30 PM",
+            "name": "Dinner at Hotel Yeti Dining Room",
+            "category": "Dinner",
+            "duration": "1.5 hrs",
+            "notes": "Yak burger and garlic soup for acclimatization.",
+            "latitude": 28.6664,
+            "longitude": 84.0205
+          }
+        ],
+        "Day 6": [
+          {
+            "time": "07:00 AM",
+            "name": "Breakfast at Hotel Yeti",
+            "category": "Food & Culinary",
+            "duration": "1.0 hr",
+            "notes": "Breakfast before departing towards Tilicho trail.",
+            "latitude": 28.6664,
+            "longitude": 84.0205
+          },
+          {
+            "time": "08:00 AM",
+            "name": "Drive to Khangsar Village (3,734m)",
+            "category": "Mountain Drive",
+            "duration": "2.5 hrs",
+            "notes": "Drive through old Khangsar village past traditional stone houses.",
+            "latitude": 28.6540,
+            "longitude": 83.9680
+          },
+          {
+            "time": "11:30 AM",
+            "name": "Lunch at Hotel Destination Tilicho, Khangsar",
+            "category": "Lunch",
+            "duration": "1.5 hrs",
+            "notes": "Noodle soup and potato bread.",
+            "latitude": 28.6545,
+            "longitude": 83.9685
+          },
+          {
+            "time": "01:00 PM",
+            "name": "Trek through Landslide Area to Tilicho Base Camp (4,150m)",
+            "category": "Trekking Adventure",
+            "duration": "4.0 hrs",
+            "notes": "Cross dramatic scree slopes and shale rock formations into Tilicho basin.",
+            "latitude": 28.6852,
+            "longitude": 83.8795
+          },
+          {
+            "time": "05:00 PM",
+            "name": "Check-in & Dinner at Tilicho Base Camp Lodge",
+            "category": "Base Camp Lodge & Dinner",
+            "duration": "2.0 hrs",
+            "notes": "Overnight base camp stay surrounded by glaciers.",
+            "latitude": 28.6855,
+            "longitude": 83.8800
+          }
+        ],
+        "Day 7": [
+          {
+            "time": "05:00 AM",
+            "name": "Early Morning Ascent to Tilicho Lake (4,919m)",
+            "category": "Sacred High Lake",
+            "duration": "4.0 hrs",
+            "notes": "Climb zig-zag trail to world's highest turquoise lake sitting below Tilicho Peak.",
+            "latitude": 28.6920,
+            "longitude": 83.8550
+          },
+          {
+            "time": "09:30 AM",
+            "name": "Breakfast on Shores of Tilicho Lake",
+            "category": "High Altitude Breakfast",
+            "duration": "1.0 hr",
+            "notes": "Hot tea and energy bars beside the frozen lake shore.",
+            "latitude": 28.6925,
+            "longitude": 83.8555
+          },
+          {
+            "time": "01:00 PM",
+            "name": "Trek back & Return Scenic Drive towards Pokhara",
+            "category": "Return Transport",
+            "duration": "6.0 hrs",
+            "notes": "Return transport down Marshyangdi Valley back to Pokhara.",
+            "latitude": 28.2096,
+            "longitude": 83.9585
+          },
+          {
+            "time": "08:00 PM",
+            "name": "Farewell Celebration Dinner at Fish Tail Lodge, Pokhara",
+            "category": "Dinner",
+            "duration": "2.0 hrs",
+            "notes": "Celebratory dinner on the island resort across Phewa Lake.",
+            "latitude": 28.2040,
+            "longitude": 83.9550
+          }
+        ]
+      },
+      "ordered_waypoints": [
+        {
+          "id": "start",
+          "name": "Pokhara Waterfront",
+          "category": "Origin",
+          "district": "Kaski",
+          "province": "Gandaki",
+          "city": "Pokhara",
+          "description": "Lakeside starting point in Pokhara.",
+          "history": "",
+          "latitude": 28.2096,
+          "longitude": 83.9585,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": false,
+          "hasTicket": false
+        },
+        {
+          "id": "w1",
+          "name": "Besisahar Gateway",
+          "category": "Annapurna Gateway",
+          "district": "Lamjung",
+          "province": "Gandaki",
+          "city": "Besisahar",
+          "description": "District capital and starting hub of Annapurna Circuit.",
+          "history": "",
+          "latitude": 28.2285,
+          "longitude": 84.3754,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": false,
+          "hasTicket": false
+        },
+        {
+          "id": "w2",
+          "name": "Jagat Gorge & Waterfall",
+          "category": "River Gorge",
+          "district": "Lamjung",
+          "province": "Gandaki",
+          "city": "Jagat",
+          "description": "Stone village perched in the Marshyangdi river gorge.",
+          "history": "",
+          "latitude": 28.4068,
+          "longitude": 84.4124,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": false,
+          "hasTicket": false
+        },
+        {
+          "id": "w3",
+          "name": "Chame District HQ & Hot Springs",
+          "category": "District HQ",
+          "district": "Manang",
+          "province": "Gandaki",
+          "city": "Chame",
+          "description": "Pine-surrounded town with natural hot springs.",
+          "history": "",
+          "latitude": 28.5524,
+          "longitude": 84.2415,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": false,
+          "hasTicket": false
+        },
+        {
+          "id": "w4",
+          "name": "Upper Pisang & Paungda Danda",
+          "category": "High Monastery",
+          "district": "Manang",
+          "province": "Gandaki",
+          "city": "Pisang",
+          "description": "Historic monastery village facing Annapurna II.",
+          "history": "",
+          "latitude": 28.6189,
+          "longitude": 84.1455,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": false,
+          "hasTicket": false
+        },
+        {
+          "id": "w5",
+          "name": "Manang Village & Braga Gompa",
+          "category": "Alpine Valley",
+          "district": "Manang",
+          "province": "Gandaki",
+          "city": "Manang",
+          "description": "3,540m high-altitude hub featuring 900-year-old monastery.",
+          "history": "",
+          "latitude": 28.6664,
+          "longitude": 84.0205,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": true,
+          "hasTicket": true
+        },
+        {
+          "id": "w6",
+          "name": "Ice Lake (Kicho Tal)",
+          "category": "High Alpine Lake",
+          "district": "Manang",
+          "province": "Gandaki",
+          "city": "Manang",
+          "description": "4,600m glacial lake offering mountain panoramas.",
+          "history": "",
+          "latitude": 28.6850,
+          "longitude": 84.0410,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": false,
+          "hasTicket": false
+        },
+        {
+          "id": "end",
+          "name": "Tilicho Lake (4,919m)",
+          "category": "High Altitude Lake Destination",
+          "district": "Manang",
+          "province": "Gandaki",
+          "city": "Tilicho",
+          "description": "World's highest turquoise mountain lake.",
+          "history": "",
+          "latitude": 28.6920,
+          "longitude": 83.8550,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "has_ticket": true,
+          "hasTicket": true
+        }
+      ],
+      "orderedWaypoints": [
+        {
+          "id": "start",
+          "name": "Pokhara Waterfront",
+          "category": "Origin",
+          "district": "Kaski",
+          "province": "Gandaki",
+          "city": "Pokhara",
+          "description": "Lakeside starting point in Pokhara.",
+          "history": "",
+          "latitude": 28.2096,
+          "longitude": 83.9585,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": false
+        },
+        {
+          "id": "w1",
+          "name": "Besisahar Gateway",
+          "category": "Annapurna Gateway",
+          "district": "Lamjung",
+          "province": "Gandaki",
+          "city": "Besisahar",
+          "description": "District capital and starting hub of Annapurna Circuit.",
+          "history": "",
+          "latitude": 28.2285,
+          "longitude": 84.3754,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": false
+        },
+        {
+          "id": "w2",
+          "name": "Jagat Gorge & Waterfall",
+          "category": "River Gorge",
+          "district": "Lamjung",
+          "province": "Gandaki",
+          "city": "Jagat",
+          "description": "Stone village perched in the Marshyangdi river gorge.",
+          "history": "",
+          "latitude": 28.4068,
+          "longitude": 84.4124,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": false
+        },
+        {
+          "id": "w3",
+          "name": "Chame District HQ & Hot Springs",
+          "category": "District HQ",
+          "district": "Manang",
+          "province": "Gandaki",
+          "city": "Chame",
+          "description": "Pine-surrounded town with natural hot springs.",
+          "history": "",
+          "latitude": 28.5524,
+          "longitude": 84.2415,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": false
+        },
+        {
+          "id": "w4",
+          "name": "Upper Pisang & Paungda Danda",
+          "category": "High Monastery",
+          "district": "Manang",
+          "province": "Gandaki",
+          "city": "Pisang",
+          "description": "Historic monastery village facing Annapurna II.",
+          "history": "",
+          "latitude": 28.6189,
+          "longitude": 84.1455,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": false
+        },
+        {
+          "id": "w5",
+          "name": "Manang Village & Braga Gompa",
+          "category": "Alpine Valley",
+          "district": "Manang",
+          "province": "Gandaki",
+          "city": "Manang",
+          "description": "3,540m high-altitude hub featuring 900-year-old monastery.",
+          "history": "",
+          "latitude": 28.6664,
+          "longitude": 84.0205,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": true
+        },
+        {
+          "id": "w6",
+          "name": "Ice Lake (Kicho Tal)",
+          "category": "High Alpine Lake",
+          "district": "Manang",
+          "province": "Gandaki",
+          "city": "Manang",
+          "description": "4,600m glacial lake offering mountain panoramas.",
+          "history": "",
+          "latitude": 28.6850,
+          "longitude": 84.0410,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": false
+        },
+        {
+          "id": "end",
+          "name": "Tilicho Lake (4,919m)",
+          "category": "High Altitude Lake Destination",
+          "district": "Manang",
+          "province": "Gandaki",
+          "city": "Tilicho",
+          "description": "World's highest turquoise mountain lake.",
+          "history": "",
+          "latitude": 28.6920,
+          "longitude": 83.8550,
+          "images": ["https://images.unsplash.com/photo-1544735716-392fe2489ffa"],
+          "hasTicket": true
+        }
+      ],
+      "route_points": [
+        [28.2096, 83.9585],
+        [28.2285, 84.3754],
+        [28.4068, 84.4124],
+        [28.5524, 84.2415],
+        [28.6189, 84.1455],
+        [28.6664, 84.0205],
+        [28.6850, 84.0410],
+        [28.6920, 83.8550]
+      ],
+      "routePoints": [
+        [28.2096, 83.9585],
+        [28.2285, 84.3754],
+        [28.4068, 84.4124],
+        [28.5524, 84.2415],
+        [28.6189, 84.1455],
+        [28.6664, 84.0205],
+        [28.6850, 84.0410],
+        [28.6920, 83.8550]
+      ],
+      "distance_km": 310.0,
+      "distanceKm": 310.0,
+      "duration_minutes": 720.0,
+      "durationMinutes": 720.0
+    }
+  ]
+}

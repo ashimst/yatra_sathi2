@@ -8,8 +8,6 @@ import 'package:mobile/constants.dart';
 import 'package:mobile/models/created_itinerary.dart';
 import 'package:mobile/models/place.dart';
 import 'package:mobile/screens/place_detail_screen.dart';
-import 'package:mobile/services/auth_service.dart';
-import 'package:mobile/services/user_session.dart';
 import 'package:mobile/widgets/day_section.dart';
 import 'package:mobile/widgets/ai_chat_widget.dart';
 
@@ -43,111 +41,50 @@ class _ItineraryEditScreenState extends State<ItineraryEditScreen> {
 
   Future<void> _initializeWorkspace() async {
     setState(() => _isLoading = true);
-
+    
     try {
-      final String userId = UserSession.loggedInUser ?? 'guest_user';
-      final headers = await AuthService.getAuthHeader();
-      headers['Content-Type'] = 'application/json';
-
-      // Convert the currently-open itinerary into a JSON snapshot that the
-      // workspace can ingest directly.  undo/redo/proposals then operate on
-      // this snapshot.
-      final initialItinerary = {
-        'id': _itinerary.id,
-        'title': _itinerary.title,
-        'origin': _itinerary.from,
-        'from': _itinerary.from,
-        'destination': _itinerary.to,
-        'to': _itinerary.to,
-        'days': _itinerary.days,
-        'travelers': _itinerary.travelers,
-        'budget': _itinerary.budget,
-        'pace': _itinerary.pace,
-        'diet': _itinerary.diet,
-        'author': _itinerary.author,
-        'likes': _itinerary.likes,
-        'is_public': _itinerary.isPublic,
-        'distance_km': _itinerary.distanceKm,
-        'duration_minutes': _itinerary.durationMinutes,
-        'itinerary': _itinerary.itinerary,
-        'ordered_waypoints': _itinerary.orderedWaypoints
-            .map((p) => {
-                  'id': p.id,
-                  'name': p.name,
-                  'latitude': p.latitude,
-                  'longitude': p.longitude,
-                  'category': p.category,
-                })
-            .toList(),
-        'route_points': _itinerary.routePoints
-            .map((ll) => {'lat': ll.latitude, 'lng': ll.longitude})
-            .toList(),
-      };
-
+      // Create or load workspace
       final response = await http.post(
         Uri.parse('$kBaseUrl/workspace'),
-        headers: headers,
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'user_id': userId,
+          'user_id': 'default_user',
           'name': _itinerary.title,
-          'origin_lat': _itinerary.orderedWaypoints.isNotEmpty
-              ? _itinerary.orderedWaypoints.first.latitude
-              : null,
-          'origin_lng': _itinerary.orderedWaypoints.isNotEmpty
-              ? _itinerary.orderedWaypoints.first.longitude
-              : null,
-          'destination_lat': _itinerary.orderedWaypoints.isNotEmpty
-              ? _itinerary.orderedWaypoints.last.latitude
-              : null,
-          'destination_lng': _itinerary.orderedWaypoints.isNotEmpty
-              ? _itinerary.orderedWaypoints.last.longitude
-              : null,
+          'origin_lat': _itinerary.orderedWaypoints.first.latitude,
+          'origin_lng': _itinerary.orderedWaypoints.first.longitude,
+          'destination_lat': _itinerary.orderedWaypoints.last.latitude,
+          'destination_lng': _itinerary.orderedWaypoints.last.longitude,
           'start_date': DateTime.now().toIso8601String(),
-          'end_date': DateTime.now()
-              .add(Duration(days: _itinerary.days))
-              .toIso8601String(),
-          'initial_itinerary': initialItinerary,
+          'end_date': DateTime.now().add(Duration(days: _itinerary.days)).toIso8601String(),
         }),
       );
-
+      
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        // Backend returns {"id": "...", ...}
-        _workspaceId = data['id'] as String?;
+        _workspaceId = data['workspace_id'];
         await _loadVersionHistory();
-        await _refreshFromWorkspace();
-      } else {
-        debugPrint(
-            'Workspace creation failed (${response.statusCode}): ${response.body}');
       }
     } catch (e) {
       debugPrint('Error initializing workspace: $e');
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _loadVersionHistory() async {
     if (_workspaceId == null) return;
-
+    
     try {
-      final headers = await AuthService.getAuthHeader();
       final response = await http.get(
         Uri.parse('$kBaseUrl/workspace/$_workspaceId/versions'),
-        headers: headers,
       );
-
+      
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        if (mounted) {
-          setState(() {
-            _versionHistory =
-                List<Map<String, dynamic>>.from(data['versions'] ?? []);
-            _currentVersionIndex = _versionHistory.isEmpty
-                ? 0
-                : _versionHistory.length - 1;
-          });
-        }
+        setState(() {
+          _versionHistory = List<Map<String, dynamic>>.from(data['versions']);
+          _currentVersionIndex = _versionHistory.length - 1;
+        });
       }
     } catch (e) {
       debugPrint('Error loading version history: $e');
@@ -191,74 +128,55 @@ class _ItineraryEditScreenState extends State<ItineraryEditScreen> {
 
   Future<void> _applyEdit(Map<String, dynamic> edits) async {
     if (_workspaceId == null) return;
-
+    
     setState(() => _isLoading = true);
-
+    
     try {
-      final String userId = UserSession.loggedInUser ?? 'guest_user';
-      final headers = await AuthService.getAuthHeader();
-      headers['Content-Type'] = 'application/json';
-
+      // Execute operation via workspace API
       final response = await http.post(
         Uri.parse('$kBaseUrl/workspace/$_workspaceId/execute'),
-        headers: headers,
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'operation_type': edits['type'] ?? 'modify_itinerary',
+          'operation_type': edits['type'],
           'args': edits,
-          'user_id': userId,
         }),
       );
-
+      
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        
+        // Update local itinerary from workspace
         await _refreshFromWorkspace();
+        
+        // Reload version history
         await _loadVersionHistory();
-        final explanation =
-            data['meta'] is Map && data['meta']['message'] != null
-                ? data['meta']['message']
-                : 'Changes applied (workspace updated)';
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(explanation)),
-          );
-        }
-      } else {
-        debugPrint(
-            'Execute failed (${response.statusCode}): ${response.body}');
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to apply changes')),
-          );
-        }
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(data['result']['explanation'] ?? 'Changes applied')),
+        );
       }
     } catch (e) {
       debugPrint('Error applying edit: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to apply changes: $e')),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to apply changes')),
+      );
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _applyProposalEdit(Map<String, dynamic> edits) async {
     if (_workspaceId == null) return;
-
+    
     setState(() => _isProposalLoading = true);
-
+    
     try {
-      final String userId = UserSession.loggedInUser ?? 'guest_user';
-      final headers = await AuthService.getAuthHeader();
-      headers['Content-Type'] = 'application/json';
-
       List<Map<String, dynamic>> operations = [];
       if (edits['edits'] is List && (edits['edits'] as List).isNotEmpty) {
         for (var e in (edits['edits'] as List)) {
           if (e is Map<String, dynamic>) {
             operations.add({
-              'operation_type': e['operation_type'] ?? e['type'] ?? 'modify_itinerary',
+              'type': e['type'] ?? 'modify_itinerary',
               'args': e,
             });
           }
@@ -267,61 +185,54 @@ class _ItineraryEditScreenState extends State<ItineraryEditScreen> {
       if (operations.isEmpty) {
         operations = [
           {
-            'operation_type': edits['operation_type'] ??
-                edits['type'] ??
-                'modify_itinerary',
+            'type': edits['type'] ?? 'modify_itinerary',
             'args': edits,
           }
         ];
       }
 
+      // Create proposal using proposal API
       final response = await http.post(
         Uri.parse('$kBaseUrl/workspace/$_workspaceId/propose'),
-        headers: headers,
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'operations': operations,
-          'user_id': userId,
+          'user_id': 'default_user',
           'screen_context': 'itinerary_edit',
         }),
       );
-
+      
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-
-        if (mounted) {
+        
+        if (data['success']) {
+          // Show proposal preview
           setState(() {
             _currentProposal = data;
             _isProposalMode = true;
           });
+          
           _showProposalDialog(data);
-        }
-      } else {
-        debugPrint(
-            'Proposal creation failed (${response.statusCode}): ${response.body}');
-        if (mounted) {
+        } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to create proposal')),
+            SnackBar(content: Text(data['error'] ?? 'Failed to create proposal')),
           );
         }
       }
     } catch (e) {
       debugPrint('Error creating proposal: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to create proposal: $e')),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to create proposal')),
+      );
     } finally {
-      if (mounted) setState(() => _isProposalLoading = false);
+      setState(() => _isProposalLoading = false);
     }
   }
 
   void _showProposalDialog(Map<String, dynamic> proposalData) {
-    final changes = (proposalData['changes'] as List?) ?? [];
-    final warnings = (proposalData['warnings'] as List?) ?? [];
-    final explanation =
-        proposalData['explanation'] as String? ??
-            'Review the proposed changes to your itinerary.';
+    final changes = proposalData['changes'] as List;
+    final warnings = proposalData['warnings'] as List;
+    final explanation = proposalData['explanation'] as String;
     
     showDialog(
       context: context,
@@ -374,195 +285,116 @@ class _ItineraryEditScreenState extends State<ItineraryEditScreen> {
     );
   }
 
-  Future<void> _acceptProposal(String? proposalId) async {
+  Future<void> _acceptProposal(String proposalId) async {
     if (_workspaceId == null || proposalId == null) return;
-
+    
     setState(() => _isProposalLoading = true);
-
+    
     try {
-      final headers = await AuthService.getAuthHeader();
-      headers['Content-Type'] = 'application/json';
-
       final response = await http.post(
-        Uri.parse(
-          '$kBaseUrl/workspace/$_workspaceId/proposals/$proposalId/action',
-        ),
-        headers: headers,
+        Uri.parse('$kBaseUrl/workspace/$_workspaceId/proposals/$proposalId/action'),
+        headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'action': 'accept',
           'create_version': true,
           'version_description': 'Accepted AI proposal',
         }),
       );
-
+      
       if (response.statusCode == 200) {
-        await _refreshFromWorkspace();
-        await _loadVersionHistory();
-
-        if (mounted) {
+        final data = jsonDecode(response.body);
+        
+        if (data['success']) {
+          // Update local itinerary from workspace
+          await _refreshFromWorkspace();
+          
+          // Reload version history
+          await _loadVersionHistory();
+          
           setState(() {
             _currentProposal = null;
             _isProposalMode = false;
           });
+          
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Changes accepted and applied')),
-          );
-        }
-      } else {
-        debugPrint(
-            'Accept proposal failed (${response.statusCode}): ${response.body}');
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to accept changes')),
           );
         }
       }
     } catch (e) {
       debugPrint('Error accepting proposal: $e');
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to accept changes: $e')),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to accept changes')),
+      );
     } finally {
-      if (mounted) setState(() => _isProposalLoading = false);
+      setState(() => _isProposalLoading = false);
     }
   }
 
   Future<void> _refreshFromWorkspace() async {
     if (_workspaceId == null) return;
-
+    
     try {
-      final headers = await AuthService.getAuthHeader();
       final response = await http.get(
         Uri.parse('$kBaseUrl/workspace/$_workspaceId'),
-        headers: headers,
       );
-
+      
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final itinerarySnapshot = data['itinerary'] as Map<String, dynamic>?;
-        if (itinerarySnapshot != null && mounted) {
-          final updated = _mergeSnapshotIntoItinerary(itinerarySnapshot);
-          if (updated != null) {
-            setState(() => _itinerary = updated);
-          }
-        }
-        debugPrint(
-            'Workspace refreshed: id=${data['id']}, '
-            'pending proposals=${data['pending_proposals']}, '
-            'version=${data['current_version_number']}');
+        // Update itinerary from workspace data
+        // This would need to be adapted based on the actual workspace structure
+        debugPrint('Workspace refreshed: ${data['workspace']['id']}');
       }
     } catch (e) {
       debugPrint('Error refreshing from workspace: $e');
     }
   }
 
-  CreatedItinerary? _mergeSnapshotIntoItinerary(Map<String, dynamic> snap) {
-    try {
-      final snapshotItinerary = snap['itinerary'] as Map?;
-      final Map<String, List<Map<String, dynamic>>> parsedSchedule = {};
-      if (snapshotItinerary != null) {
-        snapshotItinerary.forEach((k, v) {
-          if (v is List) {
-            parsedSchedule[k.toString()] = v.map((item) {
-              if (item is Map) return Map<String, dynamic>.from(item);
-              return {'name': item.toString(), 'time': ''};
-            }).toList();
-          }
-        });
-      }
-
-      return CreatedItinerary(
-        id: (snap['id'] as String?) ?? _itinerary.id,
-        title: (snap['title'] as String?) ?? _itinerary.title,
-        from: (snap['origin'] as String?) ??
-            (snap['from'] as String?) ??
-            _itinerary.from,
-        to: (snap['destination'] as String?) ??
-            (snap['to'] as String?) ??
-            _itinerary.to,
-        days: (snap['days'] as num?)?.toInt() ?? _itinerary.days,
-        travelers:
-            (snap['travelers'] as num?)?.toInt() ?? _itinerary.travelers,
-        budget: (snap['budget'] as String?) ?? _itinerary.budget,
-        pace: (snap['pace'] as String?) ?? _itinerary.pace,
-        diet: (snap['diet'] as String?) ?? _itinerary.diet,
-        author: (snap['author'] as String?) ?? _itinerary.author,
-        likes: (snap['likes'] as num?)?.toInt() ?? _itinerary.likes,
-        isPublic: (snap['is_public'] as bool?) ?? _itinerary.isPublic,
-        itinerary:
-            parsedSchedule.isNotEmpty ? parsedSchedule : _itinerary.itinerary,
-        orderedWaypoints: _itinerary.orderedWaypoints,
-        routePoints: _itinerary.routePoints,
-        distanceKm:
-            (snap['distance_km'] as num?)?.toDouble() ?? _itinerary.distanceKm,
-        durationMinutes: (snap['duration_minutes'] as num?)?.toDouble() ??
-            _itinerary.durationMinutes,
-      );
-    } catch (e) {
-      debugPrint('Workspace snapshot merge failed: $e');
-      return null;
-    }
-  }
-
   Future<void> _undo() async {
     if (_workspaceId == null) return;
-
+    
     setState(() => _isLoading = true);
-
+    
     try {
-      final headers = await AuthService.getAuthHeader();
-      headers['Content-Type'] = 'application/json';
-
       final response = await http.post(
         Uri.parse('$kBaseUrl/workspace/$_workspaceId/undo'),
-        headers: headers,
       );
-
+      
       if (response.statusCode == 200) {
         await _refreshFromWorkspace();
         await _loadVersionHistory();
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Undo successful')),
-          );
-        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Undo successful')),
+        );
       }
     } catch (e) {
       debugPrint('Error undoing: $e');
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _redo() async {
     if (_workspaceId == null) return;
-
+    
     setState(() => _isLoading = true);
-
+    
     try {
-      final headers = await AuthService.getAuthHeader();
-      headers['Content-Type'] = 'application/json';
-
       final response = await http.post(
         Uri.parse('$kBaseUrl/workspace/$_workspaceId/redo'),
-        headers: headers,
       );
-
+      
       if (response.statusCode == 200) {
         await _refreshFromWorkspace();
         await _loadVersionHistory();
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Redo successful')),
-          );
-        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Redo successful')),
+        );
       }
     } catch (e) {
       debugPrint('Error redoing: $e');
     } finally {
-      if (mounted) setState(() => _isLoading = false);
+      setState(() => _isLoading = false);
     }
   }
 

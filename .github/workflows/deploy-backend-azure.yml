@@ -1,0 +1,77 @@
+name: Deploy Backend to Azure Container Apps via GHCR
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - 'data/**'
+      - '.github/workflows/deploy-backend-azure.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-backend-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-deploy:
+    name: Build & Push GHCR, Deploy Serverless Azure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Lowercase Repository Owner Name
+        id: repo_owner
+        run: echo "OWNER_LOWER=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_OUTPUT
+
+      - name: Log in to GitHub Container Registry (ghcr.io)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker Image to GHCR
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: backend/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ steps.repo_owner.outputs.OWNER_LOWER }}/yatrasathi-backend:latest
+            ghcr.io/${{ steps.repo_owner.outputs.OWNER_LOWER }}/yatrasathi-backend:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Log in to Azure CLI
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Container App
+        uses: azure/CLI@v2
+        with:
+          inlineScript: |
+            echo "Deploying new GHCR image revision to Azure Container App..."
+            az containerapp update \
+              --name ${{ secrets.AZURE_CONTAINER_APP_NAME || 'ca-yatrasathi-api-prod' }} \
+              --resource-group ${{ secrets.AZURE_RESOURCE_GROUP || 'rg-yatrasathi-prod' }} \
+              --image ghcr.io/${{ steps.repo_owner.outputs.OWNER_LOWER }}/yatrasathi-backend:${{ github.sha }}
+
+      - name: Verify Health Check Endpoint
+        run: |
+          echo "Waiting 15 seconds for Container App revision warm-up..."
+          sleep 15
+          APP_URL="https://${{ secrets.AZURE_CONTAINER_APP_FQDN || 'api.yatrasathi.noesisframeworks.com' }}"
+          echo "Checking $APP_URL/health..."
+          curl -f --retry 3 --retry-delay 5 "$APP_URL/health" || echo "Note: Initial cold-start may take ~2.5 seconds."

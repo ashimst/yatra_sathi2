@@ -1,0 +1,414 @@
+[
+  {
+    "id": "dashain",
+    "name": "Dashain",
+    "nepali_name": "बडा दशैं / विजया दशमी",
+    "lunar_month": "Ashwin Shukla Pratipada to Purnima",
+    "typical_gregorian_window": "Late September to Mid-October",
+    "significance": "Nepal's grandest and longest Hindu festival (15 days), celebrating the supreme victory of Goddess Durga Bhavani over the buffalo demon Mahishasura (triumph of good over evil) and Lord Rama's vanquishing of Ravana. Symbolizes familial reunion, reconciliation, rejuvenation, and divine blessings.",
+    "primary_regions": [
+      "Nationwide",
+      "Kathmandu Valley",
+      "Gandaki",
+      "Koshi",
+      "Madhesh",
+      "Lumbini",
+      "Karnali",
+      "Sudurpashchim"
+    ],
+    "associated_places": [
+      "Pashupatinath Temple",
+      "Kathmandu Durbar Square (Taleju Temple)",
+      "Dakshinkali Temple",
+      "Gorkha Durbar",
+      "Bhadrakali Temple (Pokhara)",
+      "Janaki Mandir (Janakpur)",
+      "Changu Narayan Temple",
+      "Shikali Temple (Khokana)"
+    ],
+    "rituals": [
+      "Ghatasthapana: Sowing barley and maize seeds in holy sand to germinate sacred golden Jamara sprouts",
+      "Fulpati: Royal ceremonial procession carrying sacred foliage, sugar cane, and banana stalks from Gorkha Durbar to Hanuman Dhoka",
+      "Maha Ashtami: Solemn Kalaratri night-vigil and sacrifices dedicated to Goddess Kali",
+      "Maha Navami: Solemn opening of Taleju Bhawani Temple (open to public exclusively on this single day of the year); Vishwakarma vehicle and tool worship",
+      "Vijaya Dashami: Elders apply red rice-and-curd Tika and tuck golden Jamara above the ears of junior relatives while chanting Vedic benedictions",
+      "Kojagrat Purnima: Night-long vigil awaiting Goddess Lakshmi's blessing of prosperity",
+      "Erection of soaring bamboo swings (Rote Ping / Lingay Ping) in rural village hilltops and city commons",
+      "Kite flying with colorful Changi kites across the Kathmandu basin skies to signal the close of monsoon"
+    ],
+    "duration_days": 15,
+    "key_highlights": "Family reunions, red tika, bamboo swings, flying kites, feast of mutton and sel roti."
+  },
+  {
+    "id": "tihar-chhath",
+    "name": "Tihar & Chhath",
+    "nepali_name": "तिहार (दीपावली / यमपञ्चक) र छठ पर्व",
+    "lunar_month": "Kartik Krishna Trayodashi to Shukla Dwitiya (Tihar); Kartik Shukla Shashthi (Chhath)",
+    "typical_gregorian_window": "Late October to Mid-November",
+    "significance": "Tihar (Deepawali / Yamapanchak) is a 5-day festival of lights celebrating the cosmic relationship between humans, sacred animals, Yama (god of death), and Goddess Lakshmi (wealth & fertility). Chhath, following 4 days after, is the grand Mithila Vedic festival revering Surya (the Sun god) and Chhathi Maiya for cosmic health, long life, and ecological purity.",
+    "primary_regions": [
+      "Nationwide",
+      "Kathmandu Valley",
+      "Terai / Mithila Region",
+      "Pokhara",
+      "Janakpurdham"
+    ],
+    "associated_places": [
+      "Rani Pokhari (Kathmandu)",
+      "Patan Durbar Square",
+      "Phewa Lake Lakeside (Pokhara)",
+      "Janakpurdham (Ganga Sagar & Dhanush Sagar)",
+      "Bagmati River Ghats"
+    ],
+    "rituals": [
+      "Day 1 - Kaag Tihar: Offering cooked rice to crows as divine emissaries of Lord Yama",
+      "Day 2 - Kukur Tihar: Honoring dogs with marigold garlands, vermillion tika, and feasts in gratitude for loyalty and spiritual protection",
+      "Day 3 - Gai Tihar & Lakshmi Puja: Morning veneration of holy cows; evening illumination of houses with clay diyo lamps, colorful Rangoli floor mandalas, and welcoming Goddess Lakshmi with Deusi-Bhailo singing troupes",
+      "Day 4 - Govardhan Puja & Mha Puja: Worship of cows and oxen; in Newar tradition, Mha Puja (worship of the inner divine self) marking the dawn of Nepal Sambat (Newar New Year)",
+      "Day 5 - Bhai Tika: Sisters bestow seven-colored Saptarangi Tika, Makhamali (Globe Amaranth) garlands, walnuts, and blessings of immortality to brothers, receiving gifts in return",
+      "Chhath Nahay-Khay & Kharna: Ritual purification bath and sacred kheer rice pudding offerings",
+      "Chhath Sanjhiya Arghya: Devotees stand waist-deep in holy ponds/rivers at sunset holding winnowing trays (Soop) filled with Thekua sweets, sugarcane, and bananas",
+      "Chhath Bhorwa Arghya: Morning arghya offered to the rising sun, ending a rigorous 36-hour waterless fast (Nirjala Vrata)"
+    ],
+    "duration_days": 9,
+    "key_highlights": "Diyo clay lamps, rangoli floor art, marigold garlands, deusi-bhailo songs, brother-sister bonds, sunset/sunrise river offerings."
+  },
+  {
+    "id": "indra-jatra",
+    "name": "Indra Jatra",
+    "nepali_name": "इन्द्र जात्रा (येँया:)",
+    "lunar_month": "Bhadra Shukla Dwadashi to Ashwin Krishna Chaturdashi",
+    "typical_gregorian_window": "September (Late Monsoon)",
+    "significance": "Historical 8-day Newar harvest celebration in Kathmandu honoring Lord Indra (king of heaven and god of rainfall) to express gratitude for agricultural rains, remember departed ancestors, and display state authority and divine royal legitimacy.",
+    "primary_regions": [
+      "Kathmandu Valley (Old Kathmandu / Basantapur)"
+    ],
+    "associated_places": [
+      "Kathmandu Durbar Square (Hanuman Dhoka)",
+      "Kumari Ghar",
+      "Kasthamandap",
+      "Basantapur Dabali",
+      "Indrachowk"
+    ],
+    "rituals": [
+      "Yosin Thanegu: Raising of the sacred 50-foot ceremonial pine pole (Indradhwoja) harvested from Nala forest at Hanuman Dhoka palace",
+      "Kumari Jatra: Grand procession of the living royal goddess Kumari in a massive golden three-roofed chariot, accompanied by guardian chariots of Lord Ganesh and Lord Bhairav through core city streets",
+      "Majipa Lakhey Dance: Fierce masked demon dance running wildly through cobblestone streets to protective music",
+      "Pulu Kishi Dance: Humorous and spirited dance of Indra's sacred white wicker elephant racing through narrow alleys seeking its lost master",
+      "Mahakali and Sawa Bhakku dances staged on ancient public stone platforms (Dabalis)",
+      "Display of Sweta Bhairav: Opening of the gilded lattice windows of the colossal Sweta Bhairav mask, pouring blessed rice beer (Ayla) through a pipe directly into worshippers' mouths",
+      "Dasa Avatara dance enactments depicting the ten incarnations of Lord Vishnu in front of Basantapur palace",
+      "Lowering of the Yosin pole and floating it down the sacred Bagmati River to conclude the festivities"
+    ],
+    "duration_days": 8,
+    "key_highlights": "Living Goddess Kumari chariot procession, Majipa Lakhey masked dances, wicker elephant Pulu Kishi, Sweta Bhairav pouring rice beer."
+  },
+  {
+    "id": "bisket-jatra",
+    "name": "Bisket Jatra",
+    "nepali_name": "बिस्केट जात्रा",
+    "lunar_month": "Chaitra Masanta to Baisakh 5 (Solar Bikram Sambat New Year)",
+    "typical_gregorian_window": "Mid-April (April 13–15)",
+    "significance": "Ancient 9-day solar New Year celebration of the historic city of Bhaktapur. Commemorates the mythic slaying of two deadly serpent spirits that emerged from the nostrils of an enchanted princess, liberating the kingdom from terror and inaugurating renewal.",
+    "primary_regions": [
+      "Bhaktapur",
+      "Thimi (Bode)",
+      "Kathmandu Valley"
+    ],
+    "associated_places": [
+      "Bhaktapur Durbar Square",
+      "Taumadhi Square",
+      "Nyatapola Temple",
+      "Bhairavnath Temple",
+      "Bhelukhel (Yashinkhel)",
+      "Bode Mahalaxmi Temple"
+    ],
+    "rituals": [
+      "Dyapva: Ritual installment of Bhairavnath and Bhadrakali idols into their towering multi-tiered timber chariot at Taumadhi Square",
+      "Chariot Tug-of-War: Massive tug-of-war pulling the chariot between Thane (upper) and Kwone (lower) municipal quarters of Bhaktapur",
+      "Yosin Thanegu: Raising of a 55-foot straight pine tree trunk (Yohsi) adorned with two banners symbolizing the slain serpents at Bhelukhel",
+      "Yosin Kwo-Thalegu: Dramatic felling of the pole on the eve of New Year day, welcoming the new solar cycle",
+      "Sindoor Jatra in Thimi: Devotees carrying 32 palanquins (Khats) of deities through town while showering each other with vibrant orange vermillion powder",
+      "Jibro Chhedne (Tongue Piercing) in Bode: A designated Newar volunteer pierces his tongue with a 10-inch consecrated iron spike dipped in mustard oil and parades through the town with a burning bamboo brazier to safeguard the community from epidemics"
+    ],
+    "duration_days": 9,
+    "key_highlights": "Towering chariot tug-of-war at Taumadhi, felling of 55ft pole, Sindoor Jatra in Thimi, ancient tongue-piercing ceremony in Bode."
+  },
+  {
+    "id": "rato-machhindranath",
+    "name": "Rato Machhindranath Jatra",
+    "nepali_name": "रातो मत्स्येन्द्रनाथ जात्रा (बुंग द्यः / भोटो जात्रा)",
+    "lunar_month": "Chaitra Shukla Pratipada to Jestha (Spans weeks to months)",
+    "typical_gregorian_window": "Late April to June",
+    "significance": "Nepal's longest, oldest, and most revered chariot festival (established in the 7th c. Licchavi era). Honors Avalokiteshvara / Bunga Dyah as the compassionate rainmaker, patron of agriculture, and guardian deity of the Kathmandu Valley.",
+    "primary_regions": [
+      "Lalitpur (Patan)",
+      "Bungamati",
+      "Kathmandu Valley"
+    ],
+    "associated_places": [
+      "Rato Machhindranath Temple (Ta Bahal)",
+      "Pulchowk",
+      "Gabahal",
+      "Sundhara",
+      "Lagankhel",
+      "Jawalakhel",
+      "Bungamati Village"
+    ],
+    "rituals": [
+      "Snan: Ritual ceremonial bathing of the red wooden idol of Bunga Dyah at Lagankhel pool",
+      "Chariot Construction: Assembling a colossal 60-foot conical chariot at Pulchowk, built entirely with wooden pegs and cane ropes without a single iron nail, topped with a juniper plume",
+      "Rath Yatra: Thousands of devotees hauling the mammoth chariot through ancient stone-paved streets of Patan in successive ritual stages",
+      "Minnath Chariot: Small companion chariot of Chakuwah Dyah (Minnath) trailing the main chariot",
+      "Nya-kye-gu: Ceremonial dropping of a sacred coconut from the chariot roof at Lagankhel, believed to bestow children upon whoever catches it",
+      "Bhoto Jatra: Grand festival climax at Jawalakhel, where government officials and the head priest display the legendary jewel-studded vest (Bhoto) to the four cardinal directions before the President of Nepal and Living Goddess Kumari",
+      "Final transfer of the deity either to Ta Bahal (Patan) or south to Bungamati village for its six-month winter residency"
+    ],
+    "duration_days": 30,
+    "key_highlights": "60ft nail-less cane chariot, coconut drop at Lagankhel, sacred jewel-studded Bhoto display at Jawalakhel."
+  },
+  {
+    "id": "buddha-jayanti",
+    "name": "Buddha Jayanti",
+    "nepali_name": "बुद्ध जयन्ती (सागा दावा / वेसाक)",
+    "lunar_month": "Baisakh Purnima (Full moon of Baisakh / 4th Tibetan Lunar Month)",
+    "typical_gregorian_window": "May",
+    "significance": "The thrice-blessed supreme holy festival of Buddhism, commemorating Siddhartha Gautama Buddha's Birth at Lumbini (623 BCE), his Supreme Enlightenment (Bodhi) at Bodh Gaya, and his Mahaparinirvana (passing into final peace) at Kushinagar on the exact same full moon date.",
+    "primary_regions": [
+      "Lumbini Sacred Garden",
+      "Kathmandu Valley",
+      "Pokhara",
+      "Himalayan Buddhist Monasteries",
+      "Worldwide"
+    ],
+    "associated_places": [
+      "Maya Devi Temple (Lumbini)",
+      "Boudhanath Stupa",
+      "Swayambhunath Stupa",
+      "Namo Buddha Monastery",
+      "Kopan Monastery",
+      "World Peace Pagoda (Pokhara)"
+    ],
+    "rituals": [
+      "Dusk-to-dawn lighting of tens of thousands of golden butter lamps and oil diyos around stupas and sacred garden ponds",
+      "Mass circumambulations (Kora) around Boudhanath, Swayambhunath, and Maya Devi Temple with continuous chanting of 'Buddham Saranam Gacchami'",
+      "Monks from Theravada, Mahayana, and Vajrayana traditions gathering to chant the Tipitaka, Heart Sutra, and Karaniya Metta Sutta",
+      "Grand holy procession in Lumbini carrying the sacred silver and bronze Buddha image around the Kenzo Tange central canal",
+      "Bathing of infant Buddha statues (Abhisheka) with scented herbal water and flower blossoms",
+      "Hoisting new five-colored Buddhist flags and hanging lungta prayer flags across hills and rooftops",
+      "Strict vegetarianism, acts of compassionate charity (Dana), releasing captive birds, and feeding pilgrims"
+    ],
+    "duration_days": 3,
+    "key_highlights": "Tens of thousands of butter lamps, peaceful sutra chants, stupa koras, Lumbini relic processions, acts of dana."
+  },
+  {
+    "id": "mani-rimdu",
+    "name": "Mani Rimdu",
+    "nepali_name": "मनि रिम्दु",
+    "lunar_month": "10th Lunar Month of Tibetan Calendar (Post-harvest full moon)",
+    "typical_gregorian_window": "Late October to Mid-November",
+    "significance": "The principal 19-day trans-Himalayan Sherpa Buddhist monastic festival of the Nyingma tradition. Reenacts the legendary establishment of Buddhism in Tibet by 8th-century master Guru Padmasambhava (Guru Rinpoche), vanquishing hostile local demonic forces to inaugurate universal peace.",
+    "primary_regions": [
+      "Khumbu / Solukhumbu (Everest Region)",
+      "Solu"
+    ],
+    "associated_places": [
+      "Tengboche Monastery (3,867m)",
+      "Chiwong Monastery (2,700m)",
+      "Thame Monastery (3,800m)"
+    ],
+    "rituals": [
+      "Creation of an elaborate multi-colored sand mandala depicting the palace of Lord Buddha Amitabha inside the assembly hall",
+      "Consecration of sacred medicinal herbal pills (Rilbu) through weeks of secret meditation and mantra recitations by celibate monks",
+      "Day 1 (Wong / Empowerment): The high Abbot (Rinpoche) grants public long-life blessings to hundreds of assembled Sherpa pilgrims",
+      "Day 2 (Chham / Sacred Masked Dance): Monks in silk brocade robes, bone ornaments, and fierce deity masks enact the triumph of wisdom over ignorance to the clash of cymbals and bass horns",
+      "Day 3 (Jinsak / Fire Homa Puja): Monks perform a sacrificial fire ceremony in the stone courtyard to consume negativity and heal the cosmos",
+      "Destruction of the sand mandala and casting the blessed sand into the sacred Dudh Koshi river to symbolize impermanence",
+      "Nighttime community Sherpa folk singing, syabru step dancing, and drinking butter tea and chang"
+    ],
+    "duration_days": 19,
+    "key_highlights": "Cham monastic masked dances, sand mandala consecration, high-altitude Sherpa culture under Ama Dablam and Everest."
+  },
+  {
+    "id": "losar",
+    "name": "Losar",
+    "nepali_name": "ल्होसार (ग्याल्पो, सोनाम, तमु)",
+    "lunar_month": "Poush Shukla Pratipada (Tamu), Magh Shukla Pratipada (Sonam), Falgun Shukla Pratipada (Gyalpo)",
+    "typical_gregorian_window": "December to March (Tamu: Dec/Jan, Sonam: Jan/Feb, Gyalpo: Feb/Mar)",
+    "significance": "The joyous New Year festival of the high Himalayan, Tibetan, Sherpa, Tamang, and Gurung communities. Marks the transition of the seasonal animal zodiac, renewal of vitality, community harmony, and auspicious fortune.",
+    "primary_regions": [
+      "Himalayan Districts (Solukhumbu, Mustang, Manang, Dolpo, Rasuwa)",
+      "Kathmandu Valley (Boudhanath & Swayambhunath)",
+      "Pokhara"
+    ],
+    "associated_places": [
+      "Boudhanath Stupa",
+      "Swayambhunath Stupa",
+      "Tengboche Monastery",
+      "Matepani Gumba (Pokhara)",
+      "Lo Manthang Monasteries",
+      "Hyangja Tibetan Settlement"
+    ],
+    "rituals": [
+      "Tamu Losar (Gurung community in Dec/Jan): Gathering in traditional Gurung attire, Ghatu and Kauda dances, community feasts",
+      "Sonam Losar (Tamang community in Jan/Feb): Selo dances to Damphu drums, visiting monasteries and elders",
+      "Gyalpo Losar (Sherpa & Tibetan community in Feb/Mar): Main high Himalayan celebration",
+      "Guthuk: Eating the sacred nine-ingredient soup on the 29th day of the 12th month, with dough balls containing symbolic ingredients revealing character",
+      "Tossing roasted barley flour (Tsampa) into the crisp mountain air with triumphant shouts of 'Ki Ki So So Lha Gyalo!'",
+      "Replacing faded prayer flags with vibrant new five-colored Lungta across rooftops, ridge lines, and monasteries",
+      "Preparing crisp fried Khapse pastries and serving warm butter tea, Chang (Tibetan barley beer), and Tibetan dumplings",
+      "Monastic lamas perform elaborate sacred masked dances (Cham) in monastery courtyards"
+    ],
+    "duration_days": 15,
+    "key_highlights": "Three Losar traditions (Tamu, Sonam, Gyalpo), Guthuk dough dumplings, tossing Tsampa, fresh prayer flags, Cham dances."
+  },
+  {
+    "id": "maha-shivaratri",
+    "name": "Maha Shivaratri",
+    "nepali_name": "महाशिवरात्रि",
+    "lunar_month": "Falgun Krishna Chaturdashi",
+    "typical_gregorian_window": "Late February to Early March",
+    "significance": "'The Great Night of Lord Shiva', celebrating the cosmic convergence of Shiva and Shakti, Shiva's cosmic dance of creation, preservation, and destruction (Tandava), and his emergence as the supreme infinite Jyotirlinga (Pillar of Cosmic Light).",
+    "primary_regions": [
+      "Kathmandu Valley",
+      "Pokhara",
+      "Nationwide",
+      "Terai"
+    ],
+    "associated_places": [
+      "Pashupatinath Temple Complex (Epicenter)",
+      "Gokarna Mahadev Temple",
+      "Kumbheshwar Temple (Patan)",
+      "Gupteshwor Mahadev Cave (Pokhara)",
+      "Pumdikot Shiva Statue (Pokhara)",
+      "Halesi Maratika Cave (Khotang)"
+    ],
+    "rituals": [
+      "Congregation of more than one million Hindu devotees and over 5,000 Sadhus (Naga Babas, Aghoris, Bairagis) at Pashupatinath from across Nepal and India",
+      "Pre-dawn holy purification ablutions in the Bagmati River and sacred mountain streams",
+      "All-night vigil (Jagaran) beside sacred Dhuni wood bonfires, reciting Shiva Sahasranama and chanting 'Om Namah Shivaya'",
+      "Continuous ceremonial bathing (Abhisheka) of the four-faced Pashupatinath Mukhalinga with cow milk, curd, honey, ghee, sugarcane juice, bael leaves (Bilva Patra), and dhaturo flowers",
+      "Ash-smeared Naga Babas performing yogic asanas and blessing pilgrims in the Mrigasthali forest and Ram Mandir courtyards",
+      "Ritual intake of holy prasad (bhang and cannabis smoke) by ascetics as an emblem of detachment from worldly ego",
+      "Grand evening Bagmati Maha Aarti with synchronized brass lamps, conch shells, and Vedic mantras"
+    ],
+    "duration_days": 1,
+    "key_highlights": "1+ million pilgrims at Pashupatinath, Naga Sadhus from Himalayas, all-night Dhuni bonfires, holy bilva leaf offerings."
+  },
+  {
+    "id": "holi",
+    "name": "Holi",
+    "nepali_name": "होली (फागु पूर्णिमा)",
+    "lunar_month": "Falgun Purnima",
+    "typical_gregorian_window": "March (Arrival of Spring)",
+    "significance": "The jubilant Hindu festival of colors and love, welcoming the renewal of spring and commemorating the miraculous salvation of prince Prahlada and the burning of the evil demoness Holika in fire, proving that pure devotion conquers all malevolence.",
+    "primary_regions": [
+      "Nationwide",
+      "Kathmandu Valley (Hilly Region - Day 1)",
+      "Pokhara (Hilly Region - Day 1)",
+      "Terai / Madhesh (Mithila Region - Day 2)"
+    ],
+    "associated_places": [
+      "Kathmandu Durbar Square (Basantapur Dabali)",
+      "Patan Durbar Square",
+      "Pokhara Lakeside",
+      "Janakpurdham",
+      "Birgunj"
+    ],
+    "rituals": [
+      "Erection of the ceremonial wooden pole (Chir) draped with colorful cloth flags at Hanuman Dhoka palace to inaugurate Holi week",
+      "Throwing and smearing fragrant colored herbal powders (Abir) in radiant shades of gulal red, saffron yellow, jade green, and azure blue",
+      "Playful water battles with water pistols (Pichkari) and water-filled balloons (Lola)",
+      "Open-air music concerts, traditional Dholak drumming, and communal street dancing in Basantapur and Lakeside",
+      "Enjoying traditional festive sweets such as Gujiya, Malpua, and chilled Bhang-infused Thandai milk beverages",
+      "Chir Dahan: Burning the ceremonial wooden pole at midnight to symbolize the destruction of evil demoness Holika",
+      "In the Terai (Madhesh), celebrations continue with grand traditional Chaitavar folk songs and Mithila hospitality the following day"
+    ],
+    "duration_days": 2,
+    "key_highlights": "Vibrant gulal colors, Pichkari water play, lively Basantapur street concerts, festive gujiya and thandai, Holika dahan."
+  },
+  {
+    "id": "tiji-festival",
+    "name": "Tiji Festival",
+    "nepali_name": "तिजी पर्व (तेन्ची)",
+    "lunar_month": "3rd Lunar Month of Tibetan Calendar",
+    "typical_gregorian_window": "May (Spring in Upper Mustang)",
+    "significance": "Centuries-old 3-day sacred Vajrayana Buddhist festival of the Sakya tradition celebrated within the medieval walled kingdom of Lo Manthang (Upper Mustang). Commemorates the victory of the Buddhist champion Dorje Jono over his demonic father who afflicted the desert kingdom with water shortages, disaster, and pestilence.",
+    "primary_regions": [
+      "Upper Mustang (Trans-Himalayan Rain-Shadow Kingdom of Lo)"
+    ],
+    "associated_places": [
+      "Lo Manthang Walled City",
+      "Choedhe Gompa",
+      "Thubchen Gompa",
+      "Royal Palace Square of Lo Manthang"
+    ],
+    "rituals": [
+      "Solemn unfurling of a monumental three-story antique embroidered Thangka portraying Guru Padmasambhava against the fortress wall",
+      "Monks from Choedhe Gompa dressed in heavy handwoven silk brocade robes, coral and turquoise necklaces, and fierce animal deity masks perform the ancient 'Tsa Chham' dance",
+      "Reenactment of the cosmic battle between Dorje Jono and the demon of drought to the rhythmic booming of Tibetan Dungchen horns and drums",
+      "Presence of the Mustang Royal Family (Bista dynasty) presiding over ceremonial court rituals in traditional regalia",
+      "Day 2 (Nga Chham): Mystical sword and dagger dances purifying the earth of negative elemental influences",
+      "Day 3 (Rha Chham): Expulsion of evil spirits; the Tsowo (lead dancer) slays demonic effigies molded from Tsampa flour and hurls them beyond the fortified gates into the desert canyons"
+    ],
+    "duration_days": 3,
+    "key_highlights": "Historic walled capital of Lo Manthang, 3-story antique Thangka, sacred Tsa Chham masked dance, Mustang royal presence."
+  },
+  {
+    "id": "gai-jatra",
+    "name": "Gai Jatra",
+    "nepali_name": "गाईजात्रा (सा पारु)",
+    "lunar_month": "Bhadra Krishna Pratipada (Day following Janai Purnima)",
+    "typical_gregorian_window": "August to Early September (Monsoon)",
+    "significance": "A uniquely profound Newar carnival of remembrance and satire initiated by King Pratap Malla in the 17th century to console his heartbroken queen after the death of their son, demonstrating that death is a shared universal sorrow. Sacred cows guide departed souls safely across the mythical river Vaitarni to the afterlife.",
+    "primary_regions": [
+      "Kathmandu Valley (Kathmandu, Patan, Bhaktapur)",
+      "Newar settlements across Nepal (Kirtipur, Bandipur, Tansen, Pokhara)"
+    ],
+    "associated_places": [
+      "Kathmandu Durbar Square",
+      "Bhaktapur Durbar Square",
+      "Patan Durbar Square",
+      "Kirtipur Historic Town"
+    ],
+    "rituals": [
+      "Families that lost a loved one during the past year parade a decorated sacred cow (or a young child dressed as a cow with painted horns, headdress, and yellow silk) through the historical city pathways",
+      "Bystanders and shopkeepers offer fruit, beaten rice, coins, and sweets to the parading children in memory of the departed",
+      "Ghintang Ghisi Twak: Fast-paced, rhythmic two-stick communal circle dance performed by hundreds of youth in Bhaktapur",
+      "Sharp political satire, theatrical street comedies, costumed impersonations, and publication of irreverent satirical gazettes poking fun at politicians, corruption, and societal hypocrisy",
+      "Vibrant cross-dressing performances and pride parades by Nepal's LGBTQ+ community in Kathmandu, celebrated openly on this holiday of acceptance"
+    ],
+    "duration_days": 8,
+    "key_highlights": "Cow-disguised children, Ghintang Ghisi stick dance in Bhaktapur, biting political satire, comedy street theater."
+  },
+  {
+    "id": "vivah-panchami",
+    "name": "Vivah Panchami",
+    "nepali_name": "विवाह पञ्चमी",
+    "lunar_month": "Mangsir Shukla Panchami",
+    "typical_gregorian_window": "Late November to Mid-December",
+    "significance": "The glorious spiritual festival commemorating the divine Vedic wedding of Lord Rama (prince of Ayodhya) and Goddess Sita (Janaki, daughter of King Janak of Mithila). Serves as an enduring cultural and religious bridge connecting Mithila and Awadh across Nepal and India.",
+    "primary_regions": [
+      "Janakpurdham (Mithila / Madhesh Province)",
+      "Ayodhya-Janakpur Corridor"
+    ],
+    "associated_places": [
+      "Janaki Mandir",
+      "Vivah Mandap",
+      "Ram Mandir (Janakpur)",
+      "Rangbhoomi Maidan (Barabigha)",
+      "Ganga Sagar & Dhanush Sagar"
+    ],
+    "rituals": [
+      "Arrival of the grand bridal procession (Barat) from Ayodhya, India to Janakpur, greeted with flower showers and royal music",
+      "Matkor Ceremony: Women singing traditional Maithili folk songs while gathering sacred earth from the banks of holy ponds",
+      "Dhanush Yagya Reenactment: Staging Lord Rama's breaking of Shiva's celestial bow (Pinaka) at Rangbhoomi Maidan to win Sita's hand",
+      "Jaimala Ceremony: Rama and Sita idols exchange consecrated flower garlands on an elevated stage under a shower of rose petals",
+      "Vedic Wedding at Vivah Mandap: Hindu wedding rituals performed with fire oblations (Havan) in the marble wedding pavilion according to ancient Mithila traditions",
+      "Tens of thousands of pilgrims taking holy dips in Ganga Sagar and lighting oil lamps along the illuminated ghats",
+      "Serving opulent traditional Mithila feasts featuring 56 bhog delicacies including Makhana kheer, Dal-Bhat-Tarkari, and sweets"
+    ],
+    "duration_days": 7,
+    "key_highlights": "Ayodhya-Janakpur wedding procession, Jaimala exchange, Vedic wedding rites at Vivah Mandap, Ganga Sagar illuminated ghats."
+  }
+]

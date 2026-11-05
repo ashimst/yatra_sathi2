@@ -18,7 +18,117 @@ class ItineraryService:
         self.nvidia_nim_api_key = settings.NVIDIA_NIM_API_KEY
         self.temperature = settings.LLM_TEMPERATURE
         self.max_tokens = settings.LLM_MAX_TOKENS
-    
+
+    async def enrich_itinerary(
+        self,
+        itinerary: Dict[str, Any],
+        origin_lat: float,
+        origin_lng: float,
+        dest_lat: float,
+        dest_lng: float,
+        num_days: int = 3,
+        user_preferences: Optional[List[str]] = None,
+        travel_style: str = "balanced",
+        budget: str = "medium"
+    ) -> Dict[str, Any]:
+        """
+        Enrich a pre-computed deterministic itinerary with engaging narrative prose,
+        descriptions, and travel tips using LLM.
+        
+        DOES NOT alter the deterministic structure, coordinates, POI IDs, or days.
+        Guarantees zero dropped places and zero hallucinated IDs.
+        """
+        # Collect list of place names for description generation
+        places_summary = []
+        for day in itinerary.get("days", []):
+            day_num = day.get("day", 1)
+            ov = day.get("overnight_accommodation")
+            if ov and ov.get("name"):
+                places_summary.append(f"Day {day_num} Hotel: {ov.get('name')} ({ov.get('category')})")
+            for act in day.get("activities", []):
+                places_summary.append(f"Day {day_num} Activity: {act.get('name')} ({act.get('category')})")
+            for m in day.get("meals", []):
+                places_summary.append(f"Day {day_num} Meal: {m.get('name')} ({m.get('category')})")
+
+        prompt = f"""You are an expert Nepal travel guide. Enrich this pre-planned travel itinerary with engaging descriptions and practical travel tips.
+
+Route: ({origin_lat}, {origin_lng}) to ({dest_lat}, {dest_lng})
+Duration: {num_days} days
+Style: {travel_style}
+Interests: {', '.join(user_preferences) if user_preferences else 'Sightseeing & Culture'}
+
+Places scheduled in the itinerary:
+{chr(10).join(places_summary)}
+
+Respond ONLY with a valid JSON object in this format (no markdown, no backticks):
+{{
+  "summary": "A 2-3 sentence inspiring overview of the journey.",
+  "tips": [
+    "Practical tip 1 for this specific route in Nepal",
+    "Practical tip 2 regarding road conditions or timing",
+    "Practical tip 3 regarding local culture or packing"
+  ],
+  "descriptions": {{
+    "Exact Place Name": "Engaging 1-2 sentence description of why to visit and what to see"
+  }}
+}}"""
+        try:
+            raw_response = await self._call_llm(prompt)
+            # Clean response of potential markdown fences
+            clean = raw_response.strip()
+            if clean.startswith("```"):
+                clean = clean.split("\n", 1)[1]
+            if clean.endswith("```"):
+                clean = clean.rsplit("\n", 1)[0]
+            if clean.startswith("json"):
+                clean = clean[4:].strip()
+            
+            enrichment = json.loads(clean)
+            itinerary["summary"] = enrichment.get("summary", "A memorable journey through Nepal's scenic landscapes and rich cultural heritage.")
+            itinerary["tips"] = enrichment.get("tips", [
+                "Start early to avoid peak mountain highway traffic.",
+                "Keep cash (NPR) handy as digital payments may not work in rural segments.",
+                "Dress modestly when visiting religious and temple heritage sites."
+            ])
+            desc_map = enrichment.get("descriptions", {})
+
+            # Apply descriptions without touching structure
+            for day in itinerary.get("days", []):
+                ov = day.get("overnight_accommodation")
+                if ov and ov.get("name") in desc_map:
+                    ov["description"] = desc_map[ov["name"]]
+                elif ov and not ov.get("description"):
+                    ov["description"] = f"Comfortable overnight accommodation at {ov.get('name')}."
+
+                for act in day.get("activities", []):
+                    name = act.get("name", "")
+                    if name in desc_map:
+                        act["description"] = desc_map[name]
+                    elif not act.get("description"):
+                        act["description"] = f"Explore {name}, an iconic {act.get('category', 'attraction')} in the region."
+
+                for m in day.get("meals", []):
+                    name = m.get("name", "")
+                    if name in desc_map:
+                        m["description"] = desc_map[name]
+                    elif not m.get("description"):
+                        m["description"] = f"Enjoy delicious authentic meals at {name}."
+
+        except Exception as e:
+            print(f"[WARN] LLM enrichment fallback to defaults: {e}")
+            itinerary["summary"] = "A scenic journey discovering the cultural landmarks and natural wonders of Nepal."
+            itinerary["tips"] = [
+                "Start early to maximize daylight and beat mountain road traffic.",
+                "Carry local cash (NPR) for entrance fees and roadside stops.",
+                "Respect local customs and remove shoes before entering shrines."
+            ]
+            for day in itinerary.get("days", []):
+                for act in day.get("activities", []):
+                    if not act.get("description"):
+                        act["description"] = f"Explore {act.get('name')}, one of the highlights of Day {day.get('day')}."
+
+        return itinerary
+
     async def generate_itinerary(
         self,
         pois: List[Dict[str, Any]],
@@ -130,7 +240,7 @@ class ItineraryService:
         for cat_key in ("accommodation", "restaurants", "attractions"):
             for poi in categorized[cat_key][: limits[cat_key]]:
                 # embedding_text is the rich human-readable sentence generated
-                # during the ETL embedding stage — gives LLM real content.
+                # during the ETL embedding stage - gives LLM real content.
                 description = (
                     poi.get("embedding_text")
                     or poi.get("description")

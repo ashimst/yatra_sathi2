@@ -1,0 +1,930 @@
+[
+  {
+    "id": "annapurna-circuit",
+    "name": "Annapurna Circuit Trek",
+    "region": "Annapurna",
+    "difficulty": "Challenging",
+    "duration_days": 16,
+    "estimated_walking_hours_per_day": "6-8 hours",
+    "starting_elevation_m": 820.0,
+    "max_elevation_m": 5416.0,
+    "pass_elevation_m": 5416.0,
+    "end_elevation_m": 1070.0,
+    "distance_km": 190.0,
+    "permits_required": [
+      "Annapurna Conservation Area Permit (ACAP)",
+      "Trekkers' Information Management System (TIMS) Card"
+    ],
+    "start_point": {
+      "name": "Besisahar",
+      "latitude": 28.23,
+      "longitude": 84.375
+    },
+    "end_point": {
+      "name": "Nayapul",
+      "latitude": 28.3006,
+      "longitude": 83.7744
+    },
+    "key_waypoints": [
+      "Besisahar",
+      "Bhulbhule",
+      "Chamje",
+      "Tal",
+      "Dharapani",
+      "Chame",
+      "Upper Pisang",
+      "Ngawal",
+      "Braga",
+      "Manang",
+      "Yak Kharka",
+      "Thorong Phedi",
+      "Thorong High Camp",
+      "Thorong La Pass",
+      "Muktinath",
+      "Kagbeni",
+      "Jomsom",
+      "Marpha",
+      "Kalopani",
+      "Tatopani",
+      "Ghorepani",
+      "Poon Hill",
+      "Nayapul"
+    ],
+    "best_seasons": [
+      "October",
+      "November",
+      "March",
+      "April",
+      "May"
+    ],
+    "osm_relation_id": 1187310,
+    "description": "The quintessential Himalayan circuit traversing lush subtropical foothills, high Tibetan alpine valleys of Manang, the formidable 5,416m Thorong La Pass, and descending into the deepest gorge in the world (Kali Gandaki) between Annapurna and Dhaulagiri.",
+    "route_geometry_wkt": "LINESTRING(84.37500 28.23000, 84.41700 28.29300, 84.42500 28.32400, 84.40800 28.42300, 84.38200 28.46700, 84.35800 28.51700, 84.31500 28.53500, 84.28500 28.54500, 84.24030 28.55390, 84.18000 28.58300, 84.13500 28.61500, 84.11000 28.61800, 84.05000 28.64800, 84.03500 28.65800, 84.02560 28.66380, 83.98500 28.72000, 83.97000 28.74500, 83.95500 28.78800, 83.94800 28.79000, 83.93550 28.79370, 83.87140 28.81690, 83.78500 28.83500, 83.72310 28.78440, 83.68700 28.75200, 83.59500 28.64500, 83.65500 28.49500, 83.69800 28.40100, 83.77440 28.30060)"
+  },
+  {
+    "id": "annapurna-sanctuary",
+    "name": "Annapurna Sanctuary / Base Camp Trek",
+    "region": "Annapurna",
+    "difficulty": "Moderate",
+    "duration_days": 10,
+    "estimated_walking_hours_per_day": "5-7 hours",
+    "starting_elevation_m": 1070.0,
+    "max_elevation_m": 4130.0,
+    "pass_elevation_m": null,
+    "end_elevation_m": 1070.0,
+    "distance_km": 75.0,
+    "permits_required": [
+      "Annapurna Conservation Area Permit (ACAP)",
+      "Trekkers' Information Management System (TIMS) Card"
+    ],
+    "start_point": {
+      "name": "Nayapul",
+      "latitude": 28.3006,
+      "longitude": 83.7744
+    },
+    "end_point": {
+      "name": "Nayapul",
+      "latitude": 28.3006,
+      "longitude": 83.7744
+    },
+    "key_waypoints": [
+      "Nayapul",
+      "Birethanti",
+      "Tikhedhunga",
+      "Ulleri",
+      "Ghorepani",
+      "Poon Hill",
+      "Tadapani",
+      "Chhomrong",
+      "Sinuwa",
+      "Bamboo",
+      "Dovan",
+      "Deurali",
+      "Machapuchare Base Camp (MBC)",
+      "Annapurna Base Camp (ABC)",
+      "Jhinu Danda Hot Springs"
+    ],
+    "best_seasons": [
+      "October",
+      "November",
+      "March",
+      "April",
+      "May"
+    ],
+    "osm_relation_id": 17548991,
+    "description": "An intimate journey into the natural amphitheater of the Annapurna Sanctuary, encircled by ten towering glaciated giants including Annapurna I (8,091m), Annapurna South, and sacred Machapuchare (Fishtail).",
+    "route_geometry_wkt": "LINESTRING(83.77440 28.30060, 83.73800 28.34800, 83.72800 28.36200, 83.69800 28.40100, 83.76500 28.39500, 83.82060 28.42170, 83.83200 28.44200, 83.84200 28.46000, 83.85500 28.47800, 83.86200 28.50200, 83.87100 28.52400, 83.87800 28.53000, 83.87100 28.52400, 83.82060 28.42170, 83.82500 28.41000, 83.77440 28.30060)"
+  },
+  {
+    "id": "everest-base-camp",
+    "name": "Everest Base Camp (EBC) Main Trail",
+    "region": "Everest",
+    "difficulty": "Strenuous",
+    "duration_days": 14,
+    "estimated_walking_hours_per_day": "5-7 hours",
+    "starting_elevation_m": 2846.0,
+    "max_elevation_m": 5545.0,
+    "pass_elevation_m": 4830.0,
+    "end_elevation_m": 2846.0,
+    "distance_km": 130.0,
+    "permits_required": [
+      "Sagarmatha National Park Entry Permit",
+      "Khumbu Pasang Lhamu Rural Municipality Entrance Card"
+    ],
+    "start_point": {
+      "name": "Lukla Tenzing-Hillary Airport",
+      "latitude": 27.6869,
+      "longitude": 86.7314
+    },
+    "end_point": {
+      "name": "Lukla Tenzing-Hillary Airport",
+      "latitude": 27.6869,
+      "longitude": 86.7314
+    },
+    "key_waypoints": [
+      "Lukla",
+      "Phakding",
+      "Monjo",
+      "Namche Bazaar",
+      "Hotel Everest View",
+      "Tengboche Monastery",
+      "Deboche",
+      "Pangboche",
+      "Somare",
+      "Dingboche",
+      "Dughla (Thokla)",
+      "Dughla Memorial Pass",
+      "Lobuche",
+      "Gorak Shep",
+      "Everest Base Camp",
+      "Kala Patthar Viewpoint",
+      "Pheriche"
+    ],
+    "best_seasons": [
+      "October",
+      "November",
+      "March",
+      "April",
+      "May"
+    ],
+    "osm_relation_id": 1189003,
+    "description": "The world's most legendary alpine pilgrimage ascending along the Dudh Koshi into the Sherpa homeland of Khumbu, culminating at Everest Base Camp and the 5,545m panoramic peak of Kala Patthar beneath Mt. Everest.",
+    "route_geometry_wkt": "LINESTRING(86.73140 27.68690, 86.71280 27.74350, 86.72470 27.77190, 86.70900 27.80510, 86.76460 27.83640, 86.77500 27.84200, 86.78810 27.85660, 86.82870 27.89230, 86.82000 27.91500, 86.81030 27.94830, 86.82900 27.98100, 86.85250 28.00440, 86.82840 27.99580, 86.81800 27.89200, 86.70900 27.80510, 86.73140 27.68690)"
+  },
+  {
+    "id": "gokyo-lakes-three-passes",
+    "name": "Gokyo Lakes & Khumbu Three Passes Trek",
+    "region": "Everest",
+    "difficulty": "Strenuous",
+    "duration_days": 19,
+    "estimated_walking_hours_per_day": "6-9 hours",
+    "starting_elevation_m": 2846.0,
+    "max_elevation_m": 5535.0,
+    "pass_elevation_m": 5535.0,
+    "end_elevation_m": 2846.0,
+    "distance_km": 165.0,
+    "permits_required": [
+      "Sagarmatha National Park Entry Permit",
+      "Khumbu Pasang Lhamu Rural Municipality Entrance Card"
+    ],
+    "start_point": {
+      "name": "Lukla Tenzing-Hillary Airport",
+      "latitude": 27.6869,
+      "longitude": 86.7314
+    },
+    "end_point": {
+      "name": "Lukla Tenzing-Hillary Airport",
+      "latitude": 27.6869,
+      "longitude": 86.7314
+    },
+    "key_waypoints": [
+      "Lukla",
+      "Namche Bazaar",
+      "Thame",
+      "Lungden",
+      "Renjo La Pass",
+      "Gokyo Lakes",
+      "Gokyo Ri",
+      "Ngozumpa Glacier",
+      "Dragnag",
+      "Cho La Pass",
+      "Dzongla",
+      "Lobuche",
+      "Gorak Shep",
+      "Everest Base Camp",
+      "Kongma La Pass",
+      "Chhukung",
+      "Dingboche"
+    ],
+    "best_seasons": [
+      "October",
+      "November",
+      "April",
+      "May"
+    ],
+    "osm_relation_id": 3777292,
+    "description": "The ultimate grand traverse of Khumbu crossing three formidable high passes (Renjo La 5,360m, Cho La 5,420m, Kongma La 5,535m) connecting the pristine turquoise Gokyo glacial lakes to the Khumbu glacier corridor.",
+    "route_geometry_wkt": "LINESTRING(86.73140 27.68690, 86.70900 27.80510, 86.65000 27.83000, 86.63500 27.88500, 86.65850 27.94740, 86.69470 27.95380, 86.68310 27.96150, 86.72000 27.95000, 86.75160 27.96170, 86.78000 27.93500, 86.81030 27.94830, 86.82900 27.98100, 86.85250 28.00440, 86.83620 27.92970, 86.87700 27.90400, 86.82870 27.89230, 86.70900 27.80510, 86.73140 27.68690)"
+  },
+  {
+    "id": "manaslu-circuit",
+    "name": "Manaslu Circuit Trek",
+    "region": "Manaslu",
+    "difficulty": "Strenuous",
+    "duration_days": 15,
+    "estimated_walking_hours_per_day": "6-8 hours",
+    "starting_elevation_m": 900.0,
+    "max_elevation_m": 5106.0,
+    "pass_elevation_m": 5106.0,
+    "end_elevation_m": 1960.0,
+    "distance_km": 177.0,
+    "permits_required": [
+      "Manaslu Restricted Area Permit (RAP)",
+      "Manaslu Conservation Area Permit (MCAP)",
+      "Annapurna Conservation Area Permit (ACAP)"
+    ],
+    "start_point": {
+      "name": "Machha Khola",
+      "latitude": 28.232,
+      "longitude": 84.862
+    },
+    "end_point": {
+      "name": "Dharapani",
+      "latitude": 28.517,
+      "longitude": 84.358
+    },
+    "key_waypoints": [
+      "Machha Khola",
+      "Khorlabesi",
+      "Tatopani",
+      "Jagat Checkpost",
+      "Philim",
+      "Deng",
+      "Namrung",
+      "Lho",
+      "Shyala",
+      "Samagaun",
+      "Pungyen Gompa",
+      "Birendra Tal",
+      "Samdo",
+      "Dharamsala (Larkya Phedi)",
+      "Larkya La Pass",
+      "Bimthang",
+      "Tilije",
+      "Dharapani"
+    ],
+    "best_seasons": [
+      "October",
+      "November",
+      "March",
+      "April",
+      "May"
+    ],
+    "osm_relation_id": 1328173,
+    "description": "An untamed wilderness circuit circling Mt. Manaslu (8,163m, 8th highest peak) along the deep Budhi Gandaki gorge into authentic Tibetan Buddhist border culture and crossing the 5,106m Larkya La Pass.",
+    "route_geometry_wkt": "LINESTRING(84.86200 28.23200, 84.87200 28.26500, 84.90000 28.36000, 84.91000 28.41000, 84.85000 28.48000, 84.77000 28.53500, 84.71500 28.56000, 84.66500 28.57200, 84.63300 28.58300, 84.62800 28.64800, 84.57000 28.66000, 84.62200 28.66500, 84.47500 28.62500, 84.39500 28.54500, 84.35800 28.51700)"
+  },
+  {
+    "id": "tsum-valley",
+    "name": "Tsum Valley Sacred Hidden Valley Trek",
+    "region": "Manaslu",
+    "difficulty": "Moderate",
+    "duration_days": 12,
+    "estimated_walking_hours_per_day": "5-7 hours",
+    "starting_elevation_m": 1570.0,
+    "max_elevation_m": 3700.0,
+    "pass_elevation_m": null,
+    "end_elevation_m": 1570.0,
+    "distance_km": 115.0,
+    "permits_required": [
+      "Tsum Valley Restricted Area Permit (RAP)",
+      "Manaslu Conservation Area Permit (MCAP)"
+    ],
+    "start_point": {
+      "name": "Philim Checkpost",
+      "latitude": 28.41,
+      "longitude": 84.91
+    },
+    "end_point": {
+      "name": "Philim Checkpost",
+      "latitude": 28.41,
+      "longitude": 84.91
+    },
+    "key_waypoints": [
+      "Philim",
+      "Lokpa",
+      "Chumling",
+      "Chhokangparo",
+      "Ngakyu",
+      "Burji",
+      "Milarepa's Cave",
+      "Nile",
+      "Chhule",
+      "Mu Gompa",
+      "Rachen Gompa",
+      "Dumje"
+    ],
+    "best_seasons": [
+      "October",
+      "November",
+      "March",
+      "April",
+      "May"
+    ],
+    "osm_relation_id": 11074323,
+    "description": "Known as the Beyul Kyimolang (Sacred Hidden Valley of Happiness), this remote culturally preserved enclave of Tsumbas features ancient Buddhist monasteries, nunneries, and Milarepa meditation caves.",
+    "route_geometry_wkt": "LINESTRING(84.91000 28.41000, 84.92500 28.43500, 84.96500 28.45500, 85.03500 28.51500, 85.08000 28.55000, 85.10500 28.57000, 85.13000 28.59500, 85.09000 28.53500, 84.96500 28.45500, 84.91000 28.41000)"
+  },
+  {
+    "id": "langtang-valley-gosainkunda",
+    "name": "Langtang Valley & Gosainkunda Lakes Trek",
+    "region": "Langtang",
+    "difficulty": "Moderate",
+    "duration_days": 13,
+    "estimated_walking_hours_per_day": "5-7 hours",
+    "starting_elevation_m": 1460.0,
+    "max_elevation_m": 4984.0,
+    "pass_elevation_m": 4610.0,
+    "end_elevation_m": 1350.0,
+    "distance_km": 110.0,
+    "permits_required": [
+      "Langtang National Park Entry Permit",
+      "Trekkers' Information Management System (TIMS) Card",
+      "Shivapuri Nagarjun National Park Permit (if exiting Sundarijal)"
+    ],
+    "start_point": {
+      "name": "Syabrubesi",
+      "latitude": 28.161,
+      "longitude": 85.336
+    },
+    "end_point": {
+      "name": "Sundarijal",
+      "latitude": 27.755,
+      "longitude": 85.422
+    },
+    "key_waypoints": [
+      "Syabrubesi",
+      "Bamboo",
+      "Lama Hotel",
+      "Ghodatabela",
+      "Langtang Village",
+      "Mundu",
+      "Kyanjin Gompa",
+      "Tserko Ri Viewpoint",
+      "Thulo Syabru",
+      "Shin Gompa (Chandanbari)",
+      "Laurebina",
+      "Gosainkunda Lake",
+      "Laurebina La Pass",
+      "Ghopte",
+      "Tharepati",
+      "Kutumsang",
+      "Chisapani",
+      "Sundarijal"
+    ],
+    "best_seasons": [
+      "October",
+      "November",
+      "March",
+      "April",
+      "May"
+    ],
+    "osm_relation_id": 1269089,
+    "description": "Combines the vibrant Tamang heritage of the Langtang glacier valley with the sacred high-altitude alpine pilgrimage lakes of Gosainkunda and the Laurebina Pass, exiting across the Kathmandu valley ridge.",
+    "route_geometry_wkt": "LINESTRING(85.33600 28.16100, 85.37500 28.16500, 85.43800 28.17500, 85.47200 28.19200, 85.50000 28.21600, 85.56700 28.21300, 85.61700 28.24300, 85.56700 28.21300, 85.35000 28.13500, 85.37500 28.11500, 85.39500 28.10000, 85.41200 28.08200, 85.43330 28.08330, 85.46000 28.05500, 85.48500 28.03500, 85.49500 27.96500, 85.44500 27.81800, 85.42200 27.75500)"
+  },
+  {
+    "id": "helambu-trek",
+    "name": "Helambu Cultural Heritage Circuit",
+    "region": "Langtang",
+    "difficulty": "Easy",
+    "duration_days": 7,
+    "estimated_walking_hours_per_day": "4-6 hours",
+    "starting_elevation_m": 1350.0,
+    "max_elevation_m": 3690.0,
+    "pass_elevation_m": null,
+    "end_elevation_m": 1350.0,
+    "distance_km": 68.0,
+    "permits_required": [
+      "Langtang National Park Entry Permit",
+      "Shivapuri Nagarjun National Park Permit",
+      "TIMS Card"
+    ],
+    "start_point": {
+      "name": "Sundarijal",
+      "latitude": 27.755,
+      "longitude": 85.422
+    },
+    "end_point": {
+      "name": "Melamchi Pul Bazar",
+      "latitude": 27.831,
+      "longitude": 85.581
+    },
+    "key_waypoints": [
+      "Sundarijal",
+      "Chisapani",
+      "Pati Bhanjyang",
+      "Gul Bhanjyang",
+      "Kutumsang",
+      "Tharepati",
+      "Melamchigaon",
+      "Tarke Ghyang",
+      "Sermathang",
+      "Melamchi Pul Bazar"
+    ],
+    "best_seasons": [
+      "October",
+      "November",
+      "December",
+      "March",
+      "April"
+    ],
+    "osm_relation_id": 4867728,
+    "description": "An accessible, culturally rewarding trek through the green apple orchards and Hyolmo Buddhist villages of Helambu, offering splendid panoramas of the Jugal and Langtang Himal.",
+    "route_geometry_wkt": "LINESTRING(85.42200 27.75500, 85.44500 27.81800, 85.46000 27.84500, 85.48500 27.92500, 85.49500 27.96500, 85.48500 28.03500, 85.51500 28.02500, 85.55200 27.98500, 85.57000 27.92500, 85.58100 27.83100)"
+  },
+  {
+    "id": "upper-mustang",
+    "name": "Upper Mustang Trek (Kingdom of Lo)",
+    "region": "Mustang",
+    "difficulty": "Moderate",
+    "duration_days": 11,
+    "estimated_walking_hours_per_day": "5-7 hours",
+    "starting_elevation_m": 2720.0,
+    "max_elevation_m": 4230.0,
+    "pass_elevation_m": 4230.0,
+    "end_elevation_m": 2720.0,
+    "distance_km": 125.0,
+    "permits_required": [
+      "Upper Mustang Restricted Area Permit (RAP)",
+      "Annapurna Conservation Area Permit (ACAP)"
+    ],
+    "start_point": {
+      "name": "Jomsom Airport",
+      "latitude": 28.7844,
+      "longitude": 83.7231
+    },
+    "end_point": {
+      "name": "Jomsom Airport",
+      "latitude": 28.7844,
+      "longitude": 83.7231
+    },
+    "key_waypoints": [
+      "Jomsom",
+      "Kagbeni Restricted Gate",
+      "Chele",
+      "Syanboche",
+      "Ghami",
+      "Dhakmar Red Cliffs",
+      "Tsarang Palace & Gompa",
+      "Lo Manthang Walled City",
+      "Chhoser Jhong Caves",
+      "Namgyal Gompa",
+      "Chogo La Pass",
+      "Marang"
+    ],
+    "best_seasons": [
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October"
+    ],
+    "osm_relation_id": null,
+    "description": "Trek through the rain-shadow desert canyons of the ancient Kingdom of Lo, famous for mud-brick walled cities, centuries-old Gompas, sky caves, and preserved Tibetan culture north of the main Himalayan spine.",
+    "route_geometry_wkt": "LINESTRING(83.72310 28.78440, 83.78500 28.83500, 83.79000 28.91000, 83.83500 28.99500, 83.87500 29.04500, 83.87000 29.07000, 83.93000 29.11000, 83.95750 29.18270, 83.98000 29.23000, 83.93000 29.19500, 83.93000 29.11000, 83.78500 28.83500, 83.72310 28.78440)"
+  },
+  {
+    "id": "mardi-himal",
+    "name": "Mardi Himal Ridge Trek",
+    "region": "Annapurna",
+    "difficulty": "Moderate",
+    "duration_days": 5,
+    "estimated_walking_hours_per_day": "4-6 hours",
+    "starting_elevation_m": 1770.0,
+    "max_elevation_m": 4500.0,
+    "pass_elevation_m": null,
+    "end_elevation_m": 1750.0,
+    "distance_km": 45.0,
+    "permits_required": [
+      "Annapurna Conservation Area Permit (ACAP)",
+      "Trekkers' Information Management System (TIMS) Card"
+    ],
+    "start_point": {
+      "name": "Kande",
+      "latitude": 28.3039,
+      "longitude": 83.8447
+    },
+    "end_point": {
+      "name": "Sidhing Village",
+      "latitude": 28.41,
+      "longitude": 83.925
+    },
+    "key_waypoints": [
+      "Kande",
+      "Australian Camp",
+      "Pothana",
+      "Deurali",
+      "Forest Camp (Kokar)",
+      "Low Camp",
+      "Badal Danda",
+      "Mardi High Camp",
+      "Upper Viewpoint",
+      "Mardi Himal Base Camp",
+      "Sidhing"
+    ],
+    "best_seasons": [
+      "October",
+      "November",
+      "March",
+      "April",
+      "May"
+    ],
+    "osm_relation_id": 19267496,
+    "description": "A stunning ridgeline trek rising rapidly from sub-tropical rhododendron woodlands directly beneath the sheer face of Mt. Machapuchare (Fishtail) with dramatic 360-degree views of Annapurna South and Hiunchuli.",
+    "route_geometry_wkt": "LINESTRING(83.84470 28.30390, 83.85200 28.31200, 83.85600 28.32500, 83.87200 28.38500, 83.88100 28.41200, 83.88500 28.43500, 83.89600 28.46800, 83.91000 28.48000, 83.90140 28.46400, 83.92500 28.41000)"
+  },
+  {
+    "id": "kanchenjunga-circuit",
+    "name": "Kanchenjunga Circuit (North & South Base Camps)",
+    "region": "Kanchenjunga",
+    "difficulty": "Strenuous",
+    "duration_days": 24,
+    "estimated_walking_hours_per_day": "6-8 hours",
+    "starting_elevation_m": 2420.0,
+    "max_elevation_m": 5143.0,
+    "pass_elevation_m": 4480.0,
+    "end_elevation_m": 2420.0,
+    "distance_km": 220.0,
+    "permits_required": [
+      "Kanchenjunga Restricted Area Permit (RAP)",
+      "Kanchenjunga Conservation Area Project Permit (KCAP)"
+    ],
+    "start_point": {
+      "name": "Suketar Airport",
+      "latitude": 27.35,
+      "longitude": 87.7
+    },
+    "end_point": {
+      "name": "Suketar Airport",
+      "latitude": 27.35,
+      "longitude": 87.7
+    },
+    "key_waypoints": [
+      "Suketar",
+      "Chirwa Checkpost",
+      "Sekathum",
+      "Amjilosa",
+      "Gyabla",
+      "Ghunsa Acclimatization Hub",
+      "Kambachen",
+      "Lhonak",
+      "Pangpema (North Base Camp)",
+      "Sele Le Pass",
+      "Sinion La Pass",
+      "Mirgin La Pass",
+      "Tseram",
+      "Ramche",
+      "Oktang (South Base Camp)",
+      "Torongtan",
+      "Yamphudin",
+      "Mamankhe",
+      "Suketar"
+    ],
+    "best_seasons": [
+      "October",
+      "November",
+      "March",
+      "April",
+      "May"
+    ],
+    "osm_relation_id": 12664916,
+    "description": "An expedition-scale Himalayan wilderness journey circling Mt. Kanchenjunga (8,586m, 3rd highest peak in the world) through dense cloud forests, high lateral moraines, and raw alpine valleys bordering Sikkim and Tibet.",
+    "route_geometry_wkt": "LINESTRING(87.70000 27.35000, 87.75000 27.50000, 87.80500 27.56500, 87.84500 27.60500, 87.89000 27.63500, 87.93630 27.66120, 87.98000 27.72000, 88.02000 27.78000, 88.08000 27.83000, 87.95500 27.63500, 87.97000 27.61500, 88.04500 27.53500, 88.09500 27.57500, 88.13000 27.55000, 87.97500 27.48500, 87.91500 27.43500, 87.70000 27.35000)"
+  },
+  {
+    "id": "makalu-base-camp",
+    "name": "Makalu Base Camp Trek",
+    "region": "Makalu",
+    "difficulty": "Strenuous",
+    "duration_days": 18,
+    "estimated_walking_hours_per_day": "6-8 hours",
+    "starting_elevation_m": 1560.0,
+    "max_elevation_m": 4870.0,
+    "pass_elevation_m": 4216.0,
+    "end_elevation_m": 1560.0,
+    "distance_km": 140.0,
+    "permits_required": [
+      "Makalu-Barun National Park Entry Permit",
+      "TIMS Card"
+    ],
+    "start_point": {
+      "name": "Num",
+      "latitude": 27.55,
+      "longitude": 87.295
+    },
+    "end_point": {
+      "name": "Num",
+      "latitude": 27.55,
+      "longitude": 87.295
+    },
+    "key_waypoints": [
+      "Num",
+      "Seduwa",
+      "Tashigaon",
+      "Khongma Danda",
+      "Shipton La Pass",
+      "Keke La Pass",
+      "Dobato",
+      "Yangle Kharka",
+      "Langmale Kharka",
+      "Makalu Base Camp",
+      "Barun Glacier Viewpoint"
+    ],
+    "best_seasons": [
+      "October",
+      "November",
+      "April",
+      "May"
+    ],
+    "osm_relation_id": 9387979,
+    "description": "An adventurous journey up the deep, untouched Arun and Barun river valleys into the pristine amphitheater of Mt. Makalu (8,485m), crossing the dramatic Shipton La Pass through rich biodiversity zones.",
+    "route_geometry_wkt": "LINESTRING(87.29500 27.55000, 87.29000 27.58500, 87.27500 27.61500, 87.23500 27.64000, 87.21500 27.65000, 87.22800 27.66200, 87.22000 27.66500, 87.16500 27.71500, 87.12500 27.76500, 87.09500 27.79500, 87.16500 27.71500, 87.27500 27.61500, 87.29500 27.55000)"
+  },
+  {
+    "id": "upper-dolpo-circuit",
+    "name": "Upper Dolpo & Shey Gompa Circuit",
+    "region": "Dolpo",
+    "difficulty": "Strenuous",
+    "duration_days": 24,
+    "estimated_walking_hours_per_day": "6-8 hours",
+    "starting_elevation_m": 2475.0,
+    "max_elevation_m": 5360.0,
+    "pass_elevation_m": 5360.0,
+    "end_elevation_m": 2475.0,
+    "distance_km": 235.0,
+    "permits_required": [
+      "Upper Dolpo Restricted Area Permit (RAP)",
+      "Shey Phoksundo National Park Permit"
+    ],
+    "start_point": {
+      "name": "Juphal Airport",
+      "latitude": 28.985,
+      "longitude": 82.835
+    },
+    "end_point": {
+      "name": "Juphal Airport",
+      "latitude": 28.985,
+      "longitude": 82.835
+    },
+    "key_waypoints": [
+      "Juphal",
+      "Dunai",
+      "Chhepka",
+      "Ringmo Village",
+      "Lake Phoksundo",
+      "Phoksundo Khola Camp",
+      "Kang La Pass",
+      "Shey Gompa (Crystal Mountain)",
+      "Saldang",
+      "Yangjer Gompa",
+      "Chharka Bhot",
+      "Baga La Pass",
+      "Numa La Pass",
+      "Juphal"
+    ],
+    "best_seasons": [
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October"
+    ],
+    "osm_relation_id": 11104197,
+    "description": "Traversing the Tibetan trans-Himalayan plateau immortalized in Peter Matthiessen's 'The Snow Leopard', passing turquoise Lake Phoksundo, ancient Bon monasteries, and the sacred Crystal Mountain.",
+    "route_geometry_wkt": "LINESTRING(82.83500 28.98500, 82.90500 28.93500, 82.88500 29.02500, 82.90500 29.13500, 82.88000 29.35000, 82.89500 29.35000, 83.08500 29.31000, 83.42500 28.98500, 82.98000 29.12000, 83.05000 29.10000, 82.90500 28.93500, 82.83500 28.98500)"
+  },
+  {
+    "id": "lower-dolpo-circuit",
+    "name": "Lower Dolpo Circuit Trek",
+    "region": "Dolpo",
+    "difficulty": "Challenging",
+    "duration_days": 18,
+    "estimated_walking_hours_per_day": "6-7 hours",
+    "starting_elevation_m": 2475.0,
+    "max_elevation_m": 5238.0,
+    "pass_elevation_m": 5238.0,
+    "end_elevation_m": 2475.0,
+    "distance_km": 170.0,
+    "permits_required": [
+      "Lower Dolpo Restricted Area Permit (RAP)",
+      "Shey Phoksundo National Park Permit"
+    ],
+    "start_point": {
+      "name": "Juphal Airport",
+      "latitude": 28.985,
+      "longitude": 82.835
+    },
+    "end_point": {
+      "name": "Juphal Airport",
+      "latitude": 28.985,
+      "longitude": 82.835
+    },
+    "key_waypoints": [
+      "Juphal",
+      "Dunai",
+      "Tarakot",
+      "Laini",
+      "Nawarpani",
+      "Dho Tarap",
+      "Numa La Pass",
+      "Baga La Pass",
+      "Ringmo",
+      "Lake Phoksundo",
+      "Chhepka",
+      "Juphal"
+    ],
+    "best_seasons": [
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October"
+    ],
+    "osm_relation_id": 11103213,
+    "description": "An awe-inspiring circuit crossing high glaciated passes into the dramatic dry valley of Dho Tarap (one of the highest permanent settlements on Earth) and descending to sapphire Lake Phoksundo.",
+    "route_geometry_wkt": "LINESTRING(82.83500 28.98500, 82.90500 28.93500, 83.02500 28.88500, 83.15500 28.98000, 83.05000 29.10000, 82.98000 29.12000, 82.90500 29.13500, 82.88500 29.02500, 82.83500 28.98500)"
+  },
+  {
+    "id": "nar-phu-valley",
+    "name": "Nar Phu Valley & Kang La Pass Trek",
+    "region": "Annapurna",
+    "difficulty": "Strenuous",
+    "duration_days": 12,
+    "estimated_walking_hours_per_day": "6-8 hours",
+    "starting_elevation_m": 2600.0,
+    "max_elevation_m": 5320.0,
+    "pass_elevation_m": 5320.0,
+    "end_elevation_m": 3540.0,
+    "distance_km": 110.0,
+    "permits_required": [
+      "Nar Phu Restricted Area Permit (RAP)",
+      "Annapurna Conservation Area Permit (ACAP)"
+    ],
+    "start_point": {
+      "name": "Koto",
+      "latitude": 28.552,
+      "longitude": 84.258
+    },
+    "end_point": {
+      "name": "Ngawal / Manang",
+      "latitude": 28.6638,
+      "longitude": 84.0256
+    },
+    "key_waypoints": [
+      "Koto",
+      "Dharmashala",
+      "Meta",
+      "Chyako",
+      "Khyang",
+      "Phu Village",
+      "Tashi Lhakhang Gompa",
+      "Nar Phedi",
+      "Nar Village",
+      "Kang La Pass",
+      "Ngawal",
+      "Braga",
+      "Manang"
+    ],
+    "best_seasons": [
+      "October",
+      "November",
+      "March",
+      "April",
+      "May"
+    ],
+    "osm_relation_id": 1634863,
+    "description": "A hidden frontier trek venturing north from Koto through narrow river canyons into the ancient medieval Tibetan fortresses of Phu and Nar, crossing the high Kang La Pass (5,320m) into Manang.",
+    "route_geometry_wkt": "LINESTRING(84.25800 28.55200, 84.27500 28.62000, 84.28500 28.68000, 84.27000 28.78000, 84.22000 28.72000, 84.19500 28.69000, 84.22500 28.75100, 84.05000 28.64800, 84.02560 28.66380)"
+  },
+  {
+    "id": "dhaulagiri-circuit",
+    "name": "Dhaulagiri Circuit Expedition",
+    "region": "Annapurna",
+    "difficulty": "Strenuous",
+    "duration_days": 18,
+    "estimated_walking_hours_per_day": "7-9 hours",
+    "starting_elevation_m": 1190.0,
+    "max_elevation_m": 5360.0,
+    "pass_elevation_m": 5360.0,
+    "end_elevation_m": 2720.0,
+    "distance_km": 145.0,
+    "permits_required": [
+      "Annapurna Conservation Area Permit (ACAP)",
+      "Trekkers' Information Management System (TIMS) Card"
+    ],
+    "start_point": {
+      "name": "Beni / Darbang",
+      "latitude": 28.41,
+      "longitude": 83.395
+    },
+    "end_point": {
+      "name": "Marpha / Jomsom",
+      "latitude": 28.7844,
+      "longitude": 83.7231
+    },
+    "key_waypoints": [
+      "Darbang",
+      "Sibache",
+      "Boghara",
+      "Dobang",
+      "Italian Base Camp",
+      "Glacier Camp",
+      "Dhaulagiri Base Camp",
+      "French Pass",
+      "Hidden Valley",
+      "Dhampus Pass",
+      "Alubari",
+      "Marpha",
+      "Jomsom"
+    ],
+    "best_seasons": [
+      "October",
+      "November",
+      "April",
+      "May"
+    ],
+    "osm_relation_id": 11096629,
+    "description": "A rugged wilderness expedition encircling the 'White Mountain' of Dhaulagiri I (8,167m) over French Pass (5,360m) into the surreal high-altitude Arctic tundra of Hidden Valley.",
+    "route_geometry_wkt": "LINESTRING(83.39500 28.41000, 83.42000 28.48000, 83.44500 28.56000, 83.47500 28.64500, 83.49000 28.69500, 83.52000 28.78000, 83.56500 28.79000, 83.61500 28.79500, 83.68700 28.75200, 83.72310 28.78440)"
+  },
+  {
+    "id": "great-himalayan-trail-high-route",
+    "name": "Great Himalayan Trail (GHT) Nepal - High Route Corridor",
+    "region": "Pan-Himalaya",
+    "difficulty": "Strenuous",
+    "duration_days": 150,
+    "estimated_walking_hours_per_day": "7-9 hours",
+    "starting_elevation_m": 2420.0,
+    "max_elevation_m": 6190.0,
+    "pass_elevation_m": 5755.0,
+    "end_elevation_m": 2980.0,
+    "distance_km": 1700.0,
+    "permits_required": [
+      "Kanchenjunga RAP & KCAP",
+      "Makalu-Barun NP Permit",
+      "Sagarmatha NP Permit & Khumbu Entrance",
+      "Langtang NP Permit",
+      "Manaslu RAP & MCAP",
+      "Annapurna Conservation Area Permit (ACAP)",
+      "Upper Mustang RAP",
+      "Upper Dolpo RAP & Shey Phoksundo NP Permit",
+      "Humla RAP"
+    ],
+    "start_point": {
+      "name": "Kanchenjunga Base Camp (Pangpema)",
+      "latitude": 27.83,
+      "longitude": 88.08
+    },
+    "end_point": {
+      "name": "Hilsa (Tibet Border, Humla)",
+      "latitude": 30.155,
+      "longitude": 81.335
+    },
+    "key_waypoints": [
+      "Pangpema",
+      "Lumba Sumba Pass",
+      "Makalu Base Camp",
+      "Sherpani Col",
+      "West Col",
+      "Amphu Lapcha Pass",
+      "Everest Base Camp",
+      "Cho La Pass",
+      "Renjo La Pass",
+      "Tashi Lapcha Pass",
+      "Tilman's Pass",
+      "Langtang",
+      "Larkya La Pass",
+      "Thorong La Pass",
+      "Lo Manthang",
+      "Kang La (Dolpo)",
+      "Shey Gompa",
+      "Simikot",
+      "Hilsa"
+    ],
+    "best_seasons": [
+      "September",
+      "October",
+      "November",
+      "March",
+      "April",
+      "May"
+    ],
+    "osm_relation_id": 7716498,
+    "description": "The world's highest, most audacious long-distance alpine trail traversing the entire breadth of the Nepal Himalaya from Mt. Kanchenjunga in the far east to Mt. Kailash gateways in Humla in the far west.",
+    "route_geometry_wkt": "LINESTRING(88.08000 27.83000, 87.58500 27.75000, 87.09500 27.79500, 86.85250 28.00440, 86.69470 27.95380, 85.56700 28.21300, 84.62200 28.66500, 83.93550 28.79370, 83.95750 29.18270, 82.89500 29.35000, 81.82500 29.96500, 81.33500 30.15500)"
+  }
+]

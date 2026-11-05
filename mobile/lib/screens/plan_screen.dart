@@ -54,7 +54,8 @@ class _PlanScreenState extends State<PlanScreen> {
     'Bhaktapur',
     'Patan',
     'Janakpur',
-    'Bandipur'
+    'Bandipur',
+    'Panauti',
   ];
   final List<String> _travelTimes =
       ['Morning', 'Day', 'Evening', 'Night'];
@@ -91,6 +92,8 @@ class _PlanScreenState extends State<PlanScreen> {
         return const LatLng(26.7278, 85.9238);
       case 'bandipur':
         return const LatLng(27.9389, 84.4167);
+      case 'panauti':
+        return const LatLng(27.5836, 85.5122); // Panauti Municipality, Kavrepalanchok
       default:
         return const LatLng(27.7172, 85.3240);
     }

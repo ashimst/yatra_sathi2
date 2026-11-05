@@ -18,6 +18,10 @@ class WeatherService {
       throw Exception('Location permissions are denied forever.');
     }
 
+    if (kOpenWeatherApiKey.isEmpty) {
+      throw Exception('Weather is not configured (OPENWEATHER_API_KEY not set).');
+    }
+
     final pos = await Geolocator.getCurrentPosition(
         locationSettings:
             const LocationSettings(accuracy: LocationAccuracy.low));

@@ -1,7 +1,7 @@
 """
 User model for authentication.
 """
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, String, DateTime, Text
 from sqlalchemy.dialects.postgresql import UUID
 from backend.app.db.database import Base
 import uuid
@@ -18,5 +18,6 @@ class User(Base):
     username = Column(String(100), unique=True, index=True)
     hashed_password = Column(String(255))
     full_name = Column(String(255))
+    avatar_url = Column(Text, nullable=True)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))

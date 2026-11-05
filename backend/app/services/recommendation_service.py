@@ -17,6 +17,7 @@ from backend.app.models.place import Place as PlaceDB
 from backend.app.services.route_service import route_service
 from backend.app.services.itinerary_service import itinerary_service
 from backend.app.services.embedding_service import embedding_service
+from backend.app.services.decision_service import decision_service
 import math
 
 # Rough active hours per day, by pace, used to size the trip-level time budget.
@@ -47,7 +48,7 @@ class RecommendationService:
         origin_lng: float,
         dest_lat: float,
         dest_lng: float,
-        corridor_km: float = 20,
+        corridor_km: float = 15,
         limit: int = 12,
         # --- trip-shaping inputs (these are what actually drive the itinerary) ---
         interests: Optional[List[str]] = None,
@@ -84,13 +85,13 @@ class RecommendationService:
         route_coordinates = route_data["coordinates"]
 
         candidates = self._get_pois_in_route_buffer(
-            route_coordinates, 
-            15,  # Route corridor 15km — captures worthwhile en-route stops
+            route_coordinates,
+            corridor_km,  # Route corridor (API default 15km) — captures worthwhile en-route stops
             origin_lat=origin_lat,
             origin_lng=origin_lng,
             dest_lat=dest_lat,
             dest_lng=dest_lng,
-            destination_buffer_km=100  # Destination buffer 100km for attractions
+            destination_buffer_km=20  # Destination buffer 20km for attractions (realistic city/valley radius)
         )
 
         # Diagnose category counts after spatial retrieval
@@ -149,11 +150,9 @@ class RecommendationService:
                 origin_lat=origin_lat, origin_lng=origin_lng,
             )
             
-            # Store trip slots for LLM context
-            self.trip_slots = trip_slots
             
             # Store category availability info for LLM context
-            self.category_availability = {
+            category_availability = {
                 category: {
                     "requested": info["requested"],
                     "available": info["available"],
@@ -161,12 +160,11 @@ class RecommendationService:
                 }
                 for category, info in category_results.items()
             }
-            self.meal_plan = meal_plan
             
             # Create structured intermediate representation
             structured_representation = self._create_structured_representation(
                 trip_slots,
-                self.category_availability,
+                category_availability,
                 meal_plan,
                 origin_lat,
                 origin_lng,
@@ -174,8 +172,6 @@ class RecommendationService:
                 dest_lng
             )
             
-            # Store structured representation for LLM context
-            self.structured_representation = structured_representation
             
             # Flatten categorized POIs for trip optimization
             filtered_candidates = (
@@ -183,19 +179,10 @@ class RecommendationService:
                 category_results["restaurants"]["candidates"] +
                 category_results["attractions"]["candidates"]
             )
-            # Store category availability info for LLM context
-            self.category_availability = {
-                category: {
-                    "requested": info["requested"],
-                    "available": info["available"],
-                    "selected": info["selected"]
-                }
-                for category, info in category_results.items()
-            }
-            self.meal_plan = meal_plan
             print(f"[INFO] Total candidates after category-specific retrieval: {len(filtered_candidates)}")
         else:
             filtered_candidates = scored_candidates
+            trip_slots = None
 
         # Stage 2: pick the feasible, diverse, trip-fitting SET.
         try:
@@ -231,51 +218,105 @@ class RecommendationService:
             raise
 
         if generate_itinerary:
-            # Use LLM to generate natural language itinerary from structured representation
-            print("[INFO] Generating natural language itinerary using LLM")
+            # Deterministic Canonical Itinerary Construction from trip_slots
+            # LLM is used strictly to enrich descriptions & summaries, never to mutate structure or IDs
+            print("[INFO] Constructing canonical itinerary from deterministic trip_slots")
 
+            itinerary = {
+                "days": [],
+                "total_days": num_days,
+                "pace": pace,
+                "budget": budget,
+                "interests": interests or [],
+                "summary": "",
+                "tips": []
+            }
+
+            time_mapping = {
+                "morning": ("09:00", "11:00"),
+                "late_morning": ("11:30", "13:00"),
+                "afternoon": ("14:00", "16:00"),
+                "late_afternoon": ("16:30", "18:00"),
+                "evening": ("18:30", "20:00"),
+                "late_evening": ("20:30", "22:00"),
+                "night": ("21:00", "22:30"),
+                "daytime": ("10:00", "12:00")
+            }
+
+            if isinstance(trip_slots, dict):
+                trip_days = trip_slots.get("days", [])
+                for day_slot in trip_days:
+                    day_data = {
+                        "day": day_slot["day"],
+                        "starting_location": f"Day {day_slot['day']} Start",
+                        "activities": [],
+                        "meals": [],
+                        "overnight_accommodation": None
+                    }
+
+                    # Add activities with deterministic coordinates, IDs, and timing
+                    for act in day_slot.get("activities", []):
+                        slot_label = act.get("time_slot", "daytime")
+                        start_t, end_t = time_mapping.get(slot_label, ("10:00", "12:00"))
+                        day_data["activities"].append({
+                            "poi_id": act.get("place_id"),
+                            "poi_name": act.get("name"),
+                            "name": act.get("name"),
+                            "category": act.get("category"),
+                            "latitude": act.get("latitude"),
+                            "longitude": act.get("longitude"),
+                            "image_url": act.get("image_url"),
+                            "is_hidden_gem": bool(act.get("is_hidden_gem", False)),
+                            "must_try": act.get("must_try"),
+                            "price_level": act.get("price_level"),
+                            "start_time": start_t,
+                            "end_time": end_t,
+                            "duration_hours": 2,
+                            "activity_type": act.get("activity_type", "attraction"),
+                            "description": "",
+                            "similarity": act.get("similarity", 0)
+                        })
+
+                    # Add meals
+                    for meal in day_slot.get("meals", []):
+                        m_type = meal.get("meal_type", "lunch")
+                        m_time = "13:00" if m_type == "lunch" else "19:30"
+                        day_data["meals"].append({
+                            "poi_id": meal.get("place_id"),
+                            "poi_name": meal.get("name"),
+                            "name": meal.get("name"),
+                            "category": meal.get("category", "restaurant"),
+                            "latitude": meal.get("latitude"),
+                            "longitude": meal.get("longitude"),
+                            "image_url": meal.get("image_url"),
+                            "must_try": meal.get("must_try"),
+                            "price_level": meal.get("price_level"),
+                            "meal_type": m_type,
+                            "time": m_time,
+                            "description": ""
+                        })
+
+                    # Add overnight accommodation
+                    if day_slot.get("overnight"):
+                        ov = day_slot["overnight"]
+                        day_data["overnight_accommodation"] = {
+                            "poi_id": ov.get("place_id"),
+                            "poi_name": ov.get("name"),
+                            "name": ov.get("name"),
+                            "category": ov.get("category", "accommodation"),
+                            "latitude": ov.get("latitude"),
+                            "longitude": ov.get("longitude"),
+                            "image_url": ov.get("image_url"),
+                            "price_level": ov.get("price_level"),
+                            "description": ""
+                        }
+
+                    itinerary["days"].append(day_data)
+
+            # Enrich with LLM descriptions without touching deterministic structure
             try:
-                # Collect all POIs from structured representation
-                all_pois = []
-                if hasattr(self, 'trip_slots') and isinstance(self.trip_slots, dict):
-                    trip_days = self.trip_slots.get("days", [])
-                    for day_slot in trip_days:
-                        # Add overnight accommodation
-                        if day_slot.get("overnight"):
-                            all_pois.append({
-                                "id": day_slot["overnight"].get("place_id"),
-                                "name": day_slot["overnight"].get("name"),
-                                "category": day_slot["overnight"].get("category"),
-                                "latitude": day_slot["overnight"].get("latitude"),
-                                "longitude": day_slot["overnight"].get("longitude"),
-                                "embedding_similarity": day_slot["overnight"].get("similarity", 0)
-                            })
-
-                        # Add activities
-                        for activity in day_slot.get("activities", []):
-                            all_pois.append({
-                                "id": activity.get("place_id"),
-                                "name": activity.get("name"),
-                                "category": activity.get("category"),
-                                "latitude": activity.get("latitude"),
-                                "longitude": activity.get("longitude"),
-                                "embedding_similarity": activity.get("similarity", 0)
-                            })
-
-                        # Add meals
-                        for meal in day_slot.get("meals", []):
-                            all_pois.append({
-                                "id": meal.get("place_id"),
-                                "name": meal.get("name"),
-                                "category": meal.get("category"),
-                                "latitude": meal.get("latitude"),
-                                "longitude": meal.get("longitude"),
-                                "embedding_similarity": meal.get("similarity", 0)
-                            })
-
-                # Call LLM itinerary service
-                natural_itinerary = await itinerary_service.generate_itinerary(
-                    pois=all_pois,
+                itinerary = await itinerary_service.enrich_itinerary(
+                    itinerary=itinerary,
                     origin_lat=origin_lat,
                     origin_lng=origin_lng,
                     dest_lat=dest_lat,
@@ -283,79 +324,21 @@ class RecommendationService:
                     num_days=num_days,
                     user_preferences=interests,
                     travel_style=pace,
-                    budget=budget,
-                    structured_representation=self.trip_slots if hasattr(self, 'trip_slots') else None
+                    budget=budget
                 )
-
-                return natural_itinerary
-
             except Exception as e:
-                print(f"[ERROR] LLM itinerary generation failed: {e}")
-                print("[INFO] Falling back to structured trip slots")
-                # Fallback to structured slots if LLM fails
-                # Build simple itinerary from trip slots
-                itinerary = {
-                    "days": [],
-                    "total_days": num_days,
-                    "pace": pace,
-                    "budget": budget,
-                    "interests": interests or [],
-                }
+                print(f"[WARN] Non-critical LLM enrichment error: {e}")
 
-                if hasattr(self, 'trip_slots') and isinstance(self.trip_slots, dict):
-                    trip_days = self.trip_slots.get("days", [])
-                    for day_slot in trip_days:
-                        day_data = {
-                            "day": day_slot["day"],
-                            "activities": [],
-                            "meals": [],
-                            "overnight_accommodation": None
-                        }
-
-                        # Add activities
-                        for activity in day_slot.get("activities", []):
-                            day_data["activities"].append({
-                                "poi_id": activity.get("place_id"),
-                                "name": activity.get("name"),
-                                "category": activity.get("category"),
-                                "latitude": activity.get("latitude"),
-                                "longitude": activity.get("longitude")
-                            })
-
-                        # Add meals
-                        for meal in day_slot.get("meals", []):
-                            day_data["meals"].append({
-                                "poi_id": meal.get("place_id"),
-                                "name": meal.get("name"),
-                                "category": meal.get("category"),
-                                "latitude": meal.get("latitude"),
-                                "longitude": meal.get("longitude")
-                            })
-
-                        # Add overnight accommodation
-                        if day_slot.get("overnight"):
-                            day_data["overnight_accommodation"] = {
-                                "poi_id": day_slot["overnight"].get("place_id"),
-                                "name": day_slot["overnight"].get("name"),
-                                "category": day_slot["overnight"].get("category"),
-                                "latitude": day_slot["overnight"].get("latitude"),
-                                "longitude": day_slot["overnight"].get("longitude")
-                            }
-
-                        itinerary["days"].append(day_data)
-
-                return {
-                    "route": route_data,
-                    "itinerary": itinerary,
-                    "total_pois_found": len(candidates),
-                    "corridor_km": corridor_km,
-                    "time_budget": time_summary,
-                }
-            except Exception as e:
-                print(f"[ERROR] Error building itinerary: {e}")
-                import traceback
-                traceback.print_exc()
-                raise
+            return {
+                "route": route_data,
+                "itinerary": itinerary,
+                "num_days": num_days,
+                "travel_style": pace,
+                "budget": budget,
+                "total_pois_found": len(candidates),
+                "corridor_km": corridor_km,
+                "time_budget": time_summary,
+            }
 
         # Log buffer distances of final recommendations for debugging
         if not generate_itinerary:
@@ -427,7 +410,7 @@ class RecommendationService:
 
             # Add origin buffer exclusion - remove POIs within 20km of origin
             # Only apply if route is long enough (>50km) to avoid wiping out first segment
-            if origin_buffer_km > 0:
+            if origin_buffer_km > 0 and origin_lat is not None and origin_lng is not None:
                 origin_lat_deg = origin_buffer_km * self.buffer_deg_per_km_lat
                 origin_lng_deg = origin_buffer_km * self._get_longitude_deg_per_km(origin_lat)
                 origin_min_lat = origin_lat - origin_lat_deg
@@ -439,53 +422,112 @@ class RecommendationService:
                 print(f"Route distance {route_distance_km:.1f}km is too short for origin exclusion (threshold: 50km)")
                 origin_min_lat = origin_min_lng = origin_max_lat = origin_max_lng = None
 
-            # Cast centroid Text → geometry so PostGIS functions are unambiguous
-            from sqlalchemy import cast
-            from geoalchemy2 import Geometry
-            centroid_geom = cast(PlaceDB.centroid, Geometry("POINT", srid=4326))
-
-            lat_expr = func.ST_Y(centroid_geom)
-            lng_expr = func.ST_X(centroid_geom)
-
-            # Calculate destination point for ordering — places closer to the
-            # destination rank first so they are not cut by the row limit.
-            # Falls back to route centre if destination is not provided.
-            if dest_lat is not None and dest_lng is not None:
-                order_point = func.ST_SetSRID(func.ST_MakePoint(dest_lng, dest_lat), 4326)
+            dialect_name = db.bind.dialect.name if db.bind else "sqlite"
+            if dialect_name == "sqlite":
+                # SQLite fallback: use bounding box filtering directly on PlaceDB float columns
+                query = (
+                    db.query(PlaceDB)
+                    .filter(
+                        (
+                            (PlaceDB.bbox_max_lat >= min_lat) &
+                            (PlaceDB.bbox_min_lat <= max_lat) &
+                            (PlaceDB.bbox_max_lon >= min_lng) &
+                            (PlaceDB.bbox_min_lon <= max_lng)
+                        ) | (
+                            PlaceDB.bbox_min_lat.is_(None)
+                        )
+                    )
+                    .filter(PlaceDB.name.isnot(None))
+                    .filter(func.trim(PlaceDB.name) != "")
+                    .filter(func.length(func.trim(PlaceDB.name)) > 1)
+                    .filter(~PlaceDB.category.ilike("%tour operator%"))
+                    .filter(~PlaceDB.category.ilike("%tour agency%"))
+                    .filter(~PlaceDB.category.ilike("%tourist information%"))
+                    .filter(~PlaceDB.category.in_([
+                        "Spring", "Tree", "Fuel Station", "Bus Station",
+                        "ATM", "Hospital", "Pharmacy", "Apartment", "Pond", "Drinking Water"
+                    ]))
+                    .order_by(PlaceDB.popularity.desc().nullslast())
+                )
+                candidates = query.limit(3000).all()
+                rows = []
+                for p in candidates:
+                    p_lat = p.latitude or p.bbox_min_lat
+                    p_lng = p.longitude or p.bbox_min_lon
+                    if p_lat is None or p_lng is None:
+                        p_dict = p.to_dict()
+                        p_lat = p_dict.get("latitude")
+                        p_lng = p_dict.get("longitude")
+                    if p_lat is None or p_lng is None:
+                        continue
+                    if not (min_lat <= p_lat <= max_lat and min_lng <= p_lng <= max_lng):
+                        continue
+                    if origin_buffer_km > 0 and origin_min_lat is not None:
+                        if (origin_min_lat <= p_lat <= origin_max_lat and origin_min_lng <= p_lng <= origin_max_lng):
+                            continue
+                    rows.append((p, p_lat, p_lng))
+                
+                # Order by popularity and proximity to dest_point or center
+                ref_lat = dest_lat if dest_lat is not None else (sum(lats) / len(lats) if lats else origin_lat)
+                ref_lng = dest_lng if dest_lng is not None else (sum(lngs) / len(lngs) if lngs else origin_lng)
+                rows.sort(
+                    key=lambda r: (
+                        -(r[0].popularity or 0),
+                        self._haversine_distance(r[1], r[2], ref_lat, ref_lng)
+                    )
+                )
+                rows = rows[:2000]
             else:
-                route_center_lng = sum(lngs) / len(lngs) if lngs else origin_lng
-                route_center_lat = sum(lats) / len(lats) if lats else origin_lat
-                order_point = func.ST_SetSRID(func.ST_MakePoint(route_center_lng, route_center_lat), 4326)
+                # PostgreSQL with PostGIS
+                # Cast centroid Text -> geometry so PostGIS functions are unambiguous
+                from sqlalchemy import cast
+                from geoalchemy2 import Geometry
+                centroid_geom = cast(PlaceDB.centroid, Geometry("POINT", srid=4326))
 
-            query = (
-                db.query(PlaceDB, lat_expr.label("lat"), lng_expr.label("lng"))
-                .filter(
-                    lat_expr >= min_lat,
-                    lat_expr <= max_lat,
-                    lng_expr >= min_lng,
-                    lng_expr <= max_lng,
+                lat_expr = func.ST_Y(centroid_geom)
+                lng_expr = func.ST_X(centroid_geom)
+
+                # Calculate destination point for ordering — places closer to the
+                # destination rank first so they are not cut by the row limit.
+                # Falls back to route centre if destination is not provided.
+                if dest_lat is not None and dest_lng is not None:
+                    order_point = func.ST_SetSRID(func.ST_MakePoint(dest_lng, dest_lat), 4326)
+                else:
+                    route_center_lng = sum(lngs) / len(lngs) if lngs else origin_lng
+                    route_center_lat = sum(lats) / len(lats) if lats else origin_lat
+                    order_point = func.ST_SetSRID(func.ST_MakePoint(route_center_lng, route_center_lat), 4326)
+
+                query = (
+                    db.query(PlaceDB, lat_expr.label("lat"), lng_expr.label("lng"))
+                    .filter(
+                        lat_expr >= min_lat,
+                        lat_expr <= max_lat,
+                        lng_expr >= min_lng,
+                        lng_expr <= max_lng,
+                    )
+                    .filter(PlaceDB.name.isnot(None))
+                    .filter(func.trim(PlaceDB.name) != "")
+                    .filter(func.length(func.trim(PlaceDB.name)) > 1)
+                    .filter(~PlaceDB.category.ilike("%tour operator%"))
+                    .filter(~PlaceDB.category.ilike("%tour agency%"))
+                    .filter(~PlaceDB.category.ilike("%tourist information%"))
+                    .filter(~PlaceDB.category.in_([
+                        "Spring", "Tree", "Fuel Station", "Bus Station",
+                        "ATM", "Hospital", "Pharmacy", "Apartment", "Pond", "Drinking Water"
+                    ]))
+                    # Prioritize curated & popular destinations first, then physical proximity
+                    .order_by(PlaceDB.popularity.desc().nullslast(), func.ST_Distance(centroid_geom, order_point))
                 )
-                .filter(PlaceDB.name.isnot(None))
-                .filter(func.trim(PlaceDB.name) != "")
-                .filter(func.length(func.trim(PlaceDB.name)) > 1)
-                .filter(~PlaceDB.category.ilike("%tour operator%"))
-                .filter(~PlaceDB.category.ilike("%tour agency%"))
-                .filter(~PlaceDB.category.ilike("%tourist information%"))
-                # Order by distance to DESTINATION so destination-area places
-                # come first and are not cut by the row limit.
-                .order_by(func.ST_Distance(centroid_geom, order_point))
-            )
 
-            # Only apply origin exclusion filter if route is long enough
-            if origin_buffer_km > 0:
-                query = query.filter(
-                    ~((lat_expr >= origin_min_lat) & (lat_expr <= origin_max_lat) &
-                      (lng_expr >= origin_min_lng) & (lng_expr <= origin_max_lng))
-                )
+                # Only apply origin exclusion filter if route is long enough and origin coords are defined
+                if origin_buffer_km > 0 and origin_min_lat is not None:
+                    query = query.filter(
+                        ~((lat_expr >= origin_min_lat) & (lat_expr <= origin_max_lat) &
+                          (lng_expr >= origin_min_lng) & (lng_expr <= origin_max_lng))
+                    )
 
-            query = query.limit(2000)  # Raised from 1000 — destination-ordered so dest places come first
-
-            rows = query.all()
+                query = query.limit(2000)  # Raised from 1000 — destination-ordered so dest places come first
+                rows = query.all()
 
             # Use full route coordinates for precise buffer enforcement
             # Downsample only if route is extremely long (>1000 points) to avoid performance issues
@@ -845,22 +887,8 @@ class RecommendationService:
                 dropped_nameless += 1
                 continue
 
-            # 2. Hard drop: placeholder phrases ('unnamed', 'no name', 'noname', 'unknown', 'n/a', 'node/', etc.)
-            placeholders = ('unnamed', 'unknown', 'no name', 'noname', 'no_name', 'n/a', 'null', 'node/', 'way/', 'relation/')
-            if any(p in name_lower for p in placeholders) and not has_wiki:
-                dropped_nameless += 1
-                continue
-
-            # 3. Hard drop: pure generic terms or stripped generic terms (e.g. 'Teahouse', 'Coffee Shop', 'Homestay', 'Hotel', 'Bar')
-            import re as _re
-            stripped = _re.sub(r"[\d\s\-_#.,()/]+", "", name_lower)
-            if (name_lower in self._GENERIC_NAMES or stripped in self._GENERIC_NAMES) and not has_wiki:
-                dropped_nameless += 1
-                continue
-
-            # 4. Hard drop: low-quality names (score <= 0.4) that have no wiki verification
-            name_quality = self._score_name_quality(poi)
-            if name_quality <= 0.4 and not has_wiki:
+            # 2. Drop generic or low-quality POI names using KEV Decision Engine
+            if decision_service.is_generic_or_low_quality(poi):
                 dropped_nameless += 1
                 continue
 
@@ -875,92 +903,10 @@ class RecommendationService:
                 if difficulty in ("hard", "difficult", "strenuous"):
                     continue
 
-            # Dietary preferences - use soft scoring instead of hard exclusion
-            # This allows mixed-cuisine restaurants to be included with lower scores
+            # Dietary preferences: evaluate alignment using KEV Decision Service
             if dietary_preferences and self._is_food_place(poi):
-                poi_tags = (
-                    (poi.get("tags") or []) +
-                    (poi.get("travel_styles") or []) +
-                    (poi.get("semantic_tags") or [])
-                )
-
-                # Tokenize with special negation-merging: transform
-                # "non veg", "non-veg" -> single token "nonveg" so that "veg" pref
-                # does not false-positive match a "non-veg restaurant" tag.
-                import re
-                def _diet_tokens(phrases):
-                    out = set()
-                    for s in phrases:
-                        if s is None:
-                            continue
-                        text = str(s).lower()
-                        # Merge negation prefixes: "non X", "non-X" -> "nonX"
-                        # Also handle vegan-style prefixes similarly
-                        text = re.sub(r'\bnon[\s-]+(\w+)', r'non\1', text)
-                        # Merge "jain" style "no onion/garlic" if present
-                        text = re.sub(r'\bno[\s-]+(\w+)', r'no\1', text)
-                        out.update(re.findall(r'[a-zA-Z0-9]+', text))
-                    return out
-
-                tag_tokens = _diet_tokens(poi_tags)
-
-                # Also tokenize category, name, and raw_tag cuisine fields
-                tag_tokens |= _diet_tokens([
-                    poi.get("category", ""),
-                    poi.get("name", ""),
-                    (poi.get("raw_tags") or {}).get("cuisine", ""),
-                    (poi.get("raw_tags") or {}).get("diet", ""),
-                ])
-
-                # Preference keyword expansions: normalize aliases to canonical tokens
-                pref_token_map = {
-                    "veg": {"veg", "vegetarian", "veggie"},
-                    "vegetarian": {"veg", "vegetarian", "veggie"},
-                    "vegan": {"vegan"},
-                    "nonveg": {"nonveg", "non", "meat", "chicken", "mutton", "beef", "fish", "seafood"},
-                    "non-veg": {"nonveg", "non", "meat", "chicken", "mutton", "beef", "fish", "seafood"},
-                    "non veg": {"nonveg", "non", "meat", "chicken", "mutton", "beef", "fish", "seafood"},
-                    "jain": {"jain"},
-                    "halal": {"halal"},
-                    "kosher": {"kosher"},
-                }
-
-                # Also merge negations in the user preference itself, so
-                # dietary_preferences=["Non-Veg"] -> canonical lookup finds it
-                def _normalize_pref(p):
-                    t = p.lower().strip()
-                    t = re.sub(r'\bnon[\s-]+(\w+)', r'non\1', t)
-                    t = re.sub(r'\bno[\s-]+(\w+)', r'no\1', t)
-                    return t
-
-                exact_match = False
-                partial_match = False
-                for pref in dietary_preferences:
-                    pref_norm = _normalize_pref(pref)
-                    canonical = pref_token_map.get(pref_norm, pref_token_map.get(pref.lower().strip(), {pref_norm}))
-                    matches = canonical & tag_tokens
-                    if matches:
-                        exact_match = True
-                        break
-                    # Loose partial: any tag token starts-with preference token
-                    for t in tag_tokens:
-                        for p in canonical:
-                            if len(p) >= 3 and len(t) >= 3 and (t.startswith(p) or p.startswith(t)):
-                                partial_match = True
-                                break
-                        if partial_match:
-                            break
-                    if partial_match:
-                        break
-
-                if exact_match:
-                    dietary_match_score = 1.0
-                elif partial_match:
-                    dietary_match_score = 0.5
-                else:
-                    dietary_match_score = 0.3
-
-                poi["dietary_match_score"] = dietary_match_score
+                diet_match = decision_service.score_dietary_match(poi, dietary_preferences)
+                poi["dietary_match_score"] = diet_match.score
             else:
                 poi["dietary_match_score"] = 1.0
 
@@ -1054,7 +1000,7 @@ class RecommendationService:
         }
         
         if not has_restaurants:
-            meal_plan["meal_options"] = ["hotel_dinner", "self_catering", "local_food_establishments", "cafes"]
+            meal_plan["meal_options"] = ["hotel_breakfast", "hotel_dinner", "self_catering", "local_food_establishments", "cafes"]
         else:
             meal_plan["meal_options"] = ["restaurants", "hotel_dinner", "cafes", "local_food_establishments"]
         
@@ -1078,13 +1024,13 @@ class RecommendationService:
 
         Design goals
         ------------
-        • Dense itineraries: 5–7 attractions/day depending on pace.
-        • Guaranteed meals: exactly 2 meal slots/day (lunch + dinner).
-          We retrieve 3× the meal slots needed so the slot planner always
+        * Dense itineraries: 5–7 attractions/day depending on pace.
+        * Guaranteed meals: exactly 2 meal slots/day (lunch + dinner).
+          We retrieve 3x the meal slots needed so the slot planner always
           has options even after spatial filtering.
-        • 1 hotel per night: retrieve num_days × 3 so we have per-night
+        * 1 hotel per night: retrieve num_days x 3 so we have per-night
           choice even in sparse areas.
-        • Candidate buffer: attractions are retrieved at 2× the target so
+        * Candidate buffer: attractions are retrieved at 2x the target so
           the diversity/destination sorting has room to pick the best set.
         """
         # Target activities per day by pace
@@ -1094,14 +1040,14 @@ class RecommendationService:
             "packed": 7,
         }.get(pace, 6)
 
-        # Retrieve 2× candidates so sorting + diversity has headroom
+        # Retrieve 2x candidates so sorting + diversity has headroom
         attractions_needed = target_per_day * 2 * num_days
 
-        # Meals: exactly 2 slots/day, retrieve 3× as candidates
+        # Meals: exactly 2 slots/day, retrieve 3x as candidates
         meal_slots_per_day = 2   # lunch + dinner (breakfast at hotel)
         restaurants_needed = meal_slots_per_day * 3 * num_days
 
-        # Hotels: 1 per night, retrieve 3× for choice
+        # Hotels: 1 per night, retrieve 3x for choice
         accommodation_needed = num_days * 3
 
         limits = {
@@ -1110,11 +1056,11 @@ class RecommendationService:
             "attractions":   attractions_needed,
         }
 
-        print(f"[INFO] Candidate limits → "
+        print(f"[INFO] Candidate limits -> "
               f"accommodation: {accommodation_needed}, "
               f"restaurants: {restaurants_needed}, "
               f"attractions: {attractions_needed} "
-              f"(target {target_per_day}/day × {num_days} days)")
+              f"(target {target_per_day}/day x {num_days} days)")
 
         return limits
 
@@ -1271,52 +1217,9 @@ class RecommendationService:
 
     def _score_name_quality(self, poi: Dict[str, Any]) -> float:
         """
-        Return a 0–1 name-quality score.
-
-        Tiers
-        -----
-        1.0  Proper specific name  (e.g. "Phewa Lake", "Boudhanath Stupa")
-        0.7  Name contains a generic word but also has a qualifier
-             (e.g. "Sarangkot Viewpoint", "Begnas Lake")
-        0.3  Name IS a single generic word  (e.g. "Viewpoint", "Bridge")
-        0.1  Name is missing, blank, or only whitespace/punctuation
-
-        A POI with a wikidata_id or wikipedia_url is assumed well-known
-        enough that its name score is floored at 0.6 regardless.
+        Return a 0–1 name-quality score using KEV Decision Service.
         """
-        name = (poi.get("name") or "").strip()
-        name_lower = name.lower()
-
-        placeholders = ('unnamed', 'unknown', 'no name', 'noname', 'no_name', 'n/a', 'null', 'node/', 'way/', 'relation/')
-
-        # Missing, blank, extremely short name (<= 2 chars), or placeholder phrase
-        if not name or len(name) <= 2 or any(p in name_lower for p in placeholders):
-            score = 0.1
-        else:
-            # Exact match against the generic-name set
-            if name_lower in self._GENERIC_NAMES:
-                score = 0.3
-            else:
-                # Check whether the name is *only* a generic word plus digits/
-                # punctuation (e.g. "Bridge 1", "Viewpoint 3")
-                import re
-                stripped = re.sub(r"[\d\s\-_#.,()/]+", "", name_lower)
-                if stripped in self._GENERIC_NAMES:
-                    score = 0.3
-                # Name contains a generic word but also real qualifiers
-                elif any(g in name_lower for g in self._GENERIC_NAMES):
-                    # Reward proportionally to how much extra content there is
-                    generic_len = max(len(g) for g in self._GENERIC_NAMES if g in name_lower)
-                    extra_ratio = (len(name) - generic_len) / max(len(name), 1)
-                    score = 0.7 + 0.3 * min(extra_ratio, 1.0)
-                else:
-                    score = 1.0
-
-        # Well-known places (have wiki linkage) get a floor of 0.6
-        if score < 0.6 and (poi.get("wikidata_id") or poi.get("wikipedia_url")):
-            score = 0.6
-
-        return score
+        return decision_service.score_name_quality(poi)
 
     def _calculate_modular_score(
         self,
@@ -1338,9 +1241,9 @@ class RecommendationService:
           route_proximity — how close the POI is to the travel corridor
 
         Then we blend them with a destination_weight that is:
-          • 0.85 for pure destination-buffer POIs  (e.g. Pokhara attractions)
-          • 0.50 for dual-buffer POIs               (near both road and dest)
-          • 0.10 for pure route-corridor POIs       (highway stop)
+          * 0.85 for pure destination-buffer POIs  (e.g. Pokhara attractions)
+          * 0.50 for dual-buffer POIs               (near both road and dest)
+          * 0.10 for pure route-corridor POIs       (highway stop)
 
         This means Pokhara places are scored primarily on how good they are
         AT the destination, not on how far they sit from the Kathmandu highway.
@@ -1350,7 +1253,7 @@ class RecommendationService:
           dest_spatial  — proximity to destination (destination-weighted)
           route_spatial — proximity to route corridor (route-weighted)
           preference    — keyword match to stated interests
-          popularity    — normalized OSM popularity (0-100 → 0-1)
+          popularity    — normalized OSM popularity (0-100 -> 0-1)
           quality       — rating + wiki recognition
           category      — category appropriateness bonus
           season        — seasonal suitability
@@ -1723,9 +1626,9 @@ class RecommendationService:
         Classify a day as 'route_day' or 'destination_day'.
 
         For a multi-day trip:
-          - Day 1          → route_day  (departure / travel in)
-          - Day N (last)   → route_day  (travel out / return)
-          - Days 2 … N-1   → destination_day (explore the destination area)
+          - Day 1          -> route_day  (departure / travel in)
+          - Day N (last)   -> route_day  (travel out / return)
+          - Days 2 ... N-1   -> destination_day (explore the destination area)
 
         For 1- or 2-day trips every day is a route_day because there are no
         dedicated middle days.
@@ -1751,10 +1654,10 @@ class RecommendationService:
         """
         Re-rank candidates based on the day type:
 
-        route_day      → prefer places close to the route corridor.  Day 1
+        route_day      -> prefer places close to the route corridor.  Day 1
                          candidates are biased toward the origin end of the
                          route; last-day candidates toward the destination end.
-        destination_day → prefer places close to the destination (dest_lat/lng).
+        destination_day -> prefer places close to the destination (dest_lat/lng).
                          Route-only places are pushed to the back.
 
         The existing embedding_similarity score is blended with the spatial
@@ -1819,10 +1722,10 @@ class RecommendationService:
 
         Guarantees
         ----------
-        • Exactly 1 overnight hotel per day — cycles if candidates < num_days.
-        • Exactly 2 meal slots per day (lunch + dinner) — re-uses restaurants
+        * Exactly 1 overnight hotel per day — cycles if candidates < num_days.
+        * Exactly 2 meal slots per day (lunch + dinner) — re-uses restaurants
           across days rather than leaving any day without meals.
-        • Activity target met or as close as data allows — fills from
+        * Activity target met or as close as data allows — fills from
           destination-buffer pool first for destination days, route-progress
           cluster first for route days, then falls back to global unassigned
           pool.
@@ -1837,12 +1740,12 @@ class RecommendationService:
         restaurants   = category_results["restaurants"]["candidates"]
         attractions   = category_results["attractions"]["candidates"]
 
-        # Target activities to PLACE per day (half of retrieved candidates)
+        # Sane, feasible activities per day (Nepal mountain roads allow 2-4 visits max + meals & hotel)
         target_activities = {
-            "relaxed": 5,
-            "balanced": 6,
-            "packed": 7,
-        }.get(pace, 6)
+            "relaxed": 2,
+            "balanced": 3,
+            "packed": 4,
+        }.get(pace, 3)
 
         trip_slots = {"num_days": num_days, "pace": pace, "days": []}
 
@@ -1894,6 +1797,10 @@ class RecommendationService:
                     "latitude": h.get("latitude"),
                     "longitude": h.get("longitude"),
                     "similarity": h.get("embedding_similarity", 0),
+                    "image_url": h.get("image_url"),
+                    "price_level": h.get("price_level"),
+                    "must_try": h.get("must_try"),
+                    "is_hidden_gem": h.get("is_hidden_gem", False),
                 }
             else:
                 print(f"[WARN] Day {day_num}: no accommodation candidates available")
@@ -1975,7 +1882,7 @@ class RecommendationService:
                     in_dest = self._haversine_distance(
                         attraction.get("latitude", 0), attraction.get("longitude", 0),
                         dest_lat, dest_lng
-                    ) <= 100
+                    ) <= 20
                 day_slots["activities"].append({
                     "place_id":             attraction.get("id"),
                     "name":                 attraction.get("name"),
@@ -1986,6 +1893,10 @@ class RecommendationService:
                     "time_slot":            time_labels[i] if i < len(time_labels) else "daytime",
                     "activity_type":        "attraction",
                     "in_destination_buffer": in_dest,
+                    "image_url":            attraction.get("image_url"),
+                    "price_level":          attraction.get("price_level"),
+                    "must_try":             attraction.get("must_try"),
+                    "is_hidden_gem":        attraction.get("is_hidden_gem", False),
                 })
 
             # ── 3. Meals — guaranteed lunch + dinner every day ─────────────
@@ -2043,7 +1954,7 @@ class RecommendationService:
                     in_dest = self._haversine_distance(
                         r.get("latitude", 0), r.get("longitude", 0),
                         dest_lat, dest_lng
-                    ) <= 100
+                    ) <= 20
                 day_slots["meals"].append({
                     "place_id":             r.get("id"),
                     "name":                 r.get("name"),
@@ -2054,6 +1965,10 @@ class RecommendationService:
                     "meal_type":            meal_type,
                     "activity_type":        "restaurant",
                     "in_destination_buffer": in_dest,
+                    "image_url":            r.get("image_url"),
+                    "must_try":             r.get("must_try"),
+                    "price_level":          r.get("price_level"),
+                    "is_hidden_gem":        r.get("is_hidden_gem", False),
                 })
 
             trip_slots["days"].append(day_slots)
@@ -2199,29 +2114,25 @@ class RecommendationService:
                     "lng": overnight.get("longitude")
                 })
         
-        # Check for excessive backtracking (simplified)
+        # Check for excessive backtracking using KEV geometric displacement vectors
         if len(overnight_locations) > 2:
             for i in range(1, len(overnight_locations) - 1):
                 prev = overnight_locations[i - 1]
                 curr = overnight_locations[i]
                 next_loc = overnight_locations[i + 1]
                 
-                # If current is far from both previous and next, might be backtracking
-                dist_prev = self._haversine_distance(
-                    curr["lat"], curr["lng"],
-                    prev["lat"], prev["lng"]
-                )
-                dist_next = self._haversine_distance(
-                    curr["lat"], curr["lng"],
-                    next_loc["lat"], next_loc["lng"]
-                )
-                
-                if dist_prev > 50 and dist_next > 50:
-                    violations.append({
-                        "type": "excessive_backtracking",
-                        "day": curr["day"],
-                        "message": f"Day {curr['day']} overnight location may cause excessive backtracking"
-                    })
+                if None not in (prev.get("lat"), prev.get("lng"), curr.get("lat"), curr.get("lng"), next_loc.get("lat"), next_loc.get("lng")):
+                    bt_res = decision_service.check_backtracking(
+                        (prev["lat"], prev["lng"]),
+                        (curr["lat"], curr["lng"]),
+                        (next_loc["lat"], next_loc["lng"]),
+                    )
+                    if bt_res.answer:
+                        violations.append({
+                            "type": "excessive_backtracking",
+                            "day": curr["day"],
+                            "message": f"Day {curr['day']} overnight location causes geometric trajectory backtracking (confidence: {bt_res.confidence})"
+                        })
         
         # Validate time constraints (basic check)
         for day in itinerary_days:
@@ -2346,29 +2257,18 @@ class RecommendationService:
         travel_season: Optional[str],
     ) -> List[Dict[str, Any]]:
         """
-        Attach a short "why this was recommended" list to each selected
-        destination, matching the destination-set shape (place + reasons)
-        rather than a bare numeric ranking.
+        Attach an authentic cultural and contextual reason list to each selected destination
+        using KEV Rationale Engine in DecisionService.
         """
         for poi in selected:
-            reasons = []
-            if interests:
-                poi_tags = set(poi.get("tags") or []) | set(poi.get("travel_styles") or [])
-                if set(interests) & poi_tags:
-                    reasons.append("Matches your interests")
-            if travel_season:
-                seasons = set(s.lower() for s in (poi.get("seasons") or []))
-                if travel_season.lower() in seasons:
-                    reasons.append(f"Good fit for {travel_season} travel")
-            if num_children > 0 and poi.get("family_friendly"):
-                reasons.append("Family-friendly")
-            if dietary_preferences and self._is_food_place(poi):
-                reasons.append("Matches dietary preferences")
-            if poi.get("_detour_km", 0) <= 2:
-                reasons.append("Right on the route, minimal detour")
-            if not reasons:
-                reasons.append("Highly rated along your route")
-            poi["reasons"] = reasons
+            poi["reasons"] = decision_service.generate_poi_reasons(
+                poi=poi,
+                interests=interests,
+                dietary_preferences=dietary_preferences,
+                num_children=num_children,
+                budget=budget,
+                travel_season=travel_season,
+            )
         return selected
 
     def _place_to_dict(self, place: PlaceDB) -> Dict[str, Any]:
@@ -2387,12 +2287,18 @@ class RecommendationService:
                 lat = (place.bbox_min_lat + place.bbox_max_lat) / 2
                 lng = (place.bbox_min_lon + place.bbox_max_lon) / 2
 
+        img = getattr(place, "image_url", None) or (place.raw_tags.get("wikidata_image") if place.raw_tags else None) or (place.raw_tags.get("image") if place.raw_tags else None)
         return {
             "id": str(place.id),
             "name": place.name,
             "category": place.category,
             "latitude": lat,
             "longitude": lng,
+            "image_url": img,
+            "gallery": getattr(place, "gallery", []) or ([img] if img else []),
+            "price_level": getattr(place, "price_level", None),
+            "must_try": getattr(place, "must_try", None),
+            "is_hidden_gem": bool(getattr(place, "is_hidden_gem", False)),
             "district": place.raw_tags.get("addr:district") if place.raw_tags else None,
             "province": place.raw_tags.get("addr:province") if place.raw_tags else None,
             "city": place.raw_tags.get("addr:city") if place.raw_tags else None,
@@ -2400,7 +2306,7 @@ class RecommendationService:
             "history": place.raw_tags.get("historic") if place.raw_tags else None,
             "tags": place.semantic_tags,
             "seasons": place.best_seasons,
-            "images": place.raw_tags.get("images") if place.raw_tags else None,
+            "images": [img] if img else (place.raw_tags.get("images") if place.raw_tags else None),
             "has_ticket": place.raw_tags.get("has_ticket") if place.raw_tags else None,
             "family_friendly": place.family_friendly,
             "popularity": place.popularity,
@@ -2419,80 +2325,10 @@ class RecommendationService:
     @staticmethod
     def _parse_visit_duration_to_minutes(visit_duration) -> float:
         """
-        Parse a visit_duration string (e.g. "1-2 hours", "30 minutes - 1 hour",
-        "Overnight", "4-8 hours") into a numeric number of minutes.
-
-        Falls back to a category-aware default of 60 minutes if parsing fails.
+        Parse a visit_duration string into a numeric number of minutes
+        using Cactus Needle slot extraction via DecisionService.
         """
-        if visit_duration is None:
-            return 60.0
-
-        if isinstance(visit_duration, (int, float)):
-            return float(visit_duration)
-
-        s = str(visit_duration).strip().lower()
-
-        if not s:
-            return 60.0
-
-        # Overnight stays (accommodation) - use a low value so they don't dominate
-        if "overnight" in s:
-            return 30.0
-
-        try:
-            total_minutes = 0.0
-
-            # Extract hour patterns like "1-2 hours", "4 hours", "1 hour"
-            import re
-
-            # Pattern like "X-Y hours" or "X hours" or "X hour"
-            range_match = re.search(
-                r"(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*hours?", s
-            )
-            if range_match:
-                low = float(range_match.group(1))
-                high = float(range_match.group(2))
-                avg_hours = (low + high) / 2.0
-                total_minutes += avg_hours * 60.0
-            else:
-                single_hour = re.search(r"(\d+(?:\.\d+)?)\s*hours?", s)
-                if single_hour:
-                    total_minutes += float(single_hour.group(1)) * 60.0
-
-            # Pattern like "X minutes" or "X-Y minutes" or "X minutes - Y hour"
-            # Handle standalone minutes or range with minutes
-            minute_range_match = re.search(
-                r"(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*minutes?", s
-            )
-            if minute_range_match:
-                low = float(minute_range_match.group(1))
-                high = float(minute_range_match.group(2))
-                avg_minutes = (low + high) / 2.0
-                total_minutes += avg_minutes
-            else:
-                # Check for standalone "X minutes" (avoid double counting "30 minutes" already parsed as "30 minutes - 1 hour")
-                if not range_match and not single_hour:
-                    single_minute = re.search(r"(\d+(?:\.\d+)?)\s*minutes?", s)
-                    if single_minute:
-                        total_minutes += float(single_minute.group(1))
-
-            # Handle hybrid "30 minutes - 1 hour"
-            hybrid_match = re.search(
-                r"(\d+(?:\.\d+)?)\s*minutes?\s*-\s*(\d+(?:\.\d+)?)\s*hours?", s
-            )
-            if hybrid_match:
-                low_min = float(hybrid_match.group(1))
-                high_hours = float(hybrid_match.group(2))
-                avg_minutes = (low_min + high_hours * 60.0) / 2.0
-                total_minutes = avg_minutes
-
-            if total_minutes > 0:
-                return total_minutes
-
-        except Exception:
-            pass
-
-        return 60.0
+        return decision_service.parse_visit_duration(visit_duration)
 
 
 # Global instance

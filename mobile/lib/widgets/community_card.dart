@@ -30,8 +30,12 @@ class CommunityCard extends StatelessWidget {
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(15),
                 bottomLeft: Radius.circular(15)),
-            child: buildPlaceholderImage('temple',
-                width: 90, height: 90),
+            child: buildPlaceholderImage(
+                itinerary.orderedWaypoints.length > 1
+                    ? itinerary.orderedWaypoints[1].category
+                    : itinerary.to,
+                width: 90,
+                height: 90),
           ),
           Expanded(
             child: Padding(

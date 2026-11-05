@@ -1,0 +1,6 @@
+# ==============================================================================
+# Cloudflare Pages SPA Redirects Configuration
+# Maps all client-side routes (/plan, /explore, /share/:id, etc.) to index.html
+# ==============================================================================
+
+/*    /index.html   200

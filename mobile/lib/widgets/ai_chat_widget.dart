@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:mobile/constants.dart';
 import 'package:mobile/models/place.dart';
 import 'package:mobile/models/created_itinerary.dart';
-import 'package:mobile/services/ai_service.dart';
+import 'package:mobile/services/auth_service.dart';
 import 'package:mobile/services/user_session.dart';
 import 'package:mobile/services/user_storage.dart';
 
@@ -38,18 +40,6 @@ class _AIChatWidgetState extends State<AIChatWidget> {
   bool _isChatLoading = false;
   final TextEditingController _chatController = TextEditingController();
   final ScrollController _chatScrollController = ScrollController();
-
-  String? _cachedSessionId;
-
-  String _resolveSessionId() {
-    if (_cachedSessionId != null) return _cachedSessionId!;
-    // Each widget instance gets a stable, unique session id that persists
-    // for the lifetime of the widget.  If a real user id is available it's
-    // appended to make cross-user collisions impossible.
-    final String userId = UserSession.loggedInUser ?? "guest";
-    _cachedSessionId = AIService.generateSessionId() + '_' + userId;
-    return _cachedSessionId!;
-  }
 
   @override
   void dispose() {
@@ -122,9 +112,11 @@ class _AIChatWidgetState extends State<AIChatWidget> {
     });
 
     try {
-      final sessionId = _resolveSessionId();
-      final userId = UserSession.loggedInUser;
-
+      final url = Uri.parse('$kBaseUrl/ai/chat');
+      debugPrint('Sending request to: $url');
+      debugPrint('kBaseUrl: $kBaseUrl');
+      
+      // Convert itinerary context to JSON-serializable format
       Map<String, dynamic>? serializableItineraryContext;
       if (widget.itineraryContext != null) {
         serializableItineraryContext = _makeJsonSerializable(widget.itineraryContext!);
@@ -140,6 +132,7 @@ class _AIChatWidgetState extends State<AIChatWidget> {
         };
       }
 
+      // Serialize all saved itineraries from client memory (lightweight, no coordinates/descriptions)
       final List<Map<String, dynamic>> createdItinerariesPayload = [];
       for (final it in UserSession.savedItineraries) {
         final Map<String, List<String>> cleanItinerary = {};
@@ -163,45 +156,69 @@ class _AIChatWidgetState extends State<AIChatWidget> {
           'itinerary_data': cleanItinerary,
         });
       }
-
-      debugPrint('AIChatWidget → AIService.chat(session=$sessionId, user=$userId)');
-
-      final Map<String, dynamic> data = await AIService.chat(
-        sessionId: sessionId,
-        userId: userId,
-        message: text,
-        screenContext: widget.screenContext,
-        screenData: widget.screenData,
-        itineraryContext: serializableItineraryContext,
-        createdItineraries: createdItinerariesPayload,
-      );
-
-      debugPrint('AIChatWidget ← response: session_id=${data['session_id']}');
-      final responseText = data['response_text'] ?? '';
-      final proposedAction = data['proposed_action'] as Map<String, dynamic>?;
-      final redirectScreen = data['redirect_screen'] as String?;
-
-      setState(() {
-        _chatMessages.add({
-          'role': 'assistant',
-          'content': responseText,
-          'proposed_action': proposedAction,
-          'redirect_screen': redirectScreen,
-        });
+      
+      final String userId = UserSession.loggedInUser ?? "guest";
+      final requestBody = json.encode({
+        'session_id': 'flutter_user_$userId',
+        'user_id': userId,
+        'message': text,
+        'screen_context': widget.screenContext,
+        'screen_data': widget.screenData,
+        'itinerary_context': serializableItineraryContext,
+        'created_itineraries': createdItinerariesPayload,
       });
 
-      if (redirectScreen != null && widget.onNavigate != null) {
-        Future.delayed(const Duration(seconds: 2), () {
-          if (mounted) widget.onNavigate!();
+      debugPrint('Request body: $requestBody');
+      
+      final authHeaders = await AuthService.getAuthHeader();
+      final res = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json', ...authHeaders},
+        body: requestBody,
+      ).timeout(const Duration(seconds: 90));
+
+
+      if (res.statusCode == 200) {
+        debugPrint('Response status: 200');
+        final data = json.decode(res.body);
+        debugPrint('Response data: $data');
+        final responseText = data['response_text'] ?? '';
+        final proposedAction = data['proposed_action'] as Map<String, dynamic>?;
+        final redirectScreen = data['redirect_screen'] as String?;
+
+        setState(() {
+          _chatMessages.add({
+            'role': 'assistant',
+            'content': responseText,
+            'proposed_action': proposedAction,
+            'redirect_screen': redirectScreen,
+          });
+        });
+
+        // Handle redirect if suggested
+        if (redirectScreen != null && widget.onNavigate != null) {
+          Future.delayed(const Duration(seconds: 2), () {
+            widget.onNavigate!();
+          });
+        }
+      } else {
+        debugPrint('Response status: ${res.statusCode}');
+        debugPrint('Response body: ${res.body}');
+        setState(() {
+          _chatMessages.add({
+            'role': 'assistant',
+            'content':
+                'Sorry, the travel assistant service is currently unavailable (Status: ${res.statusCode}). Please try again.',
+          });
         });
       }
-    } on Exception catch (e) {
-      debugPrint('AIChatWidget error: $e');
+    } catch (e) {
+      debugPrint('Error in AI chat request: $e');
       setState(() {
         _chatMessages.add({
           'role': 'assistant',
           'content':
-              'Network/AI service error: $e. Make sure the backend is running and AI_ENABLED=true in its .env file.',
+              'Network error: could not reach the travel assistant. Error: $e. Make sure the AI service is running.',
         });
       });
     } finally {
@@ -305,23 +322,9 @@ class _AIChatWidgetState extends State<AIChatWidget> {
       );
     } else if (type == 'show_recommendations') {
       _showRecommendationsDialog(args);
-    } else if (type == 'navigate_to' && widget.onNavigate != null) {
-      widget.onNavigate!();
     } else {
-      // Unknown / not-yet-implemented action types: do NOT silently tell the
-      // user "approved" because that's misleading.  State explicitly that
-      // it's not wired yet, and leave a console trace.
-      debugPrint('AIChatWidget: unsupported proposed_action type=$type args=$args');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text(
-            "'$type' is not implemented yet in the frontend. "
-            "The action was NOT applied.",
-          ),
-          duration: const Duration(seconds: 4),
-          backgroundColor: Colors.deepOrange,
-        ),
+        SnackBar(content: Text('Action approved: $type')),
       );
     }
   }

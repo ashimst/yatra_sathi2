@@ -1,32 +1,59 @@
 """
 Database connection and session management.
 """
-from sqlalchemy import create_engine, text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy import create_engine, event
+from sqlalchemy.engine import Engine
+from sqlalchemy.orm import declarative_base, sessionmaker, Session
+from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.ext.compiler import compiles
 from backend.app.config.settings import settings
 
-# Create database engine
-engine = create_engine(
-    settings.DATABASE_URL,
-    echo=settings.DEBUG,
-)
+# Register SQLite compiler hooks for PostgreSQL specific types
+@compiles(JSONB, "sqlite")
+def compile_jsonb_sqlite(type_, compiler, **kw):
+    return "JSON"
 
-# Register pgvector type adapter so SQLAlchemy can read/write Vector columns.
-# Must happen after engine creation, before any ORM session uses the engine.
+
+@compiles(UUID, "sqlite")
+def compile_uuid_sqlite(type_, compiler, **kw):
+    return "VARCHAR(36)"
+
+
 try:
-    from pgvector.sqlalchemy import Vector  # noqa: F401 — triggers adapter registration
-    import pgvector
-    # register_vector is available in pgvector >= 0.1.8
-    if hasattr(pgvector, "psycopg2"):
-        # older API
-        from pgvector.psycopg2 import register_vector
-        with engine.connect() as _conn:
-            register_vector(_conn.connection)
-    # For newer pgvector releases the Vector() column type self-registers
-    # when imported; no explicit call needed.
-except Exception as _e:
-    print(f"[db] pgvector registration warning (non-fatal): {_e}")
+    from pgvector.sqlalchemy import Vector
+
+    @compiles(Vector, "sqlite")
+    def compile_vector_sqlite(type_, compiler, **kw):
+        return "BLOB"
+except ImportError:
+    pass
+
+
+# Enforce foreign keys on SQLite connections
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    if type(dbapi_connection).__module__.startswith("sqlite3"):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys = ON;")
+        cursor.close()
+
+
+# Configure engine. SQLite is only used by the legacy test suite; production
+# runs on PostgreSQL (PostGIS + pgvector).
+_is_sqlite = settings.DATABASE_URL.startswith("sqlite")
+_engine_kwargs = {"echo": settings.DEBUG}
+if _is_sqlite:
+    _engine_kwargs["connect_args"] = {"check_same_thread": False}
+else:
+    _engine_kwargs.update(
+        pool_pre_ping=True,          # drop dead connections (pooler restarts, idle timeouts)
+        pool_size=settings.DB_POOL_SIZE,
+        max_overflow=settings.DB_MAX_OVERFLOW,
+        pool_recycle=1800,
+        connect_args={"connect_timeout": 10},
+    )
+
+engine = create_engine(settings.DATABASE_URL, **_engine_kwargs)
 
 # Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -36,7 +63,9 @@ Base = declarative_base()
 
 
 def get_db() -> Session:
-    """Dependency for getting database sessions."""
+    """
+    Dependency for getting database sessions.
+    """
     db = SessionLocal()
     try:
         yield db
@@ -44,40 +73,47 @@ def get_db() -> Session:
         db.close()
 
 
-def _ensure_pgvector_extension() -> None:
-    """Create the pgvector extension in Postgres if it does not already exist."""
-    try:
-        with engine.connect() as conn:
-            conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
-            conn.commit()
-    except Exception as e:
-        print(f"[db] Could not create pgvector extension (non-fatal): {e}")
-
-
-def init_db() -> None:
+def init_db():
     """
     Initialize database tables.
-
-    Ensures the pgvector extension exists first so the `vector` column type
-    is recognised by Postgres before CREATE TABLE is issued.
     """
-    _ensure_pgvector_extension()
-
-    from backend.app.models import (  # noqa: F401 — side-effect imports register models
+    from backend.app.models import (
         user,
         itinerary,
         session as session_model,
         place,
-        embedding,
-        workspace,
+        memory,
+        trail_watch,
+        place_photo,
     )
+    try:
+        from backend.app.models import embedding
+    except ImportError:
+        pass
     Base.metadata.create_all(bind=engine)
 
+    # Safe schema migration for pre-existing tables missing newly added columns
+    try:
+        from sqlalchemy import inspect as sa_inspect, text as sa_text
+        inspector = sa_inspect(engine)
+        if "users" in inspector.get_table_names():
+            user_cols = {c["name"] for c in inspector.get_columns("users")}
+            if "avatar_url" not in user_cols:
+                with engine.begin() as conn:
+                    conn.execute(sa_text("ALTER TABLE users ADD COLUMN avatar_url TEXT"))
+    except Exception:
+        pass
 
-# Aliases for ETL compatibility
-def init_database() -> None:
+
+def init_database():
+    """
+    Initialize database tables (alias for init_db for ETL compatibility).
+    """
     init_db()
 
 
-def create_tables() -> None:
+def create_tables():
+    """
+    Create database tables (alias for init_db for ETL compatibility).
+    """
     init_db()

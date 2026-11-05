@@ -99,19 +99,14 @@ class _SavedItineraryDetailScreenState
   /// Fetches proposed edits from the AI service based on user's edit request
   Future<void> _fetchProposedEdits(String editRequest) async {
     setState(() => _isFetchingProposal = true);
-
+    
     try {
-      // Convert current itinerary to JSON format for the backend.
-      // Keys are stored in snake_case in the workspace snapshot, so send
-      // both snake_case and camelCase versions so the pipeline is
-      // resilient to whichever convention the backend uses.
-      final currentItineraryJson = <String, dynamic>{
+      // Convert current itinerary to JSON format for the backend
+      final currentItineraryJson = {
         'id': widget.itinerary.id,
         'title': widget.itinerary.title,
         'from': widget.itinerary.from,
-        'origin': widget.itinerary.from,
         'to': widget.itinerary.to,
-        'destination': widget.itinerary.to,
         'days': widget.itinerary.days,
         'travelers': widget.itinerary.travelers,
         'budget': widget.itinerary.budget,
@@ -119,166 +114,92 @@ class _SavedItineraryDetailScreenState
         'diet': widget.itinerary.diet,
         'author': widget.itinerary.author,
         'likes': widget.itinerary.likes,
-        'is_public': widget.itinerary.isPublic,
         'isPublic': widget.itinerary.isPublic,
         'itinerary': widget.itinerary.itinerary,
-        'ordered_waypoints': widget.itinerary.orderedWaypoints
-            .map((p) => {
-                  'id': p.id,
-                  'name': p.name,
-                  'category': p.category,
-                  'district': p.district,
-                  'province': p.province,
-                  'city': p.city,
-                  'description': p.description,
-                  'history': p.history,
-                  'latitude': p.latitude,
-                  'longitude': p.longitude,
-                  'images': p.images,
-                  'has_ticket': p.hasTicket,
-                  'hasTicket': p.hasTicket,
-                })
-            .toList(),
-        'orderedWaypoints': widget.itinerary.orderedWaypoints
-            .map((p) => {
-                  'id': p.id,
-                  'name': p.name,
-                  'category': p.category,
-                  'district': p.district,
-                  'province': p.province,
-                  'city': p.city,
-                  'description': p.description,
-                  'history': p.history,
-                  'latitude': p.latitude,
-                  'longitude': p.longitude,
-                  'images': p.images,
-                  'hasTicket': p.hasTicket,
-                })
-            .toList(),
-        'route_points': widget.itinerary.routePoints
-            .map((ll) => [ll.latitude, ll.longitude]).toList(),
-        'routePoints': widget.itinerary.routePoints
-            .map((ll) => [ll.latitude, ll.longitude]).toList(),
-        'distance_km': widget.itinerary.distanceKm,
+        'orderedWaypoints': widget.itinerary.orderedWaypoints.map((p) => {
+          'id': p.id,
+          'name': p.name,
+          'category': p.category,
+          'district': p.district,
+          'province': p.province,
+          'city': p.city,
+          'description': p.description,
+          'history': p.history,
+          'latitude': p.latitude,
+          'longitude': p.longitude,
+          'images': p.images,
+          'hasTicket': p.hasTicket,
+        }).toList(),
+        'routePoints': widget.itinerary.routePoints.map((ll) => [ll.latitude, ll.longitude]).toList(),
         'distanceKm': widget.itinerary.distanceKm,
-        'duration_minutes': widget.itinerary.durationMinutes,
         'durationMinutes': widget.itinerary.durationMinutes,
       };
-
-      final String userId = UserSession.loggedInUser ?? 'guest_user';
-
+      
       final response = await AIService.editItinerary(
         currentItinerary: currentItineraryJson,
         editRequest: editRequest,
-        userId: userId,
       );
-
+      
       // Parse the proposed itinerary from the response
-      final proposedData =
-          response['proposed_itinerary'] as Map<String, dynamic>? ??
-              currentItineraryJson;
-
-      final warnings = List<String>.from(response['warnings'] ?? []);
-      final explanation =
-          response['explanation']?.toString() ?? 'Proposal generated';
-
+      final proposedData = response['proposed_itinerary'] as Map<String, dynamic>;
+      
       // Reconstruct the proposed itinerary object
       final proposedItinerary = CreatedItinerary(
-        id: (proposedData['id'] ?? widget.itinerary.id).toString(),
-        title: (proposedData['title'] ?? widget.itinerary.title).toString(),
-        from: (proposedData['from'] ?? proposedData['origin'] ?? widget.itinerary.from)
-            .toString(),
-        to: (proposedData['to'] ?? proposedData['destination'] ?? widget.itinerary.to)
-            .toString(),
-        days: (proposedData['days'] as num?)?.toInt() ?? widget.itinerary.days,
-        travelers: (proposedData['travelers'] as num?)?.toInt() ??
-            widget.itinerary.travelers,
-        budget:
-            (proposedData['budget'] ?? widget.itinerary.budget).toString(),
-        pace: (proposedData['pace'] ?? widget.itinerary.pace).toString(),
-        diet: (proposedData['diet'] ?? widget.itinerary.diet).toString(),
-        author: (proposedData['author'] ?? widget.itinerary.author).toString(),
-        likes: (proposedData['likes'] as num?)?.toInt() ?? widget.itinerary.likes,
-        isPublic: (proposedData['is_public'] as bool?) ??
-            (proposedData['isPublic'] as bool?) ??
-            widget.itinerary.isPublic,
-        itinerary: ((proposedData['itinerary'] as Map?) ??
-                Map.from(widget.itinerary.itinerary))
-            .map(
+        id: proposedData['id'] ?? widget.itinerary.id,
+        title: proposedData['title'] ?? widget.itinerary.title,
+        from: proposedData['from'] ?? widget.itinerary.from,
+        to: proposedData['to'] ?? widget.itinerary.to,
+        days: proposedData['days'] ?? widget.itinerary.days,
+        travelers: proposedData['travelers'] ?? widget.itinerary.travelers,
+        budget: proposedData['budget'] ?? widget.itinerary.budget,
+        pace: proposedData['pace'] ?? widget.itinerary.pace,
+        diet: proposedData['diet'] ?? widget.itinerary.diet,
+        author: proposedData['author'] ?? widget.itinerary.author,
+        likes: proposedData['likes'] ?? widget.itinerary.likes,
+        isPublic: proposedData['isPublic'] ?? widget.itinerary.isPublic,
+        itinerary: (proposedData['itinerary'] as Map<String, dynamic>?)?.map(
           (key, value) => MapEntry(
-            key.toString(),
-            List<Map<String, dynamic>>.from(value ?? []),
+            key,
+            List<Map<String, dynamic>>.from(value),
           ),
-        ),
-        orderedWaypoints: ((proposedData['orderedWaypoints'] ??
-                    proposedData['ordered_waypoints']) as List?)
-                ?.map((p) => Place(
-                      id: p['id']?.toString() ?? '',
-                      name: p['name']?.toString() ?? '',
-                      category: p['category']?.toString() ?? '',
-                      district: p['district']?.toString() ?? '',
-                      province: p['province']?.toString() ?? '',
-                      city: p['city']?.toString() ?? '',
-                      description: p['description']?.toString() ?? '',
-                      history: p['history']?.toString() ?? '',
-                      latitude: (p['latitude'] as num).toDouble(),
-                      longitude: (p['longitude'] as num).toDouble(),
-                      images: List<String>.from(p['images'] ?? []),
-                      hasTicket: (p['hasTicket'] as bool?) ??
-                          (p['has_ticket'] as bool?) ??
-                          false,
-                    ))
-                .toList() ??
-            widget.itinerary.orderedWaypoints,
-        routePoints: ((proposedData['routePoints'] ?? proposedData['route_points'])
-                    as List?)
-                ?.map((ll) {
-              if (ll is List && ll.length >= 2) {
-                return LatLng(
-                  (ll[0] as num).toDouble(),
-                  (ll[1] as num).toDouble(),
-                );
-              }
-              if (ll is Map) {
-                return LatLng(
-                  (ll['lat'] ?? ll['latitude'] as num).toDouble(),
-                  (ll['lng'] ?? ll['longitude'] as num).toDouble(),
-                );
-              }
-              return null;
-            }).whereType<LatLng>().toList() ??
-            widget.itinerary.routePoints,
-        distanceKm: (proposedData['distanceKm'] as num?)?.toDouble() ??
-            (proposedData['distance_km'] as num?)?.toDouble() ??
-            widget.itinerary.distanceKm,
-        durationMinutes: (proposedData['durationMinutes'] as num?)?.toDouble() ??
-            (proposedData['duration_minutes'] as num?)?.toDouble() ??
-            widget.itinerary.durationMinutes,
+        ) ?? Map.from(widget.itinerary.itinerary),
+        orderedWaypoints: ((proposedData['orderedWaypoints'] ?? proposedData['ordered_waypoints']) as List?)
+            ?.map((p) => Place(
+                  id: p['id']?.toString() ?? '',
+                  name: p['name']?.toString() ?? '',
+                  category: p['category']?.toString() ?? '',
+                  district: p['district']?.toString() ?? '',
+                  province: p['province']?.toString() ?? '',
+                  city: p['city']?.toString() ?? '',
+                  description: p['description']?.toString() ?? '',
+                  history: p['history']?.toString() ?? '',
+                  latitude: (p['latitude'] as num).toDouble(),
+                  longitude: (p['longitude'] as num).toDouble(),
+                  images: List<String>.from(p['images'] ?? []),
+                  hasTicket: p['hasTicket'] ?? false,
+                ))
+            .toList() ?? widget.itinerary.orderedWaypoints,
+        routePoints: ((proposedData['routePoints'] ?? proposedData['route_points']) as List?)
+            ?.map((ll) => LatLng((ll[0] as num).toDouble(), (ll[1] as num).toDouble()))
+            .toList() ?? widget.itinerary.routePoints,
+        distanceKm: (proposedData['distanceKm'] as num?)?.toDouble() ?? (proposedData['distance_km'] as num?)?.toDouble() ?? widget.itinerary.distanceKm,
+        durationMinutes: (proposedData['durationMinutes'] as num?)?.toDouble() ?? (proposedData['duration_minutes'] as num?)?.toDouble() ?? widget.itinerary.durationMinutes,
       );
-
+      
       setState(() {
         _proposedItinerary = proposedItinerary;
         _isEditingWithAI = true;
       });
-
-      if (warnings.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.orange,
-            content: Text('⚠ ${warnings.first}'),
-            duration: const Duration(seconds: 4),
-          ),
-        );
-      }
+      
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(explanation)),
+        SnackBar(content: Text(response['explanation'] ?? 'Proposal generated')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to generate proposal: $e')),
       );
     } finally {
-      if (mounted) setState(() => _isFetchingProposal = false);
+      setState(() => _isFetchingProposal = false);
     }
   }
   
