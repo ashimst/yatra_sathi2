@@ -1,10 +1,10 @@
 /**
  * API configuration and helper utilities for YatraSathi Web.
  * Supports configurable VITE_API_BASE_URL for decoupled deployments
- * (e.g. Vercel frontend + Render/Railway backend), defaulting to
+ * (e.g. Cloudflare Pages frontend + separate API origin), defaulting to
  * relative paths for same-origin or reverse-proxied production setups.
  */
-export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/+$/, '');
 
 export function apiUrl(path: string): string {
   if (path.startsWith('http://') || path.startsWith('https://')) {

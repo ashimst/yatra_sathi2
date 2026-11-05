@@ -99,12 +99,23 @@ resource "azurerm_container_app" "backend" {
     container {
       name   = "yatrasathi-api"
       image  = "ghcr.io/${lower(var.github_username)}/yatrasathi-backend:latest"
-      cpu    = 0.25
-      memory = "0.5Gi"
+      # 0.5 vCPU / 1 GiB minimum: the image loads torch + the embedding model.
+      cpu    = 0.5
+      memory = "1Gi"
 
       env {
         name  = "PORT"
         value = "8000"
+      }
+
+      env {
+        name  = "ENVIRONMENT"
+        value = "production"
+      }
+
+      env {
+        name  = "PUBLIC_BASE_URL"
+        value = var.api_public_url
       }
 
       env {
@@ -134,7 +145,7 @@ resource "azurerm_container_app" "backend" {
 
       env {
         name  = "CORS_ORIGINS"
-        value = "https://${var.custom_domain},https://yatrasathi.noesisframeworks.com,https://noesisframeworks.com,http://localhost:3000"
+        value = "https://${var.custom_domain},https://yatrasathi.noesisframeworks.com,https://noesisframeworks.com"
       }
     }
   }
@@ -151,6 +162,11 @@ resource "azurerm_container_app" "backend" {
   }
 
   tags = azurerm_resource_group.rg.tags
+
+  # CI deploys immutable :<sha> images; don't let `terraform apply` revert them to :latest.
+  lifecycle {
+    ignore_changes = [template[0].container[0].image]
+  }
 
   depends_on = [
     azurerm_container_app_environment.cae

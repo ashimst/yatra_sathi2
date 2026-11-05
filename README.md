@@ -1,170 +1,115 @@
----
-title: YatraSathi Nepal
-emoji: 🏔️
-colorFrom: green
-colorTo: amber
-sdk: gradio
-sdk_version: 5.50.0
-app_file: app.py
-pinned: false
----
+# YatraSathi (यात्रा साथी)
 
-# 🏔️ YatraSathi (यात्रा साथी)
+A travel-planning companion for Nepal. YatraSathi builds multi-day itineraries
+along real road corridors, recommends places using geospatial and semantic
+search over ~7,700 places, and includes an AI assistant, a photo-memory
+scrapbook, and a community trail-conditions board.
 
-> **Cognitive Precision in Himalayan Travel Intelligence**  
-> Grounded in 7,700+ verified Nepal coordinates, licensed Sherpa guide waypoints, and zero-hallucination PostGIS geometry. Powered by the **Noesis Dual-Process Cognitive Architecture**.
+## Features
 
-[![Tests](https://img.shields.io/badge/tests-301%20passed%20%2F%20100%25-emerald?style=flat-square&logo=pytest)](file:///docs/TEST_READY.md)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com)
-[![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=flat-square&logo=react)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
-[![PostGIS](https://img.shields.io/badge/PostGIS-Spatial%20Corridors-336791?style=flat-square&logo=postgresql)](https://postgis.net)
-[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+- **Trip planner (`/plan`)**: routes between two places via OSRM, picks
+  attractions, meals and stays within a corridor around the route, and builds a
+  day-by-day itinerary based on pace, budget and interests. An AI co-pilot can
+  edit the itinerary from natural-language requests; edits are shown as a diff
+  before they're applied.
+- **Explore & map (`/explore`, `/map`)**: browse and search places. Semantic
+  ranking uses 384-dimensional `BAAI/bge-small-en-v1.5` embeddings stored in
+  PostgreSQL with pgvector.
+- **AI assistant**: Groq-hosted LLM with tool calls for place search and
+  geocoding. Chat history is stored per user.
+- **Memories (`/memories`)**: upload trip photos with captions; images are
+  validated by file signature and stored under random file names.
+- **Trail Watch (`/trail-watch`)**: travelers post trail hazards so others can
+  see them. YatraSathi is an independent platform: reports are **not** sent to
+  any authority or conservation body, and no affiliation is implied. In an
+  emergency, call Nepal Police (100) or the Tourist Police (1144).
+- **Saved & shared trips**: save itineraries to your account and share a
+  read-only public link.
 
----
-
-## 🧭 Overview
-
-**YatraSathi** is an autonomous travel companion engineered specifically for the logistical, topographic, and cultural complexities of Nepal. Navigating high-altitude mountain passes, monsoon highway closures, and sacred cultural sanctuaries requires deterministic safety rather than probabilistic hallucination.
-
-YatraSathi implements the **Noesis Frameworks Dual-Process Cognitive Architecture**:
-- **System 1 (Reflexive / Fast)**: In-process micro-engine (Cactus Needle + KEV 0.6B) executing schema-constrained deterministic tools with sub-50ms latency, zero marginal cloud cost, and 0% parameter drift.
-- **System 2 (Deliberative / Reflective)**: Autonomous ReAct planner (Groq / Qwen 27B) invoked for multi-day combinatorial graph optimization, altitude acclimatization pacing, and culturally resonant *Yatra Smriti* reflections.
-
----
-
-## ✨ Core Features
-
-### 1. Autonomous Expedition Studio (`/plan`)
-- **Deterministic Corridor Routing**: Calculates multi-day routes buffered within 15km mountain highway corridors.
-- **Agentic Co-Pilot Diff Generator**: Instead of silent mutations, the agent computes an interactive diff banner surfacing **Exertion Delta**, **Walking Delta**, and **Altitude Delta** for traveler confirmation before applying state changes.
-- **Altitude Acclimatization Safeguards**: Pre-emptively warns against rapid ascents exceeding 500m/day above 3,000m and prevents hazardous night-driving over mountain highways.
-
-### 2. Live Trail Watch & Incident Ledger (`/trail-watch`)
-- **Crowdsourced Environmental Hazard Ledger**: Trekkers report landslides, bridge washouts, and icy passes with geotagged coordinates.
-- **Warden Dispatch Integration**: Submits field incident notifications directly to ACAP (Annapurna) and SPCC (Sagarmatha) park ranger queues.
-- **Magic-Byte Verified Image Uploads**: Validates multipart uploads at the binary level (JPEG, PNG, WebP) with collision-free UUID storage.
-
-### 3. Cultural Sanctuaries & Heritage (`/cultural-sanctuary`)
-- **Living Heritage Catalog**: 80+ sacred pilgrimage monuments across Kathmandu Valley, Lumbini, and Upper Mustang.
-- **3-Tier Entry Fee Calculator**: Accurate fee calculations across Foreign, SAARC, and Nepali visitor categories.
-- **Sacred Etiquette & Festival Calendar**: Living calendar cross-referencing Bikram Sambat (BS) and Tibetan lunar dates with Gregorian windows.
-
-### 4. Interactive Geospatial Discovery (`/explore`, `/map`)
-- **7,746 Surveyed Coordinates**: Field-verified GPS coordinates for tea houses, lodges, emergency helipads, and high-altitude clinics.
-- **Dense Vector Semantic Search**: 384-dimensional `BAAI/bge-small-en-v1.5` embeddings accelerated by PostgreSQL `pgvector`.
-- **Procedural 3D Himalayan Diorama**: Custom Three.js low-poly mountain canvas featuring iconic peaks, sacred stupas, fluttering prayer flags, and pagoda temples.
-
----
-
-## 🏛️ System Architecture
+## Architecture
 
 ```
 yatra_sathi/
-├── web/                     # React 19 + TypeScript + Vite + Tailwind CSS edge client
-│   ├── src/
-│   │   ├── components/      # UI components (HimalayanPeaksCanvas, MapView, AIChatDrawer)
-│   │   ├── pages/           # Route views (ArchitecturePage, PlanPage, TrailWatchPage)
-│   │   └── api/             # API client & backend integration
-├── backend/                 # FastAPI (Python 3.12) ASGI engine
+├── backend/          FastAPI app (Python 3.11)
 │   ├── app/
-│   │   ├── api/             # REST endpoints (/recommend, /places, /ai, /trail-watch, /uploads)
-│   │   ├── config/          # Environment configuration
-│   │   ├── db/              # SQLAlchemy session factories & dialect routers
-│   │   ├── models/          # ORM models (Place, TrailReport, Itinerary, User)
-│   │   └── services/        # DecisionService, NeedleAgent, ItineraryService, UploadService
-│   ├── data/seeds/          # Curated seed datasets (trails, waypoints, heritage, festivals)
-│   └── scripts/             # Database migration and seeding tools
-├── tests/                   # 301 automated tests (100% pass rate)
-│   ├── e2e/                 # 4-tier opaque-box end-to-end test suite
-│   └── adversarial/         # Adversarial image upload and boundary fuzzing tests
-├── docs/                    # Technical whitepapers, ADRs, and testing infrastructure
-├── docker-compose.yml       # Production & local multi-container orchestration
-└── app.py                   # Hugging Face Spaces entrypoint (Dual Gradio + FastAPI mount)
+│   │   ├── api/      REST routers (auth, places, recommend, route, ai, itineraries,
+│   │   │             memories, trail-watch, uploads)
+│   │   ├── core/     JWT/bcrypt security, auth dependencies, rate limiting
+│   │   ├── config/   pydantic-settings configuration (fail-fast in production)
+│   │   ├── db/       SQLAlchemy engine & sessions
+│   │   ├── models/   ORM models
+│   │   └── services/ recommendation, embeddings, routing, uploads, AI tools
+│   ├── data/seeds/   curated seed datasets (trails, waypoints, heritage, festivals)
+│   └── scripts/      seeding
+├── etl/              OpenStreetMap → normalized/enriched places → embeddings
+├── scripts/          DB setup/restore, ETL runner, embedding generation, data fixes
+├── web/              React 19 + TypeScript + Vite + Tailwind + Leaflet
+├── mobile/           Flutter client
+├── tests/            pytest suite (e2e, adversarial, security)
+├── terraform/        Azure Container Apps infrastructure
+├── docker/           PostgreSQL + PostGIS + pgvector image for local dev
+└── docker-compose.yml  local development stack
 ```
 
-### Dual-Database Engine Parity
-- **Production Mode**: PostgreSQL 16 + **PostGIS** spatial geometry (`ST_DWithin`, `ST_MakePoint`) + **pgvector**.
-- **Offline / Field Mode**: Standalone SQLite (`yatra_sathi.db`) using native Python Haversine bounding-box queries for 100% offline parity.
+**Production stack:** Azure Container Apps (API) · Supabase PostgreSQL with
+PostGIS + pgvector · Cloudflare Pages (web). See [DEPLOYMENT.md](DEPLOYMENT.md).
 
----
-
-## 🚀 Quickstart Guide
+## Local development
 
 ### Prerequisites
-- Python 3.12+
+- Python 3.11+
 - Node.js 20+
-- (Optional) Docker & Docker Compose
+- PostgreSQL 16 with PostGIS and pgvector (or Docker)
 
-### 1. Backend Setup
+### Option A: Docker Compose
 
 ```bash
-# Clone the repository
-git clone https://github.com/ashimst/yatra_sathi.git
-cd yatra_sathi
+# .env in the project root must define POSTGRES_PASSWORD (GROQ_API_KEY optional)
+docker compose up --build
+```
+Web: http://localhost:3000 · API: http://localhost:8000 (docs at `/docs`)
 
-# Create and activate a virtual environment
+### Option B: run services directly
+
+```bash
 python -m venv venv
-# On Windows:
-.\venv\Scripts\activate
-# On Linux/macOS:
-source venv/bin/activate
+source venv/bin/activate            # Windows: .\venv\Scripts\activate
 
-# Install dependencies
-pip install -r backend/requirements.txt
+# CPU-only torch avoids downloading CUDA libraries
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+pip install -r backend/requirements-dev.txt
 
-# Run the FastAPI server
-python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
+cp .env.example .env                # then set DATABASE_URL, GROQ_API_KEY, ...
+python -m uvicorn backend.app.main:app --reload --port 8000
 ```
-API docs available at: `http://127.0.0.1:8000/docs`
-
-### 2. Frontend Setup
 
 ```bash
-# Open a new terminal in the web directory
 cd web
-
-# Install dependencies
 npm install
-
-# Start Vite dev server
-npm run dev
+npm run dev                         # http://localhost:5173
 ```
-Web client available at: `http://127.0.0.1:3000`
 
-### 3. Docker Compose (1-Command Full Stack)
+### Loading data
+Restore the pre-built database dump (`python scripts/restore_database.py`,
+dump distributed separately, not in git) or rebuild from OpenStreetMap with
+`python scripts/run_pipeline.py`, then run `python scripts/generate_embeddings.py`.
+`EMBEDDING_MODEL` must match the model used for the stored vectors.
+
+## Testing
 
 ```bash
-# Start PostgreSQL (PostGIS), FastAPI backend, and React frontend
-docker-compose up --build
+pytest                 # backend: e2e, adversarial and security suites
+cd web && npm run build && npm run lint
 ```
 
----
+## Configuration
 
-## 🧪 Testing & Verification
+All settings are environment variables; see [.env.example](.env.example) for
+development and [.env.production.example](.env.production.example) for
+production. With `ENVIRONMENT=production` the API refuses to start if the JWT
+secret is missing or weak, CORS allows `*`, or required keys are missing.
 
-The repository includes a comprehensive 4-tier opaque-box testing harness and adversarial security suite.
+## Data sources
 
-```bash
-# Execute the full 301-test suite
-pytest tests/e2e tests/adversarial -v
-```
-
-```
-============================ 301 passed in 23.82s =============================
-```
-
-- **Tier 1 (Feature Coverage)**: Validates trails, waypoints, clinics, helipads, UNESCO monuments, and fee calculations.
-- **Tier 2 (Boundary & Corner)**: Validates strict Nepal coordinate boundaries [26.0°N–30.5°N, 80.0°E–88.5°E] and elevation limits (60m to 8,848.86m).
-- **Tier 3 (Cross-Feature Triads)**: Verifies emergency evacuation paths and multi-pass trail safety.
-- **Tier 4 (Real-World Journeys)**: Multi-day itineraries and pilgrimage loops.
-- **Adversarial Suite**: Penetration testing covering magic-byte spoofing, path traversal sanitization, and 10MB payload size gating.
-
----
-
-## 📄 License & Attribution
-
-Distributed under the **MIT License**. See `LICENSE` for details.
-
-- **Geospatial Survey Data**: Department of Survey Nepal, OpenStreetMap contributors, and licensed mountain guide logs.
-- **Cognitive Architecture**: Built on the principles of **Noesis Frameworks** ([reroute.noesisframeworks.com/info](https://reroute.noesisframeworks.com/info)).
+Place data is derived from OpenStreetMap (© OpenStreetMap contributors, ODbL)
+and enriched by the ETL pipeline in `etl/`.

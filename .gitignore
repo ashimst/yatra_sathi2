@@ -53,6 +53,8 @@ data/curated/*.jsonl
 # Pipeline state
 data/pipeline_checkpoint.json
 data/enrichment_cache.sqlite
+# Database dumps are distributed via object storage, not git
+*.dump
 
 # Keep directory stubs so git tracks the folder structure
 !data/raw/.gitkeep

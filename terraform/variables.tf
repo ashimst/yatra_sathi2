@@ -57,3 +57,9 @@ variable "api_subdomain" {
   description = "API endpoint subdomain"
   default     = "api.yatrasathi.noesisframeworks.com"
 }
+
+variable "api_public_url" {
+  description = "Public HTTPS URL of the backend API (used to build absolute upload URLs)"
+  type        = string
+  default     = "https://api.yatrasathi.noesisframeworks.com"
+}

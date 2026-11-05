@@ -1,196 +1,202 @@
-# 🚀 YatraSathi Production Deployment Guide
+# 🚀 YatraSathi Production Serverless Deployment Guide
 
-This document provides complete, step-by-step instructions for deploying **YatraSathi Nepal** across various hosting environments.
+> **Target Topology**: Azure Container Apps (Serverless, Scale to Zero) + Supabase (PostGIS & pgvector) + Cloudflare Pages (Frontend CDN) + GitHub Actions CI/CD  
+> **Target Domain**: `yatrasathi.noesisframeworks.com` & `api.yatrasathi.noesisframeworks.com`  
+> **Estimated Idle Cost**: **$0.00 / month** (Tailored specifically for Azure for Students & free tier limits)
 
 ---
 
-## 🏗️ Architecture Overview
+## 🏗️ Architecture & Cost Breakdown
 
-| Component | Technology | Default Port | Production Role |
+| Component | Provider / Service | Sizing / Plan | Monthly Cost (Idle / Low Usage) |
 |---|---|---|---|
-| **Web Frontend** | React 19, TypeScript, Vite, Tailwind CSS, Leaflet | `3000` (dev) / `80` (prod) | Interactive travel planner, offline-ready print briefs, photo journals |
-| **Backend API** | FastAPI, Uvicorn, LangGraph, Decision Engine | `8000` | Travel recommendations, OSRM routing, AI editing, auth & saved yatras |
-| **Database** | PostgreSQL 15/16 + **PostGIS** + **pgvector** | `5432` | Geo-spatial indexing, 384-dim semantic embeddings, user profiles & itineraries |
-| **Routing** | OSRM (Open Source Routing Machine) | Remote / `5000` | Road network routing and drive duration calculations |
-| **LLM Provider** | Groq (`llama-3.3-70b-versatile`) | API | Natural language travel companionship & real-time itinerary refinement |
+| **Backend API** | **Azure Container Apps** | Consumption Plan (0 to 3 replicas, 0.5 vCPU, 1 GiB) | **~$0.00** at low traffic (Free allowance: 180,000 vCPU-s & 360,000 GiB-s/mo) |
+| **Container Registry** | **GitHub Container Registry (ghcr.io)** | Free Package Hosting (Direct pull from GitHub) | **$0.00** (100% Free on GitHub) |
+| **Database** | **Supabase** | Free Tier (PostgreSQL 16 + PostGIS + pgvector) | **$0.00** |
+| **Frontend CDN** | **Cloudflare Pages** | Free Tier (Unlimited bandwidth, Global Edge) | **$0.00** |
+| **CI/CD** | **GitHub Actions** | Free Tier (2,000 build min/mo) | **$0.00** |
+| **SSL / HTTPS** | **Cloudflare & Azure** | Automated Managed TLS Certificates | **$0.00** |
+| **Total** | | | **$0.00 / month** |
+
+> [!TIP]
+> **Why GitHub Container Registry (ghcr.io)?**  
+> Azure Container Registry (ACR) charges ~$4.80/month just for basic image storage. By using **GitHub Container Registry (`ghcr.io`)**, container storage and bandwidth are **100% free**, bringing your Azure bill to **$0.00**.
 
 ---
 
-## 📋 Pre-Deployment Checklist
+## 📋 Pre-Flight Checklist
 
-Before deploying, ensure you have:
-1. **Groq API Key**: Obtain a free API key at [console.groq.com](https://console.groq.com).
-2. **PostgreSQL with PostGIS & pgvector**: Either self-hosted via Docker or managed (e.g. Supabase, Neon, Render Postgres).
-3. **JWT Secret Key**: Generate a 64-character secret using:
-   ```bash
-   openssl rand -hex 32
-   ```
-
----
-
-## ⚡ Option 1: 1-Command Docker Compose (Recommended for VPS / Cloud Instances)
-
-Ideal for DigitalOcean Droplet, Hetzner, AWS EC2, Linode, or any Linux server with Docker.
-
-### 1. Clone & Enter Repository
-```bash
-git clone https://github.com/ashimst/yatra_sathi.git
-cd yatra_sathi
-```
-
-### 2. Configure Environment
-```bash
-cp .env.production.example .env
-```
-Edit `.env` and configure:
-```env
-GROQ_API_KEY=gsk_your_actual_groq_key
-JWT_SECRET_KEY=your_generated_random_secret_key
-POSTGRES_PASSWORD=your_secure_db_password
-```
-
-### 3. Build & Launch Containers
-```bash
-docker compose up -d --build
-```
-This launches 3 synchronized containers:
-- `yatrasathi_db`: PostgreSQL 16 with PostGIS & pgvector auto-initialized
-- `yatrasathi_backend`: FastAPI ASGI server with auto-healthchecks
-- `yatrasathi_web`: High-performance Nginx Alpine container serving the built React app and reverse-proxying API endpoints
-
-### 4. Seed the Nepal Destinations Data
-Restore the curated database dump (61 MB of Nepal places, coordinates, and embeddings):
-```bash
-docker exec -i yatrasathi_db pg_restore -U postgres -d yatra_sathi --clean --if-exists < data/yatra_sathi.dump
-```
-
-### 5. Access the Application
-- **Web App**: `http://<your-server-ip>:3000` (or port `80` if configured)
-- **API Health**: `http://<your-server-ip>:8000/health`
-- **Swagger Documentation**: `http://<your-server-ip>:8000/docs`
+Before you begin, ensure you have:
+1. **Azure CLI** installed (`az login`).
+2. **Terraform CLI** installed (`terraform -v >= 1.5.0`).
+3. **Supabase Account**: [supabase.com](https://supabase.com) (free).
+4. **Cloudflare Account**: [cloudflare.com](https://cloudflare.com) (free).
+5. **Access to `noesisframeworks.com` DNS management** (in Cloudflare or your domain registrar).
 
 ---
 
-## 🌐 Option 2: Serverless / Cloud PaaS (Zero Ops & Recruiter Showcase)
+## 🛠️ Step 1: Set Up Supabase Database (PostGIS & pgvector)
 
-Deploy in under 10 minutes with free-tier providers.
-
-### Step 2.1: Database (Supabase or Neon)
-1. Create a free account at [Supabase](https://supabase.com) or [Neon](https://neon.tech).
-2. Create a new PostgreSQL database.
-3. In the SQL Editor, enable the two extensions:
+1. Log into [supabase.com](https://supabase.com) and click **New Project** (select region closest to your users, e.g., `Southeast Asia (Singapore)`).
+2. Go to **SQL Editor** and run:
    ```sql
+   -- Enable spatial and vector extensions
    CREATE EXTENSION IF NOT EXISTS postgis;
    CREATE EXTENSION IF NOT EXISTS vector;
    ```
-4. Restore the destination dump using your local machine or terminal:
-   ```bash
-   pg_restore --clean --if-exists --no-owner --no-privileges -d "<YOUR_SUPABASE_OR_NEON_DATABASE_URL>" -v data/yatra_sathi.dump
+3. Copy your database connection string from **Project Settings** $\to$ **Database** $\to$ **Connection string (URI)**. Select **Transaction Pooler (Port 6543)** for serverless workloads:
    ```
-   *(Or run `python scripts/restore_database.py` with `DATABASE_URL` set in `.env`)*.
+   postgresql://postgres.[PROJECT_REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres?sslmode=require
+   ```
+4. Load the places data. Places and embeddings come from the database dump
+   (kept out of git; store it in Supabase Storage / Azure Blob) or from the ETL:
+   ```bash
+   # Option A: restore the pre-built dump
+   DATABASE_URL=<supabase-url> python scripts/restore_database.py
+   # Option B: rebuild from OpenStreetMap, then generate embeddings
+   DATABASE_URL=<supabase-url> python scripts/run_pipeline.py
+   DATABASE_URL=<supabase-url> python scripts/generate_embeddings.py
+   # Then seed trails, waypoints, heritage sites and festivals
+   DATABASE_URL=<supabase-url> python backend/scripts/seed_nepal_data.py
+   ```
+   `EMBEDDING_MODEL` must match the model used to generate the stored vectors
+   (default `BAAI/bge-small-en-v1.5`); semantic search ignores vectors from other models.
+
+### Required backend environment variables
+
+| Variable | Notes |
+|---|---|
+| `ENVIRONMENT` | `production` (set by the Docker image). Enables fail-fast config checks. |
+| `DATABASE_URL` | Supabase transaction pooler URL (port 6543). |
+| `JWT_SECRET_KEY` | Random, 32+ chars (`openssl rand -hex 32`). The app refuses to start otherwise. |
+| `CORS_ORIGINS` | Comma-separated exact frontend origins. `*` is refused. |
+| `GROQ_API_KEY` | Required while `AI_ENABLED=true`. |
+| `PUBLIC_BASE_URL` | Public API URL, so uploaded image URLs are absolute. |
+| `ADMIN_EMAILS` | Optional. Accounts allowed to set place cover photos. |
+
+See `.env.production.example` for the full list, including rate-limit settings.
 
 ---
 
-### Step 2.2: Backend (Render or Railway)
+## ☁️ Step 2: Provision Azure Infrastructure with Terraform
 
-#### Via Render (Using `render.yaml` Blueprint)
-1. Push your repository to GitHub.
-2. In [Render Dashboard](https://dashboard.render.com), click **New +** → **Blueprint**.
-3. Connect your repository. Render automatically reads [render.yaml](file:///c:/Projects/yatra_sathi/render.yaml).
-4. Supply your `GROQ_API_KEY` and database credentials in the prompts.
-5. Click **Apply**. Your backend will be deployed with URL: `https://yatrasathi-backend.onrender.com`.
+The provided Terraform code in `terraform/` automatically configures:
+- Azure Resource Group (`rg-yatrasathi-prod`)
+- Azure Log Analytics Workspace (30-day retention)
+- Azure Container Apps Environment (Serverless Consumption)
+- Azure Container App pulling from **`ghcr.io`** with `min_replicas = 0` (scale-to-zero)
 
-#### Via Railway
-1. Go to [Railway.app](https://railway.app), click **New Project** → **Deploy from GitHub repo**.
-2. Select the repository. Railway will detect the [Procfile](file:///c:/Projects/yatra_sathi/Procfile) or [Dockerfile](file:///c:/Projects/yatra_sathi/backend/Dockerfile).
-3. Under **Variables**, add:
-   - `DATABASE_URL`: Your database connection string
-   - `GROQ_API_KEY`: Your Groq API key
-   - `JWT_SECRET_KEY`: Secret string
-   - `CORS_ORIGINS`: `*` (or your frontend domain)
-   - `OSRM_URL`: `https://router.project-osrm.org`
+### 1. Initialize Terraform
+```bash
+cd terraform
+cp terraform.tfvars.example terraform.tfvars
+```
+
+### 2. Configure `terraform.tfvars`
+Fill in your secrets:
+```hcl
+app_name              = "yatrasathi"
+environment           = "prod"
+azure_region          = "southeastasia" # or "eastus"
+github_username       = "your_github_username" # e.g. ashimst
+github_pat            = ""                     # Leave empty if package will be Public on GitHub
+supabase_database_url = "postgresql://postgres.[REF]:[PASSWORD]@aws-0-[REGION].pooler.supabase.com:6543/postgres?sslmode=require"
+groq_api_key          = "gsk_your_groq_api_key"
+jwt_secret_key        = "your_random_64_character_hex_secret"
+custom_domain         = "yatrasathi.noesisframeworks.com"
+api_subdomain         = "api.yatrasathi.noesisframeworks.com"
+```
+
+### 3. Apply Terraform
+```bash
+az login
+terraform init
+terraform plan
+terraform apply -auto-approve
+```
+
+Terraform outputs will display:
+- `ghcr_image_source`: e.g. `ghcr.io/ashimst/yatrasathi-backend:latest`
+- `container_app_fqdn`: e.g. `ca-yatrasathi-api-prod.gentlegrass-12345.southeastasia.azurecontainerapps.io`
+- `custom_domain_verification_id`: Verification code for DNS TXT record.
 
 ---
 
-### Step 2.3: Frontend (Cloudflare Pages, Vercel, or Netlify)
+## 🌐 Step 3: Configure Domain & DNS Records (`noesisframeworks.com`)
 
-#### Option A: Via Cloudflare Pages (Recommended - 100% Free & Global Edge)
-1. In the [Cloudflare Dashboard](https://dash.cloudflare.com/), navigate to **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**.
-2. Select your `yatra_sathi` repository.
-3. In the **Set up builds and deployments** page:
-   - **Project name**: `yatrasathi` (or preferred name)
-   - **Production branch**: `main` (or `master`)
+Log in to your DNS provider (Cloudflare dashboard for `noesisframeworks.com`):
+
+| Type | Name (Subdomain) | Value / Target | Proxy Status | Purpose |
+|---|---|---|---|---|
+| **CNAME** | `yatrasathi` | `<your-pages-project>.pages.dev` | **Proxied (Orange Cloud)** | Frontend Web UI |
+| **CNAME** | `api.yatrasathi` | `<container_app_fqdn>` | **DNS Only (Grey Cloud)** | Serverless Backend API |
+| **TXT** | `asuid.api.yatrasathi` | `<custom_domain_verification_id>` | **DNS Only** | Azure Domain Verification |
+
+> [!NOTE]
+> Azure Container Apps requires the `asuid` TXT verification record to validate domain ownership before issuing free managed SSL certificates for `api.yatrasathi.noesisframeworks.com`.
+
+---
+
+## ⚡ Step 4: Set Up Cloudflare Pages (Frontend Hosting)
+
+1. In the **Cloudflare Dashboard**, navigate to **Workers & Pages** $\to$ **Create application** $\to$ **Pages** $\to$ **Connect to Git**.
+2. Select your repository.
+3. Set build configuration:
    - **Framework preset**: `Vite`
    - **Root directory**: `web`
    - **Build command**: `npm run build`
    - **Build output directory**: `dist`
-4. Expand **Environment variables** and add:
-   - Variable name: `VITE_API_BASE_URL`
-   - Value: `https://yatrasathi-backend.onrender.com` (your deployed backend URL)
-   - *(Optional)* Variable name: `NODE_VERSION`, Value: `20`
+4. Add Environment Variable:
+   - `VITE_API_BASE_URL`: `https://api.yatrasathi.noesisframeworks.com`
 5. Click **Save and Deploy**.
-   - Cloudflare will build the site and deploy it globally.
-   - SPA routing (`/plan`, `/explore`, `/share/:id`) and asset caching are handled automatically by [`web/public/_redirects`](file:///c:/Projects/yatra_sathi/web/public/_redirects) and [`web/public/_headers`](file:///c:/Projects/yatra_sathi/web/public/_headers).
-
-#### Option B: Deploying to Cloudflare Pages via CLI (Wrangler)
-If deploying directly from your machine or CI/CD without Git connection:
-```bash
-cd web
-npm run build
-npx wrangler pages deploy dist --project-name=yatrasathi
-```
-
-#### Option C: Via Vercel
-1. Go to [Vercel](https://vercel.com) and click **Add New** → **Project**.
-2. Import your GitHub repository.
-3. Configure the build settings:
-   - **Root Directory**: `web`
-   - **Framework Preset**: `Vite`
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-4. Under **Environment Variables**, add:
-   ```env
-   VITE_API_BASE_URL=https://yatrasathi-backend.onrender.com
-   ```
-5. Click **Deploy**.
+6. Under **Custom Domains**, add `yatrasathi.noesisframeworks.com`. Cloudflare will provision an SSL certificate in ~60 seconds.
 
 ---
 
-## 🔒 Production Security & Hardening Checklist
+## 🔄 Step 5: Configure GitHub Actions CI/CD Secrets
 
-1. **HTTPS Enforcement**: Always front public traffic with SSL/TLS (automatic on Vercel, Netlify, Render, or via Let's Encrypt / Certbot on VPS).
-2. **Restrict CORS in Production**:
-   Update `CORS_ORIGINS` in your backend environment:
-   ```env
-   CORS_ORIGINS=https://yatrasathi.com,https://your-frontend.vercel.app
-   ```
-3. **JWT Secret**: Never use default keys. Ensure `JWT_SECRET_KEY` is long and random.
-4. **Database Connection Pooling**:
-   When connecting serverless functions or multiple workers to PostgreSQL, use connection pooling (e.g. Supabase PgBouncer or Neon connection pooler URL on port 6543).
+To enable automated zero-touch deployment on every `git push origin main`:
+
+1. In GitHub, go to **Settings** $\to$ **Secrets and variables** $\to$ **Actions** $\to$ **New repository secret**.
+2. Add the following secrets:
+
+### Azure Backend Secrets:
+- `AZURE_CREDENTIALS`: Azure Service Principal JSON (generate with: `az ad sp create-for-rbac --name "github-actions-yatrasathi" --role contributor --scopes /subscriptions/<SUBSCRIPTION_ID>/resourceGroups/rg-yatrasathi-prod --sdk-auth`)
+- `AZURE_CONTAINER_APP_NAME`: `ca-yatrasathi-api-prod`
+- `AZURE_RESOURCE_GROUP`: `rg-yatrasathi-prod`
+- `AZURE_CONTAINER_APP_FQDN`: Container App FQDN from Terraform
+
+*(Notice: No ACR login or password needed! GitHub automatically uses `${{ secrets.GITHUB_TOKEN }}` to publish to `ghcr.io`)*
+
+### Making Your GHCR Package Public (Recommended for 100% Free Pulls):
+Once the first GitHub Action run pushes the package:
+1. Go to your GitHub Profile $\to$ **Packages** $\to$ select `yatrasathi-backend`.
+2. Go to **Package settings** $\to$ Scroll to **Danger Zone** $\to$ **Change package visibility** $\to$ Set to **Public**.
+3. Now Azure Container Apps can pull the image anonymously with zero authentication credentials needed!
+- `AZURE_ACR_LOGIN_SERVER`: Output from Terraform (e.g. `acryatrasathiprod.azurecr.io`)
+- `AZURE_ACR_USERNAME`: ACR Admin Username
+- `AZURE_ACR_PASSWORD`: ACR Admin Password
+- `AZURE_CONTAINER_APP_NAME`: `ca-yatrasathi-api-prod`
+- `AZURE_RESOURCE_GROUP`: `rg-yatrasathi-prod`
+- `AZURE_CONTAINER_APP_FQDN`: Container App FQDN from Terraform
+
+### Cloudflare Frontend Secrets:
+- `CLOUDFLARE_API_TOKEN`: Cloudflare Pages Edit API Token
+- `CLOUDFLARE_ACCOUNT_ID`: Your Cloudflare Account ID
 
 ---
 
-## 🩺 Monitoring & Diagnostics
+## ✅ Step 6: Verification & Cold-Start Behavior
 
-- **Health Check Endpoint**:
-  ```bash
-  curl https://api.yourdomain.com/health
-  ```
-  Expected response:
-  ```json
-  {
-    "status": "ok",
-    "service": "YatraSathi Backend",
-    "version": "1.0.0",
-    "destinations_count": 528,
-    "ai_enabled": true
-  }
-  ```
-- **Backend Logs (Docker)**:
-  ```bash
-  docker compose logs -f backend
-  ```
-- **Database Logs**:
-  ```bash
-  docker compose logs -f db
-  ```
+1. **Verify Backend Health**:
+   ```bash
+   curl -I https://api.yatrasathi.noesisframeworks.com/health
+   # Returns: HTTP/2 200 OK
+   ```
+2. **Verify Frontend**:
+   Open `https://yatrasathi.noesisframeworks.com` in your browser.
+3. **Verify Scale-to-Zero ($0 cost)**:
+   - When no visitors access the site for 5 minutes, Azure Container Apps scales down to **0 active replicas**.
+   - Inspect replica count in Azure Portal: **Container App** $\to$ **Replicas** shows `0`.
+   - When a visitor visits, Azure automatically wakes up a replica in ~2.5 seconds.
+

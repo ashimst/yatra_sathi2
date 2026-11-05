@@ -205,6 +205,27 @@ class TestPlacePhotoContributionWorkflow:
 class TestSpatialEngineStressSQLite:
     """Stress testing place_service and recommendation_service on SQLite without PostGIS."""
 
+    @pytest.fixture(autouse=True, scope="class")
+    def _corridor_places(self):
+        """
+        Seed one place on each tested corridor so these tests don't depend on
+        whatever data happens to be in the bound database file.
+        """
+        db = SessionLocal()
+        seeded = [
+            Place(id=uuid.uuid4(), name="Test Mugling Viewpoint", category="Viewpoint",
+                  centroid="POINT(84.4525 27.5341)", popularity=5.0, rating=4.0),
+            Place(id=uuid.uuid4(), name="Test Namche Bazaar Lodge", category="Hotel",
+                  centroid="POINT(86.7090 27.8051)", popularity=5.0, rating=4.0),
+        ]
+        db.add_all(seeded)
+        db.commit()
+        ids = [p.id for p in seeded]
+        yield
+        db.query(Place).filter(Place.id.in_(ids)).delete(synchronize_session=False)
+        db.commit()
+        db.close()
+
     @pytest.mark.parametrize("lat,lon,label", [
         (30.4, 81.5, "Extreme North Border (Humla / Tibet border)"),
         (26.1, 87.5, "Extreme South Border (Morang / Bihar border)"),

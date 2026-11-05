@@ -37,7 +37,7 @@ YatraSathi is a Nepal travel and trekking exploration platform.
 | M2 | Cultural Heritage, Fees & Festivals Curation | Curate Kathmandu Valley 7 UNESCO + periphery, Pokhara, Lumbini + circuit, Himalayan monasteries, fee matrix, guidelines, and 13 festivals; normalize; generate `backend/data/seeds/cultural_heritage.json` and `backend/data/seeds/festivals.json` | none | DONE |
 | M3 | Database Seeding & Integration Engine | Build idempotent seeding script populating both SQLite (`yatra_sathi.db`) and PostgreSQL (`yatra_sathi`); verify 100% coordinate compliance and schema compatibility | M1, M2 | DONE |
 | M4 | Final Milestone: E2E Test Pass & Adversarial Hardening | Pass 100% of E2E tests (Tiers 1–4 from E2E Testing Track) across all endpoints and data models; conduct Tier 5 adversarial coverage hardening | M3, E2E Track | DONE |
-| E2E | E2E Testing Track | Independent opaque-box test harness and test cases (Tiers 1–4) covering all features F1–F11; publish `TEST_READY.md` | none | DONE |
+| E2E | E2E Testing Track | Independent opaque-box test harness and test cases (Tiers 1–4) covering all features F1–F11 | none | DONE |
 
 ## Interface Contracts
 ### Data Curators (M1, M2) ↔ Seed Files (`backend/data/seeds/`)
@@ -100,7 +100,6 @@ YatraSathi is a Nepal travel and trekking exploration platform.
   - `festivals.json`
 - `backend/scripts/`:
   - `seed_nepal_data.py`: Main database seeding routine for PostgreSQL and SQLite.
-  - `verify_data_integrity.py`: Automated programmatic validation script checking bounds, deduplication, schema, and DB counts.
 - `backend/app/models/`:
   - `place.py`: Existing Place model.
   - `trail_watch.py`: Existing Trail Watch models.
